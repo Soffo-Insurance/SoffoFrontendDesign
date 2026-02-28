@@ -97,10 +97,22 @@ export function ChatPage() {
 
   const initialProcessed = useRef(false)
   useEffect(() => {
-    const initial = (location.state as { initialQuery?: string })?.initialQuery
+    const state = location.state as { initialQuery?: string; initialAttachments?: File[] }
+    const initial = state?.initialQuery
+    const files = state?.initialAttachments
     if (initial?.trim() && claimId && !initialProcessed.current) {
       initialProcessed.current = true
-      handleSend(initial)
+      const docs = files?.length
+        ? files.map((f) => ({
+            doc_id: `doc_${Date.now()}_${Math.random().toString(36).slice(2)}`,
+            filename: f.name,
+            doc_type: 'policy' as const,
+            status: 'Ready' as const,
+            created_at: new Date().toISOString(),
+            claim_id: claimId ?? '',
+          }))
+        : undefined
+      handleSend(initial, docs)
       window.history.replaceState({}, '', location.pathname)
     }
   }, [claimId, handleSend, location.state, location.pathname])
