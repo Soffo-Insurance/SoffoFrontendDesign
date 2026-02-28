@@ -2,7 +2,7 @@ import { useEffect, useRef } from 'react'
 import { UserBubble } from './UserBubble'
 import { AssistantBubble } from './AssistantBubble'
 import { ReportCard } from './ReportCard'
-import { TypingIndicator } from './TypingIndicator'
+import { WorkingProgress } from './WorkingProgress'
 import type { ChatMessage, QueryResponseMessage, ReportMessage } from '../../types'
 
 interface MessageListProps {
@@ -18,11 +18,11 @@ export function MessageList({ messages, isLoading }: MessageListProps) {
   }, [messages, isLoading])
 
   return (
-    <div className="flex-1 overflow-y-auto px-4 py-6 bg-gray-50/30">
-      <div className="max-w-3xl mx-auto space-y-6">
+    <div className="flex-1 overflow-y-auto bg-white">
+      <div className="max-w-[800px] mx-auto px-6 py-8 space-y-8">
         {messages.length === 0 && !isLoading && (
-          <div className="text-center py-12 text-gray-400 text-sm">
-            Ask a question or generate a defensible report. Try a suggested prompt below.
+          <div className="text-center py-16 text-gray-400 text-sm">
+            Ask a question or generate a defensible report.
           </div>
         )}
         {messages.map((msg) => {
@@ -37,11 +37,17 @@ export function MessageList({ messages, isLoading }: MessageListProps) {
           }
           if ((msg as ReportMessage).report) {
             return (
-              <ReportCard
-                key={msg.id}
-                report={(msg as ReportMessage).report!}
-                onExport={() => {}}
-              />
+              <div key={msg.id} className="flex gap-3">
+                <div className="shrink-0 w-8 h-8 rounded bg-gray-700 flex items-center justify-center mt-0.5">
+                  <span className="text-white font-semibold text-sm">H</span>
+                </div>
+                <div className="flex-1 min-w-0 max-w-[720px]">
+                  <ReportCard
+                    report={(msg as ReportMessage).report!}
+                    onExport={() => {}}
+                  />
+                </div>
+              </div>
             )
           }
           return (
@@ -51,7 +57,7 @@ export function MessageList({ messages, isLoading }: MessageListProps) {
             />
           )
         })}
-        {isLoading && <TypingIndicator />}
+        {isLoading && <WorkingProgress animate />}
         <div ref={bottomRef} />
       </div>
     </div>
