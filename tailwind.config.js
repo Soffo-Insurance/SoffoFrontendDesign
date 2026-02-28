@@ -10,7 +10,7 @@ export default {
         sans: ['Inter', 'system-ui', 'sans-serif'],
         'inria-serif': ['"Inria Serif"', 'serif'],
         apple: ['-apple-system', 'BlinkMacSystemFont', 'SF Pro Text', 'Segoe UI', 'Helvetica Neue', 'sans-serif'],
-        canela: ['Canela', '"Playfair Display"', 'Georgia', 'serif'],
+        canela: ['Canela', 'Georgia', 'serif'],
       },
       boxShadow: {
         // Softer but more spread input shadow
