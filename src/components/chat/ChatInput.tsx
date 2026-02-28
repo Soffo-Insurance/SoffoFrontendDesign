@@ -166,7 +166,7 @@ export function ChatInput({ onSend, showSuggestions = true, claimId }: ChatInput
             title={includeWebSearch ? 'Web search on' : 'Web search off'}
             className={`flex items-center justify-center gap-1.5 h-7 shrink-0 rounded-full overflow-hidden transition-[width] duration-200 ${
               includeWebSearch
-                ? 'w-[88px] px-3 bg-gray-200 text-gray-700'
+                ? 'w-[72px] px-2.5 bg-gray-200 text-gray-700'
                 : 'w-7 text-gray-500 hover:bg-gray-100 border border-gray-200'
             }`}
           >
