@@ -140,7 +140,7 @@ export function ChatInput({ onSend, claimId, prefill, onPrefillConsumed, placeho
   const handleDragLeave = () => setIsDropTarget(false)
 
   return (
-    <div className={`shrink-0 px-4 pt-4 bg-transparent flex justify-center ${sidePanel ? 'pb-16' : 'pb-10'}`}>
+    <div className={`shrink-0 px-4 pt-4 bg-transparent flex justify-center ${sidePanel ? 'pb-32' : 'pb-10'}`}>
       <div className="w-full max-w-xl flex flex-col items-center">
         {attachments.length > 0 && (
           <div className="flex flex-wrap gap-2 mb-2 justify-start w-full">
@@ -198,21 +198,23 @@ export function ChatInput({ onSend, claimId, prefill, onPrefillConsumed, placeho
               e.target.value = ''
             }}
           />
-          <Tooltip label={improvePrompt ? 'Improve prompt on' : 'Improve prompt'} position="above">
-            <button
-              type="button"
-              onClick={() => setImprovePrompt((v) => !v)}
-              className={`chat-input-icon flex items-center justify-center gap-1.5 h-7 shrink-0 overflow-hidden transition-[width,background-color,color] duration-200 ${
-                improvePrompt
-                  ? 'w-[72px] px-2.5 rounded-md bg-gray-100 text-gray-600'
-                  : 'w-7 rounded-full text-gray-500 hover:bg-gray-100'
-              }`}
-              aria-label={improvePrompt ? 'Improve prompt on' : 'Improve prompt off'}
-            >
-              <WandIcon className="w-3.5 h-3.5 shrink-0" />
-              {improvePrompt && <span className="text-[11px] font-semibold whitespace-nowrap">Improve</span>}
-            </button>
-          </Tooltip>
+          {!sidePanel && (
+            <Tooltip label={improvePrompt ? 'Improve prompt on' : 'Improve prompt'} position="above">
+              <button
+                type="button"
+                onClick={() => setImprovePrompt((v) => !v)}
+                className={`chat-input-icon flex items-center justify-center gap-1.5 h-7 shrink-0 overflow-hidden transition-[width,background-color,color] duration-200 ${
+                  improvePrompt
+                    ? 'w-[72px] px-2.5 rounded-md bg-gray-100 text-gray-600'
+                    : 'w-7 rounded-full text-gray-500 hover:bg-gray-100'
+                }`}
+                aria-label={improvePrompt ? 'Improve prompt on' : 'Improve prompt off'}
+              >
+                <WandIcon className="w-3.5 h-3.5 shrink-0" />
+                {improvePrompt && <span className="text-[11px] font-semibold whitespace-nowrap">Improve</span>}
+              </button>
+            </Tooltip>
+          )}
           <button
             type="button"
             onClick={() => setIncludeWebSearch((v) => !v)}
@@ -226,27 +228,29 @@ export function ChatInput({ onSend, claimId, prefill, onPrefillConsumed, placeho
             <Globe className="w-3.5 h-3.5 shrink-0" />
             {includeWebSearch && <span className="text-[11px] font-semibold whitespace-nowrap">Search</span>}
           </button>
-          <div className="relative shrink-0">
-            <Tooltip label="Add tabs or files" position="above">
-              <button
-                ref={addButtonRef}
-                type="button"
-                onClick={() => setAddPopoverOpen((v) => !v)}
-                className="chat-input-icon flex items-center justify-center h-7 w-7 text-gray-600 hover:text-gray-800 shrink-0 rounded-full hover:bg-gray-100"
-                aria-label="Add tabs or files"
-              >
-                <Plus className="w-3.5 h-3.5" />
-              </button>
-            </Tooltip>
-            <AddTabsOrFilesPopover
-              open={addPopoverOpen}
-              onClose={() => setAddPopoverOpen(false)}
-              onUploadClick={() => fileInputRef.current?.click()}
-              anchorRef={addButtonRef}
-              placement="above"
-              libraryFiles={attachments.map((d) => ({ id: d.doc_id, name: d.filename }))}
-            />
-          </div>
+          {!sidePanel && (
+            <div className="relative shrink-0">
+              <Tooltip label="Add tabs or files" position="above">
+                <button
+                  ref={addButtonRef}
+                  type="button"
+                  onClick={() => setAddPopoverOpen((v) => !v)}
+                  className="chat-input-icon flex items-center justify-center h-7 w-7 text-gray-600 hover:text-gray-800 shrink-0 rounded-full hover:bg-gray-100"
+                  aria-label="Add tabs or files"
+                >
+                  <Plus className="w-3.5 h-3.5" />
+                </button>
+              </Tooltip>
+              <AddTabsOrFilesPopover
+                open={addPopoverOpen}
+                onClose={() => setAddPopoverOpen(false)}
+                onUploadClick={() => fileInputRef.current?.click()}
+                anchorRef={addButtonRef}
+                placement="above"
+                libraryFiles={attachments.map((d) => ({ id: d.doc_id, name: d.filename }))}
+              />
+            </div>
+          )}
           <button
             onClick={handleSubmit}
             disabled={!input.trim()}
