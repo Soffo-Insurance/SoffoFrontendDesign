@@ -38,18 +38,13 @@ export function AddTabsOrFilesPopover({
     const anchor = anchorRef.current
     if (!anchor) return
     const r = anchor.getBoundingClientRect()
-    const width = 320
     const padding = 12
-    let left = r.left
-    if (left + width > window.innerWidth - padding) left = window.innerWidth - width - padding
+    // Position at the horizontal center of the trigger
+    let left = r.left + r.width / 2
     if (left < padding) left = padding
-    // For chat input near the bottom of the viewport we want the popover ABOVE the button.
-    // We don't know the exact height before render, so we use an estimated max height and clamp.
-    const estimatedHeight = 260
-    const top =
-      placement === 'above'
-        ? Math.max(padding, r.top - 4 - estimatedHeight)
-        : Math.min(window.innerHeight - padding, r.bottom + 4)
+    if (left > window.innerWidth - padding) left = window.innerWidth - padding
+    // Vertical anchor point; final placement uses CSS translate so the pill hugs the trigger
+    const top = placement === 'above' ? r.top - 8 : r.bottom + 8
     setPosition({
       top,
       left,
@@ -112,6 +107,7 @@ export function AddTabsOrFilesPopover({
         position: 'fixed',
         top: position.top,
         left: position.left,
+        transform: placement === 'above' ? 'translate(-50%, -100%)' : 'translate(-50%, 0)',
         width: 320,
         maxWidth: 'calc(100vw - 24px)',
         zIndex: 2147483647,

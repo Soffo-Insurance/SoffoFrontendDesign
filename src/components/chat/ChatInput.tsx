@@ -1,17 +1,15 @@
 import { useState, useRef, useEffect } from 'react'
 import { ArrowUp, X, Globe, Plus } from 'lucide-react'
-import { SUGGESTED_PROMPTS } from '../../mockData'
 import { DOC_DRAG_TYPE } from '../../utils/drag'
 import type { StoredDocument } from '../../types'
 import { AddTabsOrFilesPopover } from '../AddTabsOrFilesPopover'
 
 interface ChatInputProps {
   onSend: (text: string, attachments?: StoredDocument[], includeWebSearch?: boolean) => void
-  showSuggestions?: boolean
   claimId?: string
 }
 
-export function ChatInput({ onSend, showSuggestions = true, claimId }: ChatInputProps) {
+export function ChatInput({ onSend, claimId }: ChatInputProps) {
   const [input, setInput] = useState('')
   const [attachments, setAttachments] = useState<StoredDocument[]>([])
   const [includeWebSearch, setIncludeWebSearch] = useState(false)
@@ -109,21 +107,8 @@ export function ChatInput({ onSend, showSuggestions = true, claimId }: ChatInput
           <div className="mb-3 flex w-full max-w-xl items-center gap-2 text-xs text-gray-500">
             <span className="inline-flex items-center gap-1.5 rounded-full bg-gray-100/80 px-3 py-1.5 animate-pulse">
               <Globe className="w-3.5 h-3.5 text-gray-400" />
-              <span>Thinking… searching the web and case law</span>
+              <span>Thinking…</span>
             </span>
-          </div>
-        )}
-        {showSuggestions && (
-          <div className="flex flex-wrap gap-2 mb-2 justify-center">
-            {SUGGESTED_PROMPTS.map((prompt) => (
-              <button
-                key={prompt}
-                onClick={() => onSend(prompt)}
-                className="px-3 py-1.5 text-xs rounded-lg border border-gray-200 text-gray-600 bg-white hover:bg-gray-50 hover:border-gray-300 shadow-soft transition-all duration-150"
-              >
-                {prompt}
-              </button>
-            ))}
           </div>
         )}
         {attachments.length > 0 && (
@@ -184,10 +169,8 @@ export function ChatInput({ onSend, showSuggestions = true, claimId }: ChatInput
             type="button"
             onClick={() => setIncludeWebSearch((v) => !v)}
             title={includeWebSearch ? 'Web search on' : 'Web search off'}
-            className={`flex items-center justify-center gap-1.5 h-7 shrink-0 px-2.5 rounded-md text-xs transition-colors border ${
-              includeWebSearch
-                ? 'bg-gray-100 border-gray-200 text-gray-700'
-                : 'bg-transparent border-gray-200 text-gray-500 hover:bg-gray-50'
+            className={`flex items-center justify-center gap-1.5 h-7 shrink-0 px-1.5 text-xs transition-colors ${
+              includeWebSearch ? 'text-gray-800' : 'text-gray-500 hover:text-gray-700'
             }`}
           >
             <Globe className="w-3.5 h-3.5 shrink-0" />
@@ -198,7 +181,7 @@ export function ChatInput({ onSend, showSuggestions = true, claimId }: ChatInput
               ref={addButtonRef}
               type="button"
               onClick={() => setAddPopoverOpen((v) => !v)}
-              className="flex items-center justify-center h-7 px-2.5 rounded-md border border-gray-200 text-gray-600 hover:bg-gray-50 shrink-0"
+              className="flex items-center justify-center h-7 px-1.5 text-gray-600 hover:text-gray-800 shrink-0"
               title="Add tabs or files"
             >
               <Plus className="w-3.5 h-3.5" />
