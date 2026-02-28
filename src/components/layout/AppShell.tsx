@@ -8,6 +8,7 @@ import { TabContentPanel } from './TabContentPanel'
 import { ChatPanel } from './ChatPanel'
 
 const SIDEBAR_WIDTH = 220
+const SIDEBAR_COLLAPSED_WIDTH = 56
 const RIGHT_CHAT_WIDTH = 360
 
 function HomeIcon({ className }: { className?: string }) {
@@ -48,7 +49,15 @@ function PanelLeftIcon({ className }: { className?: string }) {
   )
 }
 
-function LeftSidebar({ workspaceName }: { workspaceName: string }) {
+function LeftSidebar({
+  workspaceName,
+  collapsed,
+  onToggleCollapse,
+}: {
+  workspaceName: string
+  collapsed: boolean
+  onToggleCollapse: () => void
+}) {
   const navLinkClass = ({ isActive }: { isActive: boolean }) =>
     `flex items-center gap-1.5 px-1.5 py-1 rounded-md text-sm font-medium text-gray-900 transition-colors ${
       isActive ? 'bg-gray-200/70' : 'hover:bg-gray-200/70'
@@ -56,59 +65,76 @@ function LeftSidebar({ workspaceName }: { workspaceName: string }) {
 
   return (
     <aside
-      className="shrink-0 flex flex-col bg-[#FAFAF9]"
-      style={{ width: SIDEBAR_WIDTH }}
+      className="shrink-0 flex flex-col bg-[#FAFAF9] transition-[width] duration-200 overflow-hidden"
+      style={{ width: collapsed ? SIDEBAR_COLLAPSED_WIDTH : SIDEBAR_WIDTH }}
     >
-      <div className="px-2 pt-2 pb-1.5 flex items-center gap-1.5">
+      <div className={`pt-2 pb-1.5 flex items-center ${collapsed ? 'px-1.5 justify-center flex-col gap-1' : 'px-2 gap-1.5'}`}>
+        {!collapsed ? (
+          <button
+            type="button"
+            className="flex items-center gap-1.5 min-w-0 flex-1 text-left rounded-md py-1 px-1.5 hover:bg-gray-200/70 transition-colors"
+            aria-label="Switch workspace"
+          >
+            <span className="w-5 h-5 shrink-0 rounded bg-gray-200 flex items-center justify-center text-[10px] font-semibold text-gray-700 leading-none">
+              {workspaceName.charAt(0).toUpperCase() || 'W'}
+            </span>
+            <span className="text-sm font-medium text-gray-900 truncate min-w-0 flex-1">{workspaceName}</span>
+            <ChevronDown className="w-3.5 h-3.5 shrink-0 text-gray-500" />
+          </button>
+        ) : (
+          <button
+            type="button"
+            className="flex items-center justify-center rounded-md py-1 px-1.5 hover:bg-gray-200/70 transition-colors"
+            aria-label="Workspace"
+          >
+            <span className="w-5 h-5 shrink-0 rounded bg-gray-200 flex items-center justify-center text-[10px] font-semibold text-gray-700 leading-none">
+              {workspaceName.charAt(0).toUpperCase() || 'W'}
+            </span>
+          </button>
+        )}
         <button
           type="button"
-          className="flex items-center gap-1.5 min-w-0 flex-1 text-left rounded-md py-1 px-1.5 hover:bg-gray-200/70 transition-colors"
-          aria-label="Switch workspace"
-        >
-          <span className="w-5 h-5 shrink-0 rounded bg-gray-200 flex items-center justify-center text-[10px] font-semibold text-gray-700 leading-none">
-            {workspaceName.charAt(0).toUpperCase() || 'W'}
-          </span>
-          <span className="text-sm font-medium text-gray-900 truncate min-w-0 flex-1">{workspaceName}</span>
-          <ChevronDown className="w-3.5 h-3.5 shrink-0 text-gray-500" />
-        </button>
-        <button
-          type="button"
+          onClick={onToggleCollapse}
           className="p-0.5 rounded text-gray-500 hover:bg-gray-200 shrink-0"
-          aria-label="Collapse sidebar"
+          aria-label={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
         >
-          <PanelLeftIcon className="w-3.5 h-3.5" />
+          <PanelLeftIcon className={`w-3.5 h-3.5 transition-transform ${collapsed ? 'rotate-180' : ''}`} />
         </button>
       </div>
       <nav className="flex-1 px-1.5 py-1 space-y-0.5">
-        <NavLink to="/c" end className={navLinkClass}>
+        <NavLink to="/c" end className={navLinkClass} title="Home">
           <HomeIcon className="w-4 h-4 shrink-0" />
-          Home
+          {!collapsed && <span>Home</span>}
         </NavLink>
-        <NavLink to="/c/library" className={navLinkClass}>
+        <NavLink to="/c/library" className={navLinkClass} title="Library">
           <LibraryIcon className="w-4 h-4 shrink-0" />
-          Library
+          {!collapsed && <span>Library</span>}
         </NavLink>
-        <NavLink to="/c/integrations" className={navLinkClass}>
+        <NavLink to="/c/integrations" className={navLinkClass} title="Integrations">
           <IntegrationsIcon className="w-4 h-4 shrink-0" />
-          Integrations
+          {!collapsed && <span>Integrations</span>}
         </NavLink>
       </nav>
       <div className="px-1.5 py-1.5">
-        <div className="flex items-center gap-1.5 px-2 py-1.5 rounded-lg bg-gray-200/80">
+        <div className={`flex items-center rounded-lg bg-gray-200/80 ${collapsed ? 'justify-center p-1.5' : 'gap-1.5 px-2 py-1.5'}`}>
           <div className="w-7 h-7 rounded-full bg-gray-300 flex items-center justify-center shrink-0">
             <User className="w-4 h-4 text-gray-500" />
           </div>
-          <div className="min-w-0 flex-1">
-            <p className="text-sm font-medium text-gray-900 truncate">Alex Yang</p>
-            <p className="text-xs text-gray-500">Free</p>
-          </div>
-          <button
-            type="button"
-            className="p-0.5 rounded text-gray-500 hover:bg-gray-300"
-            aria-label="Profile menu"
-          >
-            <ChevronRight className="w-4 h-4 rotate-[-90deg]" />
-          </button>
+          {!collapsed && (
+            <>
+              <div className="min-w-0 flex-1">
+                <p className="text-sm font-medium text-gray-900 truncate">Alex Yang</p>
+                <p className="text-xs text-gray-500">Free</p>
+              </div>
+              <button
+                type="button"
+                className="p-0.5 rounded text-gray-500 hover:bg-gray-300"
+                aria-label="Profile menu"
+              >
+                <ChevronRight className="w-4 h-4 rotate-[-90deg]" />
+              </button>
+            </>
+          )}
         </div>
       </div>
     </aside>
@@ -193,11 +219,16 @@ function ContentWithClaimChat() {
 
 export function AppShell() {
   const [workspaceName] = useState(() => 'My Workspace')
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false)
 
   return (
     <TabsProvider>
       <div className="flex h-screen bg-[#FAFAF9] text-gray-900">
-        <LeftSidebar workspaceName={workspaceName} />
+        <LeftSidebar
+          workspaceName={workspaceName}
+          collapsed={sidebarCollapsed}
+          onToggleCollapse={() => setSidebarCollapsed((v) => !v)}
+        />
         <div className="flex-1 flex flex-col min-w-0 min-h-0 bg-[#FAFAF9]">
           <ContentWithClaimChat />
         </div>
