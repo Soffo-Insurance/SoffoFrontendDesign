@@ -8,3 +8,16 @@ body {
   @apply bg-white text-black antialiased;
   font-family: 'Inter', system-ui, sans-serif;
 }
+
+/* Chat page: grey focus/selection box effect on all buttons */
+.chat-page button:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px #d1d5db;
+}
+.chat-page button::-moz-focus-inner {
+  border: 0;
+}
+.chat-page button::selection {
+  background-color: #e5e7eb;
+  color: inherit;
+}

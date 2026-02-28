@@ -85,7 +85,7 @@ export function ChatPage() {
   }
 
   return (
-    <div className="flex flex-1 flex-col min-h-0">
+    <div className="chat-page flex flex-1 flex-col min-h-0">
       <MessageList messages={messages} isLoading={isLoading} />
       <ChatInput onSend={handleSend} claimId={claimId} />
     </div>
