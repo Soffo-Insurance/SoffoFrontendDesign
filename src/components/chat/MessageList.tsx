@@ -18,7 +18,7 @@ export function MessageList({ messages, isLoading }: MessageListProps) {
   }, [messages, isLoading])
 
   return (
-    <div className="flex-1 overflow-y-auto px-4 py-6">
+    <div className="flex-1 overflow-y-auto px-4 py-6 bg-gray-50/30">
       <div className="max-w-3xl mx-auto space-y-6">
         {messages.length === 0 && !isLoading && (
           <div className="text-center py-12 text-gray-400 text-sm">

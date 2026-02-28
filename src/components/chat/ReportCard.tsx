@@ -41,7 +41,7 @@ function CausationDiagram({ mermaidCode }: { mermaidCode: string }) {
   }, [mermaidCode])
 
   return (
-    <div ref={ref} className="mermaid bg-gray-50 p-3 text-sm">
+    <div ref={ref} className="mermaid bg-gray-50/60 p-4 rounded-xl text-sm">
       {mermaidCode}
     </div>
   )
@@ -78,20 +78,20 @@ export function ReportCard({ report }: ReportCardProps) {
   const handlePrint = () => window.print()
 
   return (
-    <div className="border border-gray-200 overflow-hidden">
-      <div className="px-3 py-2 border-b border-gray-200 flex items-center justify-between bg-gray-50">
+    <div className="rounded-2xl border border-gray-200 overflow-hidden shadow-soft-lg bg-white">
+      <div className="px-4 py-3 border-b border-gray-100 flex items-center justify-between bg-gray-50/80">
         <h3 className="text-sm font-medium text-black">Report</h3>
         <div className="flex gap-2">
           <button
             onClick={handleExport}
-            className="flex items-center gap-1 px-2 py-1 text-xs text-gray-600 hover:bg-gray-200"
+            className="flex items-center gap-1.5 px-3 py-2 text-xs text-gray-600 hover:bg-white hover:text-black rounded-lg border border-gray-200 shadow-soft-button transition-all"
           >
             <Download className="w-3.5 h-3.5" />
             Export
           </button>
           <button
             onClick={handlePrint}
-            className="flex items-center gap-1 px-2 py-1 text-xs text-gray-600 hover:bg-gray-200"
+            className="flex items-center gap-1.5 px-3 py-2 text-xs text-gray-600 hover:bg-white hover:text-black rounded-lg border border-gray-200 shadow-soft-button transition-all"
           >
             <Printer className="w-3.5 h-3.5" />
             Print
@@ -189,7 +189,7 @@ export function ReportCard({ report }: ReportCardProps) {
             <div key={key}>
               <button
                 onClick={() => setOpenSection(isOpen ? '' : key)}
-                className="w-full flex items-center justify-between px-3 py-2 text-left hover:bg-gray-50"
+                className="w-full flex items-center justify-between px-4 py-3 text-left hover:bg-gray-50 rounded-lg transition-colors"
               >
                 <span className="text-sm font-medium text-black">{label}</span>
                 <ChevronDown className={`w-4 h-4 transition-transform ${isOpen ? 'rotate-180' : ''}`} />

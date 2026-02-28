@@ -8,7 +8,7 @@ export function ConfidenceMeter({ value }: ConfidenceMeterProps) {
   return (
     <div className="flex items-center gap-2">
       <span className="text-gray-500 text-xs">Confidence</span>
-      <div className="w-12 h-1 bg-gray-200 overflow-hidden">
+      <div className="w-12 h-1.5 bg-gray-200 rounded-full overflow-hidden">
         <div
           className="h-full bg-black transition-all"
           style={{ width: `${pct}%` }}

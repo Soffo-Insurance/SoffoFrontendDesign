@@ -70,17 +70,17 @@ export function DocumentLibrary({
   return (
     <div className="relative flex shrink-0">
       <aside
-        className={`shrink-0 border-l border-gray-200 flex flex-col transition-all duration-200 ${
+        className={`shrink-0 border-l border-gray-100 flex flex-col transition-all duration-200 shadow-soft ${
           isOpen ? 'w-64' : 'w-0 overflow-hidden'
         }`}
       >
-        <div className="p-2 border-b border-gray-200">
+        <div className="p-3 border-b border-gray-100">
           <h3 className="text-sm font-medium text-black">Documents</h3>
-          <p className="text-[11px] text-gray-500">Claim {claimId}</p>
+          <p className="text-[11px] text-gray-500 mt-0.5">Claim {claimId}</p>
         </div>
-        <div className="flex gap-1 p-2 border-b border-gray-200">
+        <div className="flex gap-2 p-3 border-b border-gray-100">
           <div
-            className="flex-1 cursor-pointer border border-dashed border-gray-200 hover:border-gray-300 p-2 flex items-center justify-center gap-1.5"
+            className="flex-1 cursor-pointer border border-dashed border-gray-200 hover:border-gray-300 hover:bg-gray-50 rounded-lg p-2.5 flex items-center justify-center gap-1.5 transition-all"
             onClick={() => fileInputRef.current?.click()}
           >
             <input
@@ -95,7 +95,7 @@ export function DocumentLibrary({
           </div>
           <button
             onClick={onCreateFolder}
-            className="p-2 border border-dashed border-gray-200 hover:border-gray-300 flex items-center justify-center"
+            className="p-2.5 border border-dashed border-gray-200 hover:border-gray-300 hover:bg-gray-50 rounded-lg flex items-center justify-center transition-all"
             title="New folder"
           >
             <FolderPlus className="w-3.5 h-3.5 text-gray-500" />
@@ -109,7 +109,7 @@ export function DocumentLibrary({
               <div key={folder.folder_id} className="mb-1">
                 <button
                   onClick={() => toggleFolder(folder.folder_id)}
-                  className="w-full flex items-center gap-1.5 py-1 px-2 hover:bg-gray-50 text-left"
+                  className="w-full flex items-center gap-1.5 py-2 px-3 hover:bg-gray-50 rounded-lg text-left transition-colors"
                 >
                   {isExpanded ? (
                     <ChevronDown className="w-3.5 h-3.5 text-gray-500 shrink-0" />
@@ -126,7 +126,7 @@ export function DocumentLibrary({
                       key={doc.doc_id}
                       draggable
                       onDragStart={(e) => handleDocDragStart(e, doc)}
-                      className="flex items-start gap-2 py-1.5 pl-6 pr-2 hover:bg-gray-50 cursor-grab active:cursor-grabbing group"
+                      className="flex items-start gap-2 py-2 pl-7 pr-3 hover:bg-gray-50 rounded-lg cursor-grab active:cursor-grabbing transition-colors"
                     >
                       <FileText className="w-3.5 h-3.5 text-gray-400 shrink-0 mt-0.5" />
                       <div className="min-w-0 flex-1">
@@ -150,7 +150,7 @@ export function DocumentLibrary({
                   key={doc.doc_id}
                   draggable
                   onDragStart={(e) => handleDocDragStart(e, doc)}
-                  className="flex items-start gap-2 py-1.5 px-2 hover:bg-gray-50 cursor-grab active:cursor-grabbing"
+                  className="flex items-start gap-2 py-2 px-3 hover:bg-gray-50 rounded-lg cursor-grab active:cursor-grabbing transition-colors"
                 >
                   <FileText className="w-3.5 h-3.5 text-gray-400 shrink-0 mt-0.5" />
                   <div className="min-w-0 flex-1">
@@ -172,7 +172,7 @@ export function DocumentLibrary({
       </aside>
       <button
         onClick={onToggle}
-        className="absolute -left-8 top-1/2 -translate-y-1/2 w-6 h-12 flex items-center justify-center bg-gray-200 hover:bg-gray-300 border border-gray-200 border-r-0"
+        className="absolute -left-8 top-1/2 -translate-y-1/2 w-6 h-12 flex items-center justify-center bg-white hover:bg-gray-100 border border-gray-200 rounded-l-lg shadow-soft transition-colors"
       >
         {isOpen ? <ChevronRight className="w-4 h-4" /> : <ChevronLeft className="w-4 h-4" />}
       </button>

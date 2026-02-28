@@ -27,7 +27,7 @@ export function AssistantBubble({ message }: AssistantBubbleProps) {
 
   return (
     <div className="flex justify-start">
-      <div className="max-w-[85%] rounded-md border border-gray-200 px-3 py-2">
+      <div className="max-w-[85%] rounded-2xl border border-gray-200 bg-white px-4 py-3 shadow-soft">
         <div className="text-gray-800">
           {hasCitations ? (
             <p className="text-sm leading-relaxed">{renderContentWithCitations(message.content)}</p>
@@ -36,7 +36,7 @@ export function AssistantBubble({ message }: AssistantBubbleProps) {
           )}
         </div>
         {showMeter && (
-          <div className="mt-2 pt-2 border-t border-gray-100 flex items-center gap-4">
+          <div className="mt-3 pt-3 border-t border-gray-100 flex items-center gap-4">
             <ConfidenceMeter value={message.confidence!} />
             {message.graphNodesUsed != null && (
               <span>{message.graphNodesUsed} graph nodes</span>

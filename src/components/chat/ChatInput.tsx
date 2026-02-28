@@ -70,14 +70,14 @@ export function ChatInput({ onSend, showSuggestions = true }: ChatInputProps) {
   const handleDragLeave = () => setIsDropTarget(false)
 
   return (
-    <div className="shrink-0 border-t border-gray-200 px-4 py-3">
+    <div className="shrink-0 border-t border-gray-100 px-4 py-3 bg-white">
       {showSuggestions && (
-        <div className="flex flex-wrap gap-1.5 mb-2">
+        <div className="flex flex-wrap gap-2 mb-2">
           {SUGGESTED_PROMPTS.map((prompt) => (
             <button
               key={prompt}
               onClick={() => onSend(prompt)}
-              className="px-2 py-1 text-xs border border-gray-200 text-gray-600 hover:bg-gray-50"
+              className="px-3 py-1.5 text-xs rounded-lg border border-gray-200 text-gray-600 bg-white hover:bg-gray-50 hover:border-gray-300 shadow-soft transition-all duration-150"
             >
               {prompt}
             </button>
@@ -85,17 +85,17 @@ export function ChatInput({ onSend, showSuggestions = true }: ChatInputProps) {
         </div>
       )}
       {attachments.length > 0 && (
-        <div className="flex flex-wrap gap-1.5 mb-2">
+        <div className="flex flex-wrap gap-2 mb-2">
           {attachments.map((doc) => (
             <span
               key={doc.doc_id}
-              className="inline-flex items-center gap-1 px-2 py-1 text-xs bg-gray-100 border border-gray-200 text-gray-800"
+              className="inline-flex items-center gap-1.5 px-2.5 py-1.5 text-xs bg-gray-50 border border-gray-200 text-gray-800 rounded-lg shadow-soft"
             >
               {doc.filename}
               <button
                 type="button"
                 onClick={() => removeAttachment(doc.doc_id)}
-                className="p-0.5 hover:bg-gray-200 rounded"
+                className="p-0.5 hover:bg-gray-200 rounded-md transition-colors"
                 aria-label="Remove"
               >
                 <X className="w-3 h-3" />
@@ -108,8 +108,10 @@ export function ChatInput({ onSend, showSuggestions = true }: ChatInputProps) {
         onDrop={handleDrop}
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
-        className={`flex items-end gap-2 border p-2 transition-colors ${
-          isDropTarget ? 'border-black bg-gray-50' : 'border-gray-200'
+        className={`flex items-end gap-2 p-2.5 rounded-xl transition-all duration-200 ${
+          isDropTarget
+            ? 'border-2 border-black bg-gray-50 shadow-soft-md'
+            : 'border border-gray-200 bg-white shadow-soft'
         }`}
       >
         <textarea
@@ -119,21 +121,25 @@ export function ChatInput({ onSend, showSuggestions = true }: ChatInputProps) {
           onKeyDown={handleKeyDown}
           placeholder={isDropTarget ? 'Drop document here' : 'Ask about causation, coverage... or drag a doc here'}
           rows={1}
-          className="flex-1 resize-none bg-transparent px-2 py-1.5 text-sm outline-none placeholder:text-gray-400 min-h-[36px] max-h-[200px]"
+          className="flex-1 resize-none bg-transparent px-2 py-1.5 text-sm outline-none placeholder:text-gray-400 min-h-[36px] max-h-[200px] rounded-lg"
         />
-        <div className="flex items-center gap-1 shrink-0">
+        <div className="flex items-center gap-1.5 shrink-0">
           <button
             type="button"
             onClick={() => setIncludeWebSearch((v) => !v)}
             title={includeWebSearch ? 'Web search on' : 'Include web search'}
-            className={`p-1.5 border ${includeWebSearch ? 'bg-black text-white border-black' : 'border-gray-200 hover:bg-gray-50'}`}
+            className={`p-2 rounded-lg transition-all duration-150 ${
+              includeWebSearch
+                ? 'bg-black text-white shadow-soft-button hover:shadow-soft-button-hover'
+                : 'border border-gray-200 bg-white hover:bg-gray-50 hover:border-gray-300 shadow-soft-button'
+            }`}
           >
             <Globe className="w-4 h-4" />
           </button>
           <button
             onClick={handleSubmit}
             disabled={!input.trim()}
-            className="p-1.5 bg-black text-white hover:bg-gray-800 disabled:opacity-40 disabled:cursor-not-allowed"
+            className="p-2 rounded-lg bg-black text-white shadow-soft-button hover:bg-gray-800 hover:shadow-soft-button-hover disabled:opacity-40 disabled:cursor-not-allowed disabled:shadow-none disabled:hover:shadow-none transition-all duration-150"
           >
             <Send className="w-4 h-4" />
           </button>
