@@ -135,7 +135,7 @@ export function ChatInput({ onSend, claimId }: ChatInputProps) {
           onDrop={handleDrop}
           onDragOver={handleDragOver}
           onDragLeave={handleDragLeave}
-          className={`w-full flex items-end gap-2 p-2.5 rounded-2xl bg-white shadow-input transition-all duration-200 ${
+          className={`w-full flex items-center gap-2 p-2.5 rounded-2xl bg-white shadow-input transition-all duration-200 ${
             isDropTarget ? 'shadow-soft-md' : ''
           }`}
         >
@@ -148,7 +148,7 @@ export function ChatInput({ onSend, claimId }: ChatInputProps) {
           rows={1}
           className="flex-1 resize-none bg-transparent px-2 py-1.5 text-sm outline-none placeholder:text-gray-400 min-h-[36px] max-h-[200px] rounded-lg"
         />
-        <div className="flex items-center gap-1.5 shrink-0">
+        <div className="flex items-center gap-1 shrink-0">
           <input
             ref={fileInputRef}
             type="file"
@@ -169,19 +169,21 @@ export function ChatInput({ onSend, claimId }: ChatInputProps) {
             type="button"
             onClick={() => setIncludeWebSearch((v) => !v)}
             title={includeWebSearch ? 'Web search on' : 'Web search off'}
-            className={`flex items-center justify-center gap-1.5 h-7 shrink-0 px-1.5 text-xs transition-colors ${
-              includeWebSearch ? 'text-gray-800' : 'text-gray-500 hover:text-gray-700'
+            className={`flex items-center justify-center gap-1.5 h-7 shrink-0 overflow-hidden transition-[width,background-color,color] duration-200 ${
+              includeWebSearch
+                ? 'w-[80px] px-2.5 rounded-full bg-gray-100 text-gray-700'
+                : 'w-7 rounded-full text-gray-500 hover:bg-gray-50'
             }`}
           >
             <Globe className="w-3.5 h-3.5 shrink-0" />
-            {includeWebSearch && <span className="text-xs font-semibold whitespace-nowrap">Search</span>}
+            {includeWebSearch && <span className="text-[11px] font-semibold whitespace-nowrap">Search</span>}
           </button>
           <div className="relative shrink-0">
             <button
               ref={addButtonRef}
               type="button"
               onClick={() => setAddPopoverOpen((v) => !v)}
-              className="flex items-center justify-center h-7 px-1.5 text-gray-600 hover:text-gray-800 shrink-0"
+              className="flex items-center justify-center h-7 w-7 text-gray-600 hover:text-gray-800 shrink-0"
               title="Add tabs or files"
             >
               <Plus className="w-3.5 h-3.5" />
