@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react'
+import { useState, useRef, useEffect, useLayoutEffect } from 'react'
 import { createPortal } from 'react-dom'
 import { Search, FileText, Upload } from 'lucide-react'
 
@@ -27,31 +27,35 @@ export function AddTabsOrFilesPopover({
   onSelectFile,
 }: AddTabsOrFilesPopoverProps) {
   const [search, setSearch] = useState('')
-  const [position, setPosition] = useState({ top: 0, left: 0 })
+  const [position, setPosition] = useState<{ top: number; left: number } | null>(null)
   const popoverRef = useRef<HTMLDivElement>(null)
 
-  useEffect(() => {
+  // Position popover directly below the trigger button (no Popover API so we control placement)
+  const updatePosition = () => {
+    const anchor = anchorRef.current
+    if (!anchor) return
+    const r = anchor.getBoundingClientRect()
+    const width = 320
+    const padding = 12
+    let left = r.left
+    if (left + width > window.innerWidth - padding) left = window.innerWidth - width - padding
+    if (left < padding) left = padding
+    setPosition({
+      top: r.bottom + 4,
+      left,
+    })
+  }
+  useLayoutEffect(() => {
     if (!open) {
-      try { popoverRef.current?.hidePopover?.() } catch { /* noop */ }
+      setPosition(null)
       return
     }
-    const el = popoverRef.current
-    if (!el) return
-    el.setAttribute('popover', 'manual')
-    const anchor = anchorRef.current
-    if (anchor) {
-      const r = anchor.getBoundingClientRect()
-      const width = 320
-      const padding = 12
-      let left = r.left
-      if (left + width > window.innerWidth - padding) left = window.innerWidth - width - padding
-      if (left < padding) left = padding
-      setPosition({
-        top: r.bottom + 4,
-        left,
-      })
-    }
-    try { el.showPopover?.() } catch { /* noop */ }
+    updatePosition()
+    // Fallback: anchor might not be laid out yet (e.g. first frame)
+    const id = requestAnimationFrame(() => {
+      updatePosition()
+    })
+    return () => cancelAnimationFrame(id)
   }, [open, anchorRef])
 
   useEffect(() => {
@@ -99,6 +103,8 @@ export function AddTabsOrFilesPopover({
         maxWidth: 'calc(100vw - 24px)',
         zIndex: 2147483647,
       }}
+      role="dialog"
+      aria-label="Library"
       onClick={(e) => e.stopPropagation()}
     >
       {/* Search bar + Upload button on same row (reference: pill search + circular upload) */}
@@ -161,7 +167,7 @@ export function AddTabsOrFilesPopover({
     </div>
   )
 
-  if (!open) return null
+  if (!open || position === null) return null
 
   return createPortal(popoverContent, document.body)
 }
