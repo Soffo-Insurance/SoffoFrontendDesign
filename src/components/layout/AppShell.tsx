@@ -150,7 +150,7 @@ function TopBar() {
   const hasTabs = tabs && tabs.tabs.length > 0
 
   return (
-    <header className="shrink-0 h-10 flex items-center px-3 gap-2 border-b border-gray-100">
+    <header className="shrink-0 h-10 flex items-center px-3 gap-2">
       {hasTabs ? (
         <TabStrip />
       ) : (
@@ -164,10 +164,12 @@ function ContentWithClaimChat() {
   const claimId = useParams<{ claimId?: string }>().claimId
 
   const shell = (
-    <div className="flex-1 flex flex-col min-h-0 min-w-0 bg-white rounded-lg border border-gray-200 overflow-hidden">
-      <TopBar />
-      <div className="flex-1 flex min-h-0 min-w-0 overflow-hidden">
-        <MainContent />
+    <div className="flex-1 flex flex-col min-h-0 min-w-0 p-3">
+      <div className="flex-1 flex flex-col min-h-0 min-w-0 bg-white rounded-lg border border-gray-200 overflow-hidden">
+        <TopBar />
+        <div className="flex-1 flex min-h-0 min-w-0 overflow-hidden">
+          <MainContent />
+        </div>
       </div>
     </div>
   )
