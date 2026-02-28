@@ -61,7 +61,6 @@ export function EmptyStatePage() {
   return (
     <div className="flex-1 flex flex-col items-center justify-center bg-white px-4">
       <div className="w-full max-w-2xl flex flex-col items-center">
-        <div className="-mt-2 mb-5 text-4xl font-semibold tracking-wide text-black font-inria-serif">Soffo</div>
         <div
           onDrop={handleDrop}
           onDragOver={handleDragOver}
@@ -91,7 +90,7 @@ export function EmptyStatePage() {
               ))}
             </div>
           )}
-          <div className="grid grid-cols-[4.5rem_1fr] items-center gap-2 px-4 py-3">
+          <div className="flex items-center gap-2 px-4 py-3">
             <Search className="w-4 h-4 text-gray-400 shrink-0" />
             <input
               type="text"
@@ -99,10 +98,10 @@ export function EmptyStatePage() {
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={(e) => e.key === 'Enter' && !e.shiftKey && (e.preventDefault(), handleSubmit())}
               placeholder="Ask anything..."
-              className="min-w-0 bg-transparent text-sm outline-none placeholder:text-gray-400"
+              className="flex-1 bg-transparent text-sm outline-none placeholder:text-gray-400 min-w-0"
             />
           </div>
-          <div className="grid grid-cols-[4.5rem_1fr_auto] items-center gap-2 px-4 py-2">
+          <div className="flex items-center justify-between gap-2 px-4 py-2 border-t border-gray-100">
             <input
               ref={fileInputRef}
               type="file"
@@ -111,20 +110,20 @@ export function EmptyStatePage() {
               className="hidden"
               onChange={handleFileChange}
             />
-            <button
-              type="button"
-              onClick={() => setWebSearchOn((v) => !v)}
-              title={webSearchOn ? 'Web search on' : 'Web search off'}
-              className={`flex items-center justify-center gap-1.5 h-7 w-7 shrink-0 overflow-hidden transition-[width] duration-200 col-start-1 ${
-                webSearchOn
-                  ? 'w-[72px] px-2.5 rounded-md bg-gray-100 text-gray-600'
-                  : 'w-7 rounded-full text-gray-500 hover:bg-gray-100'
-              }`}
-            >
-              <Globe className="w-3.5 h-3.5 shrink-0" />
-              {webSearchOn && <span className="text-xs font-semibold whitespace-nowrap">Search</span>}
-            </button>
-            <div className="flex items-center gap-2 min-w-0 col-start-2">
+            <div className="flex items-center gap-2 flex-1 min-w-0">
+              <button
+                type="button"
+                onClick={() => setWebSearchOn((v) => !v)}
+                title={webSearchOn ? 'Web search on' : 'Web search off'}
+                className={`flex items-center justify-center gap-1.5 h-7 shrink-0 overflow-hidden transition-[width] duration-200 ${
+                  webSearchOn
+                    ? 'w-[72px] px-2.5 rounded-md bg-gray-100 text-gray-600'
+                    : 'w-7 rounded-full text-gray-500 hover:bg-gray-100'
+                }`}
+              >
+                <Globe className="w-3.5 h-3.5 shrink-0" />
+                {webSearchOn && <span className="text-xs font-semibold whitespace-nowrap">Search</span>}
+              </button>
               <button
                 type="button"
                 onClick={handleAddFiles}
@@ -134,7 +133,7 @@ export function EmptyStatePage() {
                 <span>Add tabs or files</span>
               </button>
             </div>
-            <div className="flex items-center gap-1 shrink-0 col-start-3">
+            <div className="flex items-center gap-1 shrink-0">
               <button type="button" className="w-7 h-7 flex items-center justify-center rounded-full text-gray-400 hover:text-gray-600" title="Voice input">
                 <Mic className="w-3.5 h-3.5" />
               </button>
