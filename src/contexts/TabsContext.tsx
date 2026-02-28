@@ -27,11 +27,17 @@ export function TabsProvider({ children }: { children: ReactNode }) {
     const id = `tab-${Date.now()}-${Math.random().toString(36).slice(2)}`
     const newTab: Tab = { ...tab, id }
     setTabs((prev) => {
-      const exists = prev.some((t) => t.title === tab.title && t.type === tab.type)
-      if (exists) return prev
+      // Dedupe sources only; allow multiple editor tabs (e.g. multiple "Untitled")
+      if (tab.type === 'source') {
+        const existing = prev.find((t) => t.title === tab.title && t.type === tab.type)
+        if (existing) {
+          setActiveTabId(existing.id)
+          return prev
+        }
+      }
+      setActiveTabId(id)
       return [...prev, newTab]
     })
-    setActiveTabId(id)
     return id
   }, [])
 

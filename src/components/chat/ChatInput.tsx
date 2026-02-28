@@ -140,7 +140,7 @@ export function ChatInput({ onSend, claimId, prefill, onPrefillConsumed, placeho
   const handleDragLeave = () => setIsDropTarget(false)
 
   return (
-    <div className={`shrink-0 px-4 pt-4 bg-transparent flex justify-center ${sidePanel ? 'pb-32' : 'pb-10'}`}>
+    <div className={`shrink-0 px-4 pt-4 bg-transparent flex justify-center ${sidePanel ? 'pb-3' : 'pb-10'}`}>
       <div className="w-full max-w-xl flex flex-col items-center">
         {attachments.length > 0 && (
           <div className="flex flex-wrap gap-2 mb-2 justify-start w-full">

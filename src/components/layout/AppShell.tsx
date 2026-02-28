@@ -134,13 +134,11 @@ function TopBar() {
   const hasTabs = tabs && tabs.tabs.length > 0
 
   return (
-    <header
-      className="shrink-0 h-10 flex items-center px-3 gap-2 bg-white"
-    >
+    <header className="shrink-0 h-10 flex items-end min-h-0 bg-[#E5E7EB]">
       {hasTabs ? (
         <TabStrip />
       ) : (
-        <div className="flex-1 min-w-0" />
+        <div className="flex-1 min-w-0 h-full bg-[#E5E7EB]" />
       )}
     </header>
   )

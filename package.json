@@ -9,12 +9,15 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@blocksuite/blocks": "^0.0.0-canary-20250316001624",
+    "@blocksuite/presets": "^0.0.0-canary-20250316001624",
+    "@blocksuite/store": "^0.0.0-canary-20250316001624",
+    "lucide-react": "^0.460.0",
+    "mermaid": "^11.4.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "react-router-dom": "^6.28.0",
-    "lucide-react": "^0.460.0",
     "react-markdown": "^9.0.1",
-    "mermaid": "^11.4.0"
+    "react-router-dom": "^6.28.0"
   },
   "devDependencies": {
     "@types/react": "^18.3.12",
