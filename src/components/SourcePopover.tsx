@@ -129,12 +129,12 @@ export function SourcePopover({
             </button>
           </div>
           <span className="flex items-center gap-1.5 text-gray-500">
-            <FileText className="h-4 w-4 text-blue-600" aria-hidden />
+            <FileText className="h-4 w-4 text-gray-600" aria-hidden />
             {total} source{total !== 1 ? 's' : ''}
           </span>
         </div>
         <div className="flex items-center gap-2 mb-1">
-          <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded bg-blue-100 text-blue-600">
+          <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded bg-gray-200 text-gray-800">
             <FileText className="h-3 w-3" />
           </span>
           <span className="text-gray-700">{source.name}</span>
