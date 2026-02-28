@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Outlet, useParams, NavLink } from 'react-router-dom'
-import { User, ChevronDown } from 'lucide-react'
+import { User, ChevronDown, ChevronRight } from 'lucide-react'
 import { TabsProvider, useTabsOptional } from '../../contexts/TabsContext'
 import { ClaimChatProvider, useClaimChatOptional } from '../../contexts/ClaimChatContext'
 import { TabStrip } from './TabStrip'
