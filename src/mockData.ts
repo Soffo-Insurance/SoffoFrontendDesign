@@ -54,40 +54,28 @@ export const MOCK_DOCUMENTS: Record<string, StoredDocument[]> = {
 }
 
 export const MOCK_QUERY_RESPONSES: Record<string, string> = {
-  'what caused the foundation damage': `Based on the claim documents and environmental data, the foundation damage at 4812 Jessamine St was **predisposed by drought-induced soil movement** and **proximately caused by the May 15, 2024 hail and wind event**.
+  'what caused the foundation damage': `Based on the claim documents and environmental data, the foundation damage at 4812 Jessamine St was **predisposed by drought-induced soil movement** and **proximately caused by the May 15, 2024 hail and wind event**. [doc_002_chunk_0003]
 
-**Key evidence:**
-- [doc_002_chunk_0003] — Inspection report notes differential settlement consistent with shrink-swell cycles in expansive clay soil.
-- [node:DroughtRecord:PDSI-4102-202404] — PDSI of **-5.03** in April 2024 indicates extreme drought (threshold &lt; -4.0), supporting soil contraction and foundation micro-movement.
-- [node:StormEvent:NCEI-941852] — Golf-ball hail (1.75 in) and wind on May 15, 2024 at Bellaire; roof damage reported at 4800 block Jessamine St.
-- [doc_001_chunk_0001] — Policy Coverage A applies to wind/hail; anti-concurrent-causation (ACC) clause requires documented causal chain.
+The inspection report notes differential settlement consistent with shrink-swell cycles in expansive clay soil. April 2024 PDSI of **-5.03** indicates extreme drought, supporting soil contraction and foundation micro-movement. [node:DroughtRecord:PDSI-4102-202404]
 
-**Conclusion:** The carrier can assert ACC with confidence: drought predisposed the structure; hail/wind was the efficient proximate cause of the claimed roof damage. Foundation movement is excludable as a separate peril.`,
-  'is this covered under coverage a': `Yes. The loss is **covered under Coverage A** subject to the wind/hail deductible.
+Golf-ball hail (1.75 in) and wind on May 15, 2024 at Bellaire were documented at the 4800 block of Jessamine St. Policy Coverage A applies to wind and hail; the anti-concurrent-causation clause requires a documented causal chain. [node:StormEvent:NCEI-941852]
 
-**Evidence:**
-- [doc_001_chunk_0002] — Coverage A includes wind and hail as named perils.
-- [node:StormEvent:NCEI-941852] — Storm event corroborates hail and wind on loss date.
-- [node:FloodHazardZone:FHZ-1] — Property in Zone X (minimal flood risk); flood exclusions do not apply.
+The carrier can assert ACC with confidence: drought predisposed the structure; hail and wind were the efficient proximate cause of the claimed damage. Foundation movement is excludable as a separate peril. [doc_001_chunk_0001]`,
+  'is this covered under coverage a': `Yes. The loss is **covered under Coverage A** subject to the wind/hail deductible. [doc_001_chunk_0002]
 
-Deductible: 2% wind/hail per [doc_001_chunk_0005].`,
-  'environmental evidence': `**Environmental evidence for CLM-2024-TX-00847:**
+Coverage A includes wind and hail as named perils. The storm event corroborates hail and wind on the loss date. [node:StormEvent:NCEI-941852]
 
-| Data Type | Value | Source | Fetch Time |
-|-----------|-------|--------|------------|
-| Storm Event | Hail 1.75 in, Bellaire | NCEI Storm Events | 2024-05-20 |
-| PDSI (Apr 2024) | -5.03 (extreme drought) | NOAA PDSI | 2024-05-20 |
-| Flood Zone | X (minimal) | FEMA NFHL | 2024-05-20 |
-| Earthquake | M3.2, 8 km NW Houston | USGS | 2024-05-20 |
+The property is in Flood Zone X (minimal flood risk), so flood exclusions do not apply. Wind/hail deductible is 2% per the policy. [node:FloodHazardZone:FHZ-1]`,
+  'environmental evidence': `Environmental evidence for this claim includes storm, drought, and flood-hazard data. [node:StormEvent:NCEI-941852]
 
-The PDSI value supports drought-induced foundation micro-movement as a predisposing factor.`,
-  default: `The system has analyzed the claim documents and graph data. Based on available evidence:
+Storm Event: hail 1.75 in at Bellaire (NCEI). PDSI April 2024: -5.03 (extreme drought, NOAA). Flood Zone: X minimal (FEMA NFHL). [node:DroughtRecord:PDSI-4102-202404]
 
-- [doc_001_chunk_0001] — Policy terms and coverage apply.
-- [doc_002_chunk_0002] — Inspection findings support the damage assessment.
-- [node:Claim:CLM-2024-TX-00847] — Claim context and loss date align with documented events.
+The PDSI value supports drought-induced foundation micro-movement as a predisposing factor for the loss. [doc_002_chunk_0003]`,
+  default: `The system has analyzed the claim documents and graph data for this claim. [doc_001_chunk_0001]
 
-For more specific analysis, try: "What caused the foundation damage?" or "Generate defensible report."`,
+Policy terms and coverage apply; inspection findings support the damage assessment. Claim context and loss date align with documented events. [doc_002_chunk_0002]
+
+For a deeper analysis, try "What caused the foundation damage?" or "Is this covered under Coverage A?" You can also generate a defensible report with the button above. [node:Claim:CLM-2024-TX-00847]`,
 }
 
 export const SUGGESTED_PROMPTS = [

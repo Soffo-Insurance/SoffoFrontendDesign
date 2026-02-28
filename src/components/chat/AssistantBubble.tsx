@@ -1,6 +1,6 @@
 import { useState, useRef } from 'react'
 import ReactMarkdown from 'react-markdown'
-import { Copy, Download, FileEdit, Globe, ThumbsUp, ThumbsDown } from 'lucide-react'
+import { Copy, Download, FileEdit, FileText, Globe, ThumbsUp, ThumbsDown } from 'lucide-react'
 
 function RewriteIcon({ className }: { className?: string }) {
   return (
@@ -36,43 +36,64 @@ interface AssistantBubbleProps {
 function sourceEntriesFromCitations(citations: string[]): SourceEntry[] {
   return citations.map((name) => ({
     name,
-    title: name,
+    title: citationToDisplayDomain(name),
     description: 'Source content and context for this citation.',
   }))
 }
 
-function renderInlineWithCitations(
-  text: string,
-  citations: string[],
-  onCitationClick: (index: number, el: HTMLElement) => void
-) {
-  const parts = text.split(/(\[[^\]]+\])/g)
-  return parts.map((part, i) => {
-    if (part.startsWith('[') && part.endsWith(']')) {
-      const cite = part.slice(1, -1)
-      const index = citations.indexOf(cite)
-      const idx = index >= 0 ? index : 0
-      return (
-        <sup key={i} className="align-super ml-0.5">
-          <button
-            type="button"
-            onClick={(e) => onCitationClick(idx, e.currentTarget)}
-            className="text-gray-400 text-xs font-normal hover:text-gray-600 cursor-pointer underline decoration-dotted"
-          >
-            {cite}
-          </button>
-        </sup>
-      )
-    }
-    return (
-      <span
-        key={i}
-        dangerouslySetInnerHTML={{
-          __html: part.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>'),
-        }}
-      />
-    )
-  })
+/** Map citation id to a short domain-style label for the pill */
+function citationToDisplayDomain(citation: string): string {
+  if (citation.startsWith('node:')) {
+    if (citation.includes('StormEvent') || citation.includes('NCEI')) return 'ncei.noaa.gov'
+    if (citation.includes('PDSI') || citation.includes('Drought')) return 'drought.gov'
+    if (citation.includes('FloodHazard') || citation.includes('FEMA')) return 'msc.fema.gov'
+    if (citation.includes('Claim')) return 'claim file'
+    return 'data source'
+  }
+  if (citation.includes('doc_') && citation.includes('chunk')) {
+    if (citation.includes('doc_001')) return 'policy_dec_sheet.pdf'
+    if (citation.includes('doc_002')) return 'inspection_report.pdf'
+    return citation
+  }
+  return citation
+}
+
+function SourcePill({
+  domain,
+  citationIndex,
+  onClick,
+}: {
+  domain: string
+  citationIndex: number
+  onClick: (index: number, el: HTMLElement) => void
+}) {
+  const isDoc = domain.endsWith('.pdf') || domain.endsWith('.doc') || domain.endsWith('.docx')
+  return (
+    <button
+      type="button"
+      onClick={(e) => onClick(citationIndex, e.currentTarget)}
+      className="inline-flex items-center gap-1.5 rounded-full bg-gray-200 px-2.5 py-1 text-xs font-medium text-gray-700 hover:bg-gray-300 transition-colors ml-1.5 align-middle"
+    >
+      {isDoc ? (
+        <FileText className="w-3 h-3 shrink-0 text-gray-600" aria-hidden />
+      ) : (
+        <Globe className="w-3 h-3 shrink-0 text-gray-600" aria-hidden />
+      )}
+      <span className="truncate max-w-[180px]">{domain}</span>
+    </button>
+  )
+}
+
+/** Render paragraph text with bold, no [citation] markers (used when source is shown as pill at end) */
+function renderParagraphText(text: string) {
+  const withoutRefs = text.replace(/\s*\[[^\]]+\]\s*/g, ' ').trim()
+  return (
+    <span
+      dangerouslySetInnerHTML={{
+        __html: withoutRefs.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>'),
+      }}
+    />
+  )
 }
 
 const DEFAULT_FOLLOW_UPS = [
@@ -98,7 +119,6 @@ function extractCitationLabels(content: string): string[] {
 
 export function AssistantBubble({ message, followUps = DEFAULT_FOLLOW_UPS, onFollowUpClick }: AssistantBubbleProps) {
   const hasCitations = message.content.includes('[')
-  const citedCount = message.citations?.length ?? message.chunksUsed ?? 16
   const citations =
     message.citations && message.citations.length > 0
       ? message.citations
@@ -118,14 +138,35 @@ export function AssistantBubble({ message, followUps = DEFAULT_FOLLOW_UPS, onFol
     void navigator.clipboard.writeText(message.content)
   }
 
+  const paragraphs = message.content.split(/\n\n+/)
+
   return (
     <div className="flex-1 min-w-0 max-w-[720px]">
         <div className="text-[15px] leading-relaxed text-gray-900">
-          {hasCitations ? (
+          {hasCitations && citations.length > 0 ? (
+            <div className="space-y-4">
+              {paragraphs.map((para, i) => {
+                const citation = citations[i]
+                const hasSourcePill = citation != null
+                return (
+                  <p key={i} className="leading-relaxed">
+                    {renderParagraphText(para)}
+                    {hasSourcePill && (
+                      <SourcePill
+                        domain={citationToDisplayDomain(citation)}
+                        citationIndex={i}
+                        onClick={handleCitationClick}
+                      />
+                    )}
+                  </p>
+                )
+              })}
+            </div>
+          ) : hasCitations ? (
             <div className="space-y-3">
-              {message.content.split(/\n\n+/).map((para, i) => (
+              {paragraphs.map((para, i) => (
                 <p key={i} className="leading-relaxed">
-                  {renderInlineWithCitations(para, citations, handleCitationClick)}
+                  {renderParagraphText(para)}
                 </p>
               ))}
             </div>
@@ -141,20 +182,6 @@ export function AssistantBubble({ message, followUps = DEFAULT_FOLLOW_UPS, onFol
               {message.content}
             </ReactMarkdown>
           )}
-        </div>
-
-        <div className="mt-6">
-          <p className="text-sm font-medium text-gray-500 mb-2">Sources</p>
-          <button
-            type="button"
-            className="flex flex-col items-start gap-0.5 px-3 py-2.5 rounded-lg border border-gray-200 bg-gray-100 hover:bg-gray-50 transition-colors text-left shadow-[inset_0_1px_0_rgba(255,255,255,0.5)]"
-          >
-            <span className="flex items-center gap-2 text-sm font-medium text-gray-900">
-              <Globe className="w-4 h-4 text-gray-600" />
-              Web search and files
-            </span>
-            <span className="text-xs text-gray-500 pl-6">{citedCount} cited</span>
-          </button>
         </div>
 
         <div className="flex items-center justify-between gap-2 mt-3 flex-wrap">
