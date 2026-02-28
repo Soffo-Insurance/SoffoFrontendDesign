@@ -15,7 +15,6 @@ export function ChatInput({ onSend, claimId }: ChatInputProps) {
   const [includeWebSearch, setIncludeWebSearch] = useState(false)
   const [isDropTarget, setIsDropTarget] = useState(false)
   const [addPopoverOpen, setAddPopoverOpen] = useState(false)
-  const [isThinking, setIsThinking] = useState(false)
   const textareaRef = useRef<HTMLTextAreaElement>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
   const addButtonRef = useRef<HTMLButtonElement>(null)
@@ -34,8 +33,6 @@ export function ChatInput({ onSend, claimId }: ChatInputProps) {
     onSend(trimmed, attachments.length > 0 ? attachments : undefined, includeWebSearch)
     setInput('')
     setAttachments([])
-    // Show a short \"thinking\" shimmer after sending to mimic Claude/ChatGPT
-    setIsThinking(true)
   }
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -93,24 +90,9 @@ export function ChatInput({ onSend, claimId }: ChatInputProps) {
 
   const handleDragLeave = () => setIsDropTarget(false)
 
-  // Auto-clear the thinking state after a short delay so it doesn't persist forever
-  useEffect(() => {
-    if (!isThinking) return
-    const id = setTimeout(() => setIsThinking(false), 3500)
-    return () => clearTimeout(id)
-  }, [isThinking])
-
   return (
     <div className="shrink-0 px-4 pt-4 pb-10 bg-transparent flex justify-center">
       <div className="w-full max-w-xl flex flex-col items-center">
-        {isThinking && (
-          <div className="mb-3 flex w-full max-w-xl items-center gap-2 text-xs text-gray-500">
-            <span className="inline-flex items-center gap-1.5 rounded-full bg-gray-100/80 px-3 py-1.5 animate-pulse">
-              <Globe className="w-3.5 h-3.5 text-gray-400" />
-              <span>Thinking…</span>
-            </span>
-          </div>
-        )}
         {attachments.length > 0 && (
           <div className="flex flex-wrap gap-2 mb-2 justify-start w-full">
             {attachments.map((doc) => (
@@ -171,7 +153,7 @@ export function ChatInput({ onSend, claimId }: ChatInputProps) {
             title={includeWebSearch ? 'Web search on' : 'Web search off'}
             className={`flex items-center justify-center gap-1.5 h-7 shrink-0 overflow-hidden transition-[width,background-color,color] duration-200 ${
               includeWebSearch
-                ? 'w-[80px] px-2.5 rounded-full bg-gray-100 text-gray-700'
+                ? 'w-[72px] px-2.5 rounded-md bg-gray-100 text-gray-600'
                 : 'w-7 rounded-full text-gray-500 hover:bg-gray-100'
             }`}
           >

@@ -64,7 +64,7 @@ export function WorkingProgress({ animate = true }: WorkingProgressProps) {
                 className="flex items-center gap-2 text-sm text-gray-900"
               >
                 {i < completedCount ? (
-                  <Check className="w-4 h-4 shrink-0 text-green-600" />
+                  <Check className="w-4 h-4 shrink-0 text-gray-500" />
                 ) : (
                   <span className="w-4 h-4 shrink-0" />
                 )}
