@@ -1,26 +1,18 @@
 import { useState, useCallback, useEffect, useRef } from 'react'
 import { useParams, useLocation } from 'react-router-dom'
-import { ClaimHeader } from '../components/shared/ClaimHeader'
 import { MessageList } from '../components/chat/MessageList'
 import { ChatInput } from '../components/chat/ChatInput'
-import { DocumentLibrary } from '../components/documents/DocumentLibrary'
-import { MOCK_CLAIMS, MOCK_DOCUMENTS, MOCK_FOLDERS } from '../mockData'
+import { MOCK_CLAIMS } from '../mockData'
 import { mockQueryResponse, mockReportResponse } from '../mockGenerator'
-import type { ChatMessage, QueryResponseMessage, ReportMessage, StoredDocument, DocFolder } from '../types'
+import type { ChatMessage, StoredDocument } from '../types'
 
 export function ChatPage() {
   const { claimId } = useParams<{ claimId: string }>()
   const location = useLocation()
   const claim = MOCK_CLAIMS.find((c) => c.claim_id === claimId)
   const [messages, setMessages] = useState<ChatMessage[]>([])
-  const [documents, setDocuments] = useState(
-    () => MOCK_DOCUMENTS[claimId ?? ''] ?? []
-  )
-  const [folders, setFolders] = useState<DocFolder[]>(
-    () => MOCK_FOLDERS[claimId ?? ''] ?? []
-  )
   const [isLoading, setIsLoading] = useState(false)
-  const [docLibraryOpen, setDocLibraryOpen] = useState(true)
+  const initialProcessed = useRef(false)
 
   const handleSend = useCallback(
     (text: string, attachments?: StoredDocument[], includeWebSearch?: boolean) => {
@@ -58,46 +50,12 @@ export function ChatPage() {
     [claimId]
   )
 
-  const handleUpload = useCallback(
-    (file: File, docType: string) => {
-      const doc = {
-        doc_id: `doc_${Date.now()}`,
-        filename: file.name,
-        doc_type: docType as import('../types').DocType,
-        status: 'Processing' as const,
-        created_at: new Date().toISOString(),
-        claim_id: claimId ?? '',
-      }
-      setDocuments((prev) => [...prev, doc])
-      setTimeout(() => {
-        setDocuments((prev) =>
-          prev.map((d) =>
-            d.doc_id === doc.doc_id ? { ...d, status: 'Ready' as const } : d
-          )
-        )
-      }, 2000)
-    },
-    [claimId]
-  )
-
-  const handleCreateFolder = useCallback(() => {
-    if (!claimId) return
-    const name = `Folder ${folders.length + 1}`
-    setFolders((prev) => [
-      ...prev,
-      { folder_id: `f_${Date.now()}`, name, claim_id: claimId },
-    ])
-  }, [claimId, folders.length])
-
-  const handleMoveToFolder = useCallback((docId: string, folderId: string | null) => {
-    setDocuments((prev) =>
-      prev.map((d) => (d.doc_id === docId ? { ...d, folder_id: folderId ?? undefined } : d))
-    )
-  }, [])
-
-  const initialProcessed = useRef(false)
   useEffect(() => {
-    const state = location.state as { initialQuery?: string; initialAttachments?: File[]; includeWebSearch?: boolean }
+    const state = location.state as {
+      initialQuery?: string
+      initialAttachments?: File[]
+      includeWebSearch?: boolean
+    }
     const initial = state?.initialQuery
     const files = state?.initialAttachments
     const includeWebSearch = state?.includeWebSearch
@@ -127,22 +85,9 @@ export function ChatPage() {
   }
 
   return (
-    <div className="flex flex-1 min-h-0">
-      <div className="flex-1 flex flex-col min-w-0">
-        <ClaimHeader claim={claim} onEnrich={() => {}} />
-        <MessageList messages={messages} isLoading={isLoading} />
-        <ChatInput onSend={handleSend} showSuggestions={messages.length === 0} claimId={claimId} />
-      </div>
-      <DocumentLibrary
-        claimId={claimId}
-        documents={documents}
-        folders={folders}
-        onUpload={handleUpload}
-        onCreateFolder={handleCreateFolder}
-        onMoveToFolder={handleMoveToFolder}
-        isOpen={docLibraryOpen}
-        onToggle={() => setDocLibraryOpen((o) => !o)}
-      />
+    <div className="flex flex-1 flex-col min-h-0">
+      <MessageList messages={messages} isLoading={isLoading} />
+      <ChatInput onSend={handleSend} claimId={claimId} />
     </div>
   )
 }
