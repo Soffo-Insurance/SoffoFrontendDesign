@@ -81,10 +81,12 @@ export function ClaimChatProvider({
       initialQuery?: string
       initialAttachments?: File[]
       includeWebSearch?: boolean
+      improvePrompt?: boolean
     }
     const initial = state?.initialQuery
     const files = state?.initialAttachments
     const includeWebSearch = state?.includeWebSearch
+    const improvePrompt = state?.improvePrompt
     if (initial?.trim() && !initialProcessed.current) {
       initialProcessed.current = true
       const docs = files?.length
@@ -97,7 +99,7 @@ export function ClaimChatProvider({
             claim_id: claimId,
           }))
         : undefined
-      send(initial, docs, includeWebSearch)
+      send(initial, docs, includeWebSearch, improvePrompt)
       window.history.replaceState({}, '', location.pathname)
     }
   }, [claimId, send, location.state, location.pathname])

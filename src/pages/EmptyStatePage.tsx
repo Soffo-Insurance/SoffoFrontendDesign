@@ -5,11 +5,40 @@ import { MOCK_CLAIMS } from '../mockData'
 import { AddTabsOrFilesPopover } from '../components/AddTabsOrFilesPopover'
 import { useLibraryOptional } from '../contexts/LibraryContext'
 
+function WandIcon({ className }: { className?: string }) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={className}
+      aria-hidden
+    >
+      <path d="M15 4V2" />
+      <path d="M15 16v-2" />
+      <path d="M8 9h2" />
+      <path d="M20 9h2" />
+      <path d="M17.8 11.8 19 13" />
+      <path d="M15 9h.01" />
+      <path d="M17.8 6.2 19 5" />
+      <path d="m3 21 9-9" />
+      <path d="M12.2 6.2 11 5" />
+    </svg>
+  )
+}
+
 export function EmptyStatePage() {
   const [input, setInput] = useState('')
   const [attachments, setAttachments] = useState<{ id: string; file: File }[]>([])
   const [isDropTarget, setIsDropTarget] = useState(false)
   const [webSearchOn, setWebSearchOn] = useState(false)
+  const [improvePrompt, setImprovePrompt] = useState(false)
   const [addPopoverOpen, setAddPopoverOpen] = useState(false)
   const fileInputRef = useRef<HTMLInputElement>(null)
   const addButtonRef = useRef<HTMLButtonElement>(null)
@@ -25,6 +54,7 @@ export function EmptyStatePage() {
         initialQuery: trimmed,
         initialAttachments: attachments.map((a) => a.file),
         includeWebSearch: webSearchOn,
+        improvePrompt,
       },
     })
   }
@@ -119,6 +149,19 @@ export function EmptyStatePage() {
               onChange={handleFileChange}
             />
             <div className="flex items-center gap-2 flex-1 min-w-0">
+              <button
+                type="button"
+                onClick={() => setImprovePrompt((v) => !v)}
+                title={improvePrompt ? 'Improve prompt on' : 'Improve prompt off'}
+                className={`flex items-center justify-center gap-1.5 h-7 shrink-0 overflow-hidden transition-[width] duration-200 ${
+                  improvePrompt
+                    ? 'w-[72px] px-2.5 rounded-md bg-gray-100 text-gray-600'
+                    : 'w-7 rounded-full text-gray-500 hover:bg-gray-100'
+                }`}
+              >
+                <WandIcon className="w-3.5 h-3.5 shrink-0" />
+                {improvePrompt && <span className="text-xs font-semibold whitespace-nowrap">Improve</span>}
+              </button>
               <button
                 type="button"
                 onClick={() => setWebSearchOn((v) => !v)}
