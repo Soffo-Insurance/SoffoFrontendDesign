@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react'
-import { ArrowUp, X, Globe } from 'lucide-react'
+import { ArrowUp, X, Globe, Plus, ChevronDown } from 'lucide-react'
 import { SUGGESTED_PROMPTS } from '../../mockData'
 import { DOC_DRAG_TYPE } from '../../utils/drag'
 import type { StoredDocument } from '../../types'
@@ -7,14 +7,18 @@ import type { StoredDocument } from '../../types'
 interface ChatInputProps {
   onSend: (text: string, attachments?: StoredDocument[], includeWebSearch?: boolean) => void
   showSuggestions?: boolean
+  claimId?: string
 }
 
-export function ChatInput({ onSend, showSuggestions = true }: ChatInputProps) {
+export function ChatInput({ onSend, showSuggestions = true, claimId }: ChatInputProps) {
   const [input, setInput] = useState('')
   const [attachments, setAttachments] = useState<StoredDocument[]>([])
   const [includeWebSearch, setIncludeWebSearch] = useState(false)
+  const [webSearchExpanded, setWebSearchExpanded] = useState(false)
+  const [webSearchQuery, setWebSearchQuery] = useState('')
   const [isDropTarget, setIsDropTarget] = useState(false)
   const textareaRef = useRef<HTMLTextAreaElement>(null)
+  const fileInputRef = useRef<HTMLInputElement>(null)
 
   useEffect(() => {
     const ta = textareaRef.current
@@ -24,18 +28,29 @@ export function ChatInput({ onSend, showSuggestions = true }: ChatInputProps) {
     }
   }, [input])
 
-  const handleSubmit = () => {
+  const handleSubmit = (forceWebSearch?: boolean) => {
     const trimmed = input.trim()
     if (!trimmed) return
-    onSend(trimmed, attachments.length > 0 ? attachments : undefined, includeWebSearch)
+    const useWebSearch = forceWebSearch ?? includeWebSearch
+    onSend(trimmed, attachments.length > 0 ? attachments : undefined, useWebSearch)
     setInput('')
     setAttachments([])
+  }
+
+  const handleWebSearchSubmit = () => {
+    const q = webSearchQuery.trim()
+    if (q) {
+      onSend(q, attachments.length > 0 ? attachments : undefined, true)
+      setWebSearchQuery('')
+      setWebSearchExpanded(false)
+      setAttachments([])
+    }
   }
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault()
-      handleSubmit()
+      handleSubmit(includeWebSearch)
     }
   }
 
@@ -43,9 +58,26 @@ export function ChatInput({ onSend, showSuggestions = true }: ChatInputProps) {
     setAttachments((prev) => prev.filter((d) => d.doc_id !== docId))
   }
 
+  const fileToDoc = (file: File): StoredDocument => ({
+    doc_id: `doc_${Date.now()}_${Math.random().toString(36).slice(2)}`,
+    filename: file.name,
+    doc_type: 'policy',
+    status: 'Ready',
+    created_at: new Date().toISOString(),
+    claim_id: claimId ?? '',
+  })
+
   const handleDrop = (e: React.DragEvent) => {
     e.preventDefault()
     setIsDropTarget(false)
+    const files = e.dataTransfer.files
+    if (files?.length) {
+      const newDocs = Array.from(files)
+        .filter((f) => f.name && (f.name.endsWith('.pdf') || f.name.endsWith('.docx') || f.name.endsWith('.doc')))
+        .map(fileToDoc)
+      if (newDocs.length) setAttachments((prev) => [...prev, ...newDocs])
+      return
+    }
     const raw = e.dataTransfer.getData(DOC_DRAG_TYPE)
     if (!raw) return
     try {
@@ -61,7 +93,7 @@ export function ChatInput({ onSend, showSuggestions = true }: ChatInputProps) {
 
   const handleDragOver = (e: React.DragEvent) => {
     e.preventDefault()
-    if (e.dataTransfer.types.includes(DOC_DRAG_TYPE)) {
+    if (e.dataTransfer.types.includes(DOC_DRAG_TYPE) || e.dataTransfer.types.includes('Files')) {
       e.dataTransfer.dropEffect = 'copy'
       setIsDropTarget(true)
     }
@@ -124,22 +156,72 @@ export function ChatInput({ onSend, showSuggestions = true }: ChatInputProps) {
           className="flex-1 resize-none bg-transparent px-2 py-1.5 text-sm outline-none placeholder:text-gray-400 min-h-[36px] max-h-[200px] rounded-lg"
         />
         <div className="flex items-center gap-1.5 shrink-0">
+          <input
+            ref={fileInputRef}
+            type="file"
+            multiple
+            accept=".pdf,.docx,.doc"
+            className="hidden"
+            onChange={(e) => {
+              const files = e.target.files
+              if (files?.length && claimId) {
+                const newDocs = Array.from(files).map(fileToDoc)
+                setAttachments((prev) => [...prev, ...newDocs])
+              }
+              e.target.value = ''
+            }}
+          />
+          {webSearchExpanded ? (
+            <div className="flex items-center gap-2 min-w-0 max-w-[240px] bg-gray-50 rounded-full px-3 py-1.5 border border-gray-200">
+              <Globe className="w-4 h-4 text-gray-500 shrink-0" />
+              <input
+                type="text"
+                value={webSearchQuery}
+                onChange={(e) => setWebSearchQuery(e.target.value)}
+                onKeyDown={(e) => e.key === 'Enter' && handleWebSearchSubmit()}
+                placeholder="Search the web"
+                className="flex-1 min-w-0 bg-transparent text-sm outline-none placeholder:text-gray-400"
+              />
+              <button
+                type="button"
+                onClick={handleWebSearchSubmit}
+                disabled={!webSearchQuery.trim()}
+                className="flex items-center gap-1 px-2.5 py-1 rounded-md bg-blue-600 text-white text-xs font-medium hover:bg-blue-700 disabled:opacity-50 shrink-0"
+              >
+                <Globe className="w-3 h-3" />
+                Search
+              </button>
+              <button
+                type="button"
+                onClick={() => { setWebSearchExpanded(false); setWebSearchQuery('') }}
+                className="p-1 text-gray-400 hover:text-gray-600 shrink-0"
+                aria-label="Collapse"
+              >
+                <ChevronDown className="w-4 h-4 rotate-180" />
+              </button>
+            </div>
+          ) : (
+            <button
+              type="button"
+              onClick={() => setWebSearchExpanded(true)}
+              className="w-9 h-9 flex items-center justify-center rounded-full border border-gray-200 hover:bg-gray-50 shrink-0"
+              title="Search the web"
+            >
+              <Globe className="w-4 h-4 text-gray-600" />
+            </button>
+          )}
           <button
             type="button"
-            onClick={() => setIncludeWebSearch((v) => !v)}
-            title={includeWebSearch ? 'Web search on' : 'Include web search'}
-            className={`p-2 rounded-lg transition-all duration-150 ${
-              includeWebSearch
-                ? 'bg-black text-white shadow-soft-button hover:shadow-soft-button-hover'
-                : 'border border-gray-200 bg-white hover:bg-gray-50 hover:border-gray-300 shadow-soft-button'
-            }`}
+            onClick={() => fileInputRef.current?.click()}
+            className="w-9 h-9 flex items-center justify-center rounded-full border border-gray-200 hover:bg-gray-50 shrink-0"
+            title="Add files"
           >
-            <Globe className="w-4 h-4" />
+            <Plus className="w-4 h-4 text-gray-600" />
           </button>
           <button
-            onClick={handleSubmit}
+            onClick={() => handleSubmit(includeWebSearch)}
             disabled={!input.trim()}
-            className="p-1.5 rounded-lg bg-gray-200 text-gray-700 hover:bg-gray-300 shadow-soft-button disabled:opacity-40 disabled:cursor-not-allowed transition-all duration-150"
+            className="w-9 h-9 flex items-center justify-center rounded-full bg-gray-200 text-gray-700 hover:bg-gray-300 shadow-soft-button disabled:opacity-40 disabled:cursor-not-allowed transition-all duration-150 shrink-0"
             title="Send"
           >
             <ArrowUp className="w-4 h-4" />

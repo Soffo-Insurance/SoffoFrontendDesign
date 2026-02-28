@@ -97,9 +97,10 @@ export function ChatPage() {
 
   const initialProcessed = useRef(false)
   useEffect(() => {
-    const state = location.state as { initialQuery?: string; initialAttachments?: File[] }
+    const state = location.state as { initialQuery?: string; initialAttachments?: File[]; includeWebSearch?: boolean }
     const initial = state?.initialQuery
     const files = state?.initialAttachments
+    const includeWebSearch = state?.includeWebSearch
     if (initial?.trim() && claimId && !initialProcessed.current) {
       initialProcessed.current = true
       const docs = files?.length
@@ -112,7 +113,7 @@ export function ChatPage() {
             claim_id: claimId ?? '',
           }))
         : undefined
-      handleSend(initial, docs)
+      handleSend(initial, docs, includeWebSearch)
       window.history.replaceState({}, '', location.pathname)
     }
   }, [claimId, handleSend, location.state, location.pathname])
@@ -130,7 +131,7 @@ export function ChatPage() {
       <div className="flex-1 flex flex-col min-w-0">
         <ClaimHeader claim={claim} onEnrich={() => {}} />
         <MessageList messages={messages} isLoading={isLoading} />
-        <ChatInput onSend={handleSend} showSuggestions={messages.length === 0} />
+        <ChatInput onSend={handleSend} showSuggestions={messages.length === 0} claimId={claimId} />
       </div>
       <DocumentLibrary
         claimId={claimId}
