@@ -9,9 +9,10 @@ interface MessageListProps {
   messages: ChatMessage[]
   isLoading: boolean
   onFollowUpClick?: (text: string) => void
+  onSavePrompt?: (content: string) => void
 }
 
-export function MessageList({ messages, isLoading, onFollowUpClick }: MessageListProps) {
+export function MessageList({ messages, isLoading, onFollowUpClick, onSavePrompt }: MessageListProps) {
   const bottomRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -33,6 +34,7 @@ export function MessageList({ messages, isLoading, onFollowUpClick }: MessageLis
                 key={msg.id}
                 content={msg.content}
                 attachments={msg.attachments}
+                onSavePrompt={onSavePrompt ? () => onSavePrompt(msg.content) : undefined}
               />
             )
           }

@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { Search, Plus, Mic, ArrowUp, Globe, X, FileText } from 'lucide-react'
 import { MOCK_CLAIMS } from '../mockData'
 import { AddTabsOrFilesPopover } from '../components/AddTabsOrFilesPopover'
+import { useLibraryOptional } from '../contexts/LibraryContext'
 
 export function EmptyStatePage() {
   const [input, setInput] = useState('')
@@ -14,6 +15,7 @@ export function EmptyStatePage() {
   const addButtonRef = useRef<HTMLButtonElement>(null)
   const navigate = useNavigate()
   const firstClaimId = MOCK_CLAIMS[0]?.claim_id
+  const library = useLibraryOptional()
 
   const handleSubmit = () => {
     const trimmed = input.trim()
@@ -30,10 +32,11 @@ export function EmptyStatePage() {
   const addFiles = (files: FileList | null) => {
     if (!files?.length) return
     const fileList = Array.from(files)
-    setAttachments((prev) => [
-      ...prev,
-      ...fileList.map((f, i) => ({ id: `att_${Date.now()}_${i}_${Math.random().toString(36).slice(2)}`, file: f })),
-    ])
+    fileList.forEach((f, i) => {
+      const id = `att_${Date.now()}_${i}_${Math.random().toString(36).slice(2)}`
+      setAttachments((prev) => [...prev, { id, file: f }])
+      library?.addLibraryFile(f.name, id)
+    })
   }
 
   const handleAddFiles = () => fileInputRef.current?.click()
@@ -144,7 +147,7 @@ export function EmptyStatePage() {
                   onClose={() => setAddPopoverOpen(false)}
                   onUploadClick={openUpload}
                   anchorRef={addButtonRef}
-                  libraryFiles={attachments.map((a) => ({ id: a.id, name: a.file.name }))}
+                  libraryFiles={library ? library.libraryFiles : attachments.map((a) => ({ id: a.id, name: a.file.name }))}
                 />
               </div>
             </div>

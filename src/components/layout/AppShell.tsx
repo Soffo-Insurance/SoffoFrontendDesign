@@ -89,7 +89,7 @@ function LeftSidebar({
             className="flex items-center justify-center rounded p-1 hover:bg-gray-200/70 transition-colors"
             aria-label="Workspace"
           >
-            <span className="w-4 h-4 shrink-0 rounded bg-gray-200 flex items-center justify-center text-[9px] font-semibold text-gray-700 leading-none">
+            <span className="w-5 h-5 shrink-0 rounded bg-gray-200 flex items-center justify-center text-[10px] font-semibold text-gray-700 leading-none">
               {workspaceName.charAt(0).toUpperCase() || 'W'}
             </span>
           </button>
@@ -100,20 +100,20 @@ function LeftSidebar({
           className={`rounded text-gray-500 hover:bg-gray-200 shrink-0 ${collapsed ? 'p-0.5' : 'p-0.5'}`}
           aria-label={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
         >
-          <PanelLeftIcon className={`transition-transform ${collapsed ? 'w-3 h-3 rotate-180' : 'w-3.5 h-3.5'}`} />
+          <PanelLeftIcon className={`transition-transform ${collapsed ? 'w-4 h-4 rotate-180' : 'w-4 h-4'}`} />
         </button>
       </div>
       <nav className={`flex-1 py-1 space-y-0.5 ${collapsed ? 'px-0 flex flex-col items-center' : 'px-1.5'}`}>
         <NavLink to="/c" end className={navLinkClass} title="Home">
-          <HomeIcon className={collapsed ? 'w-3.5 h-3.5 shrink-0' : 'w-4 h-4 shrink-0'} />
+          <HomeIcon className="w-4 h-4 shrink-0" />
           {!collapsed && <span>Home</span>}
         </NavLink>
         <NavLink to="/c/library" className={navLinkClass} title="Library">
-          <LibraryIcon className={collapsed ? 'w-3.5 h-3.5 shrink-0' : 'w-4 h-4 shrink-0'} />
+          <LibraryIcon className="w-4 h-4 shrink-0" />
           {!collapsed && <span>Library</span>}
         </NavLink>
         <NavLink to="/c/integrations" className={navLinkClass} title="Integrations">
-          <IntegrationsIcon className={collapsed ? 'w-3.5 h-3.5 shrink-0' : 'w-4 h-4 shrink-0'} />
+          <IntegrationsIcon className="w-4 h-4 shrink-0" />
           {!collapsed && <span>Integrations</span>}
         </NavLink>
       </nav>
