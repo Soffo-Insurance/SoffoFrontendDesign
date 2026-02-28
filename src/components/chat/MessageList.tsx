@@ -8,9 +8,10 @@ import type { ChatMessage, QueryResponseMessage, ReportMessage } from '../../typ
 interface MessageListProps {
   messages: ChatMessage[]
   isLoading: boolean
+  onFollowUpClick?: (text: string) => void
 }
 
-export function MessageList({ messages, isLoading }: MessageListProps) {
+export function MessageList({ messages, isLoading, onFollowUpClick }: MessageListProps) {
   const bottomRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -54,6 +55,7 @@ export function MessageList({ messages, isLoading }: MessageListProps) {
             <AssistantBubble
               key={msg.id}
               message={msg as QueryResponseMessage}
+              onFollowUpClick={onFollowUpClick}
             />
           )
         })}

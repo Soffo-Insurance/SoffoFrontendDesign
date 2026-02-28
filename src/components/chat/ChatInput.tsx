@@ -7,9 +7,12 @@ import { AddTabsOrFilesPopover } from '../AddTabsOrFilesPopover'
 interface ChatInputProps {
   onSend: (text: string, attachments?: StoredDocument[], includeWebSearch?: boolean) => void
   claimId?: string
+  /** When set, pastes into the input and focuses; cleared after consumed */
+  prefill?: string | null
+  onPrefillConsumed?: () => void
 }
 
-export function ChatInput({ onSend, claimId }: ChatInputProps) {
+export function ChatInput({ onSend, claimId, prefill, onPrefillConsumed }: ChatInputProps) {
   const [input, setInput] = useState('')
   const [attachments, setAttachments] = useState<StoredDocument[]>([])
   const [includeWebSearch, setIncludeWebSearch] = useState(false)
@@ -18,6 +21,15 @@ export function ChatInput({ onSend, claimId }: ChatInputProps) {
   const textareaRef = useRef<HTMLTextAreaElement>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
   const addButtonRef = useRef<HTMLButtonElement>(null)
+
+  useEffect(() => {
+    const value = prefill?.trim()
+    if (value) {
+      setInput(value)
+      onPrefillConsumed?.()
+      textareaRef.current?.focus()
+    }
+  }, [prefill, onPrefillConsumed])
 
   useEffect(() => {
     const ta = textareaRef.current

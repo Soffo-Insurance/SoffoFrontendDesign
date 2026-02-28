@@ -29,6 +29,7 @@ import type { QueryResponseMessage } from '../../types'
 interface AssistantBubbleProps {
   message: QueryResponseMessage
   followUps?: string[]
+  onFollowUpClick?: (text: string) => void
 }
 
 function sourceEntriesFromCitations(citations: string[]): SourceEntry[] {
@@ -94,7 +95,7 @@ function extractCitationLabels(content: string): string[] {
   return list
 }
 
-export function AssistantBubble({ message, followUps = DEFAULT_FOLLOW_UPS }: AssistantBubbleProps) {
+export function AssistantBubble({ message, followUps = DEFAULT_FOLLOW_UPS, onFollowUpClick }: AssistantBubbleProps) {
   const hasCitations = message.content.includes('[')
   const citedCount = message.citations?.length ?? message.chunksUsed ?? 16
   const citations =
@@ -229,6 +230,7 @@ export function AssistantBubble({ message, followUps = DEFAULT_FOLLOW_UPS }: Ass
                 >
                   <button
                     type="button"
+                    onClick={() => onFollowUpClick?.(prompt)}
                     className="w-full py-2 text-left text-sm text-gray-500 hover:text-gray-700 transition-colors"
                   >
                     {prompt}

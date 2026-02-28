@@ -12,6 +12,7 @@ export function ChatPage() {
   const claim = MOCK_CLAIMS.find((c) => c.claim_id === claimId)
   const [messages, setMessages] = useState<ChatMessage[]>([])
   const [isLoading, setIsLoading] = useState(false)
+  const [prefillInput, setPrefillInput] = useState<string | null>(null)
   const initialProcessed = useRef(false)
 
   const handleSend = useCallback(
@@ -86,8 +87,17 @@ export function ChatPage() {
 
   return (
     <div className="chat-page flex flex-1 flex-col min-h-0">
-      <MessageList messages={messages} isLoading={isLoading} />
-      <ChatInput onSend={handleSend} claimId={claimId} />
+      <MessageList
+        messages={messages}
+        isLoading={isLoading}
+        onFollowUpClick={(text) => setPrefillInput(text)}
+      />
+      <ChatInput
+        onSend={handleSend}
+        claimId={claimId}
+        prefill={prefillInput}
+        onPrefillConsumed={() => setPrefillInput(null)}
+      />
     </div>
   )
 }
