@@ -44,7 +44,7 @@ export function UserBubble({
 
   return (
     <div className="flex-1 min-w-0 max-w-[720px]">
-      <div className="rounded-xl bg-gray-100 px-4 py-3">
+      <div className="rounded-xl bg-gray-100 px-4 py-3 w-fit max-w-full">
         {attachments && attachments.length > 0 && (
           <div className="flex flex-wrap gap-1.5 mb-2">
             {attachments.map((doc) => (
@@ -60,24 +60,24 @@ export function UserBubble({
         <p className="text-[15px] leading-relaxed text-gray-900 whitespace-pre-wrap">
           {content}
         </p>
-        <div className="flex items-center gap-2 mt-2">
-          <button
-            type="button"
-            onClick={handleCopy}
-            className="inline-flex items-center gap-1.5 text-sm text-gray-500 hover:text-gray-700 transition-colors"
-          >
-            <Copy className="w-3.5 h-3.5" />
-            Copy
-          </button>
-          <button
-            type="button"
-            onClick={onSavePrompt}
-            className="inline-flex items-center gap-1.5 text-sm text-gray-500 hover:text-gray-700 transition-colors"
-          >
-            <SavePromptIcon className="w-3.5 h-3.5" />
-            Save prompt
-          </button>
-        </div>
+      </div>
+      <div className="flex items-center gap-2 mt-2">
+        <button
+          type="button"
+          onClick={handleCopy}
+          className="inline-flex items-center gap-1.5 text-sm text-gray-500 hover:text-gray-700 transition-colors"
+        >
+          <Copy className="w-3.5 h-3.5" />
+          Copy
+        </button>
+        <button
+          type="button"
+          onClick={onSavePrompt}
+          className="inline-flex items-center gap-1.5 text-sm text-gray-500 hover:text-gray-700 transition-colors"
+        >
+          <SavePromptIcon className="w-3.5 h-3.5" />
+          Save prompt
+        </button>
       </div>
     </div>
   )

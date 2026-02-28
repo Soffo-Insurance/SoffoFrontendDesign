@@ -20,7 +20,7 @@ export function MessageList({ messages, isLoading, onFollowUpClick }: MessageLis
 
   return (
     <div className="flex-1 overflow-y-auto bg-white">
-      <div className="max-w-[800px] mx-auto px-6 py-8 space-y-8">
+      <div className="max-w-[800px] mx-auto px-6 py-8 pb-40 space-y-8">
         {messages.length === 0 && !isLoading && (
           <div className="text-center py-16 text-gray-400 text-sm">
             Ask a question or generate a defensible report.

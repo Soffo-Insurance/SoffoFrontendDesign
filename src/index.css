@@ -47,6 +47,11 @@ body {
   color: inherit;
 }
 
+/* Input bar area must stay transparent so message list scrolls visible behind it */
+.chat-page .chat-input-bar {
+  background-color: transparent !important;
+}
+
 /* Shimmer effect for working/loading text */
 @keyframes shimmer {
   0% { background-position: -200% 0; }

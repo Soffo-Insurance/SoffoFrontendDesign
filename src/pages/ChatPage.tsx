@@ -86,18 +86,20 @@ export function ChatPage() {
   }
 
   return (
-    <div className="chat-page flex flex-1 flex-col min-h-0">
+    <div className="chat-page flex flex-1 flex-col min-h-0 relative">
       <MessageList
         messages={messages}
         isLoading={isLoading}
         onFollowUpClick={(text) => setPrefillInput(text)}
       />
-      <ChatInput
-        onSend={handleSend}
-        claimId={claimId}
-        prefill={prefillInput}
-        onPrefillConsumed={() => setPrefillInput(null)}
-      />
+      <div className="chat-input-bar absolute bottom-0 left-0 right-0 bg-transparent">
+        <ChatInput
+            onSend={handleSend}
+            claimId={claimId}
+            prefill={prefillInput}
+            onPrefillConsumed={() => setPrefillInput(null)}
+          />
+      </div>
     </div>
   )
 }
