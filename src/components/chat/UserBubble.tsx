@@ -43,18 +43,8 @@ export function UserBubble({
   }
 
   return (
-    <div className="flex gap-3">
-      <div className="shrink-0 w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center mt-0.5">
-        <svg
-          className="w-4 h-4 text-gray-500"
-          fill="currentColor"
-          viewBox="0 0 24 24"
-          aria-hidden
-        >
-          <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
-        </svg>
-      </div>
-      <div className="flex-1 min-w-0 max-w-[720px]">
+    <div className="flex-1 min-w-0 max-w-[720px]">
+      <div className="rounded-xl bg-gray-100 px-4 py-3">
         {attachments && attachments.length > 0 && (
           <div className="flex flex-wrap gap-1.5 mb-2">
             {attachments.map((doc) => (

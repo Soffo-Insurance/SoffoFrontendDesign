@@ -118,11 +118,7 @@ export function AssistantBubble({ message, followUps = DEFAULT_FOLLOW_UPS, onFol
   }
 
   return (
-    <div className="flex gap-3">
-      <div className="shrink-0 w-8 h-8 rounded bg-gray-700 flex items-center justify-center mt-0.5">
-        <span className="text-white font-semibold text-sm">H</span>
-      </div>
-      <div className="flex-1 min-w-0 max-w-[720px]">
+    <div className="flex-1 min-w-0 max-w-[720px]">
         <div className="text-[15px] leading-relaxed text-gray-900">
           {hasCitations ? (
             <div className="space-y-3">
@@ -240,7 +236,6 @@ export function AssistantBubble({ message, followUps = DEFAULT_FOLLOW_UPS, onFol
             </ul>
           </div>
         )}
-      </div>
     </div>
   )
 }

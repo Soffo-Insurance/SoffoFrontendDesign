@@ -38,16 +38,11 @@ export function MessageList({ messages, isLoading, onFollowUpClick }: MessageLis
           }
           if ((msg as ReportMessage).report) {
             return (
-              <div key={msg.id} className="flex gap-3">
-                <div className="shrink-0 w-8 h-8 rounded bg-gray-700 flex items-center justify-center mt-0.5">
-                  <span className="text-white font-semibold text-sm">H</span>
-                </div>
-                <div className="flex-1 min-w-0 max-w-[720px]">
-                  <ReportCard
-                    report={(msg as ReportMessage).report!}
-                    onExport={() => {}}
-                  />
-                </div>
+              <div key={msg.id} className="flex-1 min-w-0 max-w-[720px]">
+                <ReportCard
+                  report={(msg as ReportMessage).report!}
+                  onExport={() => {}}
+                />
               </div>
             )
           }
