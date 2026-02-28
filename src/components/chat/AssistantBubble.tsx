@@ -147,7 +147,7 @@ export function AssistantBubble({ message, followUps = DEFAULT_FOLLOW_UPS, onFol
         </div>
 
         <div className="mt-6">
-          <p className="text-sm font-medium text-gray-500 mb-2">Sources.</p>
+          <p className="text-sm font-medium text-gray-500 mb-2">Sources</p>
           <button
             type="button"
             className="flex flex-col items-start gap-0.5 px-3 py-2.5 rounded-lg border border-gray-200 bg-gray-100 hover:bg-gray-50 transition-colors text-left shadow-[inset_0_1px_0_rgba(255,255,255,0.5)]"
