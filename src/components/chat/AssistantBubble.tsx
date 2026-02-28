@@ -25,6 +25,7 @@ function RewriteIcon({ className }: { className?: string }) {
 
 import { SourcePopover, type SourceEntry } from '../SourcePopover'
 import { Tooltip } from '../shared/Tooltip'
+import { useTabsOptional } from '../../contexts/TabsContext'
 import type { QueryResponseMessage } from '../../types'
 
 interface AssistantBubbleProps {
@@ -118,6 +119,7 @@ function extractCitationLabels(content: string): string[] {
 }
 
 export function AssistantBubble({ message, followUps = DEFAULT_FOLLOW_UPS, onFollowUpClick }: AssistantBubbleProps) {
+  const tabsApi = useTabsOptional()
   const hasCitations = message.content.includes('[')
   const citations =
     message.citations && message.citations.length > 0
@@ -217,6 +219,13 @@ export function AssistantBubble({ message, followUps = DEFAULT_FOLLOW_UPS, onFol
             <Tooltip label="Open in editor">
               <button
                 type="button"
+                onClick={() => {
+                  tabsApi?.addTab({
+                    title: 'Editor',
+                    type: 'editor',
+                    payload: { content: message.content },
+                  })
+                }}
                 className="p-1.5 text-gray-500 hover:text-gray-700 rounded-md hover:bg-gray-100 transition-colors"
                 aria-label="Open in editor"
               >

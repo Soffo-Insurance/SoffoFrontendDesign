@@ -122,28 +122,6 @@ function LeftSidebar({
 }
 
 function MainContent() {
-  const tabs = useTabsOptional()
-  const claimId = useParams<{ claimId?: string }>().claimId
-  const hasClaimChat = useClaimChatOptional()
-  const hasTabs = tabs && tabs.tabs.length > 0
-  const showSplitView = hasTabs && claimId && hasClaimChat
-
-  if (showSplitView) {
-    return (
-      <>
-        <div className="flex-1 flex flex-col min-w-0 min-h-0 overflow-hidden">
-          <TabContentPanel />
-        </div>
-        <aside
-          className="shrink-0 flex flex-col bg-white"
-          style={{ width: RIGHT_CHAT_WIDTH }}
-        >
-          <ChatPanel />
-        </aside>
-      </>
-    )
-  }
-
   return (
     <main className="flex-1 flex flex-col min-w-0 min-h-0 overflow-auto">
       <Outlet />
@@ -156,7 +134,9 @@ function TopBar() {
   const hasTabs = tabs && tabs.tabs.length > 0
 
   return (
-    <header className="shrink-0 h-10 flex items-center px-3 gap-2">
+    <header
+      className={`shrink-0 h-10 flex items-center px-3 gap-2 ${hasTabs ? 'bg-[#374151]' : 'bg-white'}`}
+    >
       {hasTabs ? (
         <TabStrip />
       ) : (
@@ -166,8 +146,31 @@ function TopBar() {
   )
 }
 
-function ContentWithClaimChat() {
+function ContentLayout() {
   const claimId = useParams<{ claimId?: string }>().claimId
+  const tabs = useTabsOptional()
+  const hasClaimChat = useClaimChatOptional()
+  const hasTabs = tabs && tabs.tabs.length > 0
+  const showSplitView = Boolean(claimId && hasTabs && hasClaimChat)
+
+  if (showSplitView) {
+    return (
+      <div className="flex-1 flex flex-col min-h-0 min-w-0 p-3">
+        <div className="flex-1 flex min-h-0 gap-0 overflow-hidden">
+          <div className="flex-1 flex flex-col min-h-0 min-w-0 bg-white rounded-lg border border-gray-200 overflow-hidden">
+            <TopBar />
+            <TabContentPanel />
+          </div>
+          <aside
+            className="shrink-0 flex flex-col min-h-0 bg-[#FAFAF9]"
+            style={{ width: RIGHT_CHAT_WIDTH }}
+          >
+            <ChatPanel />
+          </aside>
+        </div>
+      </div>
+    )
+  }
 
   const shell = (
     <div className="flex-1 flex flex-col min-h-0 min-w-0 p-3">
@@ -180,19 +183,27 @@ function ContentWithClaimChat() {
     </div>
   )
 
+  return (
+    <div className="flex-1 flex flex-col min-h-0 min-w-0">
+      {shell}
+    </div>
+  )
+}
+
+function ContentWithClaimChatOrLayout() {
+  const claimId = useParams<{ claimId?: string }>().claimId
   if (claimId) {
     return (
       <ClaimChatProvider claimId={claimId}>
-        <div className="flex-1 flex flex-col min-h-0 min-w-0">
-          {shell}
+        <div className="flex-1 flex flex-col min-w-0 min-h-0">
+          <ContentLayout />
         </div>
       </ClaimChatProvider>
     )
   }
-
   return (
-    <div className="flex-1 flex flex-col min-h-0 min-w-0">
-      {shell}
+    <div className="flex-1 flex flex-col min-w-0 min-h-0">
+      <ContentLayout />
     </div>
   )
 }
@@ -210,7 +221,7 @@ export function AppShell() {
           onToggleCollapse={() => setSidebarCollapsed((v) => !v)}
         />
         <div className="flex-1 flex flex-col min-w-0 min-h-0 bg-[#FAFAF9]">
-          <ContentWithClaimChat />
+          <ContentWithClaimChatOrLayout />
         </div>
       </div>
     </TabsProvider>

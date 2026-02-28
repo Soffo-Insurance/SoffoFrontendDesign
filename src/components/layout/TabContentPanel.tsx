@@ -1,5 +1,6 @@
 import { useTabs } from '../../contexts/TabsContext'
 import { FileText } from 'lucide-react'
+import { EditorView } from '../editor/EditorView'
 
 export function TabContentPanel() {
   const { tabs, activeTabId } = useTabs()
@@ -10,6 +11,14 @@ export function TabContentPanel() {
       <div className="flex-1 flex items-center justify-center text-gray-400 text-sm bg-white">
         Select a tab or open a source / editor from chat.
       </div>
+    )
+  }
+
+  if (activeTab.type === 'editor' && activeTab.payload?.content) {
+    return (
+      <EditorView
+        content={activeTab.payload.content}
+      />
     )
   }
 
@@ -24,7 +33,7 @@ export function TabContentPanel() {
         {activeTab.payload?.content ? (
           <pre className="whitespace-pre-wrap font-sans">{activeTab.payload.content}</pre>
         ) : (
-          <p>Content for “{activeTab.title}” will appear here.</p>
+          <p>Content for "{activeTab.title}" will appear here.</p>
         )}
       </div>
     </div>
