@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Outlet, useParams, NavLink } from 'react-router-dom'
-import { User, ChevronDown, ChevronRight } from 'lucide-react'
+import { ChevronDown } from 'lucide-react'
 import { TabsProvider, useTabsOptional } from '../../contexts/TabsContext'
 import { ClaimChatProvider, useClaimChatOptional } from '../../contexts/ClaimChatContext'
 import { TabStrip } from './TabStrip'
@@ -8,7 +8,7 @@ import { TabContentPanel } from './TabContentPanel'
 import { ChatPanel } from './ChatPanel'
 
 const SIDEBAR_WIDTH = 220
-const SIDEBAR_COLLAPSED_WIDTH = 56
+const SIDEBAR_COLLAPSED_WIDTH = 40
 const RIGHT_CHAT_WIDTH = 360
 
 function HomeIcon({ className }: { className?: string }) {
@@ -60,7 +60,7 @@ function LeftSidebar({
 }) {
   const navLinkClass = ({ isActive }: { isActive: boolean }) =>
     `flex items-center gap-1.5 rounded-md text-sm font-medium text-gray-900 transition-colors ${
-      collapsed ? 'justify-center p-1.5' : 'px-1.5 py-1'
+      collapsed ? 'justify-center p-1' : 'px-1.5 py-1'
     } ${
       isActive ? 'bg-gray-200/70' : 'hover:bg-gray-200/70'
     }`
@@ -70,7 +70,7 @@ function LeftSidebar({
       className="shrink-0 flex flex-col bg-[#FAFAF9] transition-[width] duration-200 overflow-hidden"
       style={{ width: collapsed ? SIDEBAR_COLLAPSED_WIDTH : SIDEBAR_WIDTH }}
     >
-      <div className={`pt-2 pb-1.5 flex items-center ${collapsed ? 'px-1.5 justify-center flex-col gap-1' : 'px-2 gap-1.5'}`}>
+      <div className={`pt-2 pb-1.5 flex items-center ${collapsed ? 'px-0 justify-center flex-col gap-0.5' : 'px-2 gap-1.5'}`}>
         {!collapsed ? (
           <button
             type="button"
@@ -86,10 +86,10 @@ function LeftSidebar({
         ) : (
           <button
             type="button"
-            className="flex items-center justify-center rounded-md py-1 px-1.5 hover:bg-gray-200/70 transition-colors"
+            className="flex items-center justify-center rounded p-1 hover:bg-gray-200/70 transition-colors"
             aria-label="Workspace"
           >
-            <span className="w-5 h-5 shrink-0 rounded bg-gray-200 flex items-center justify-center text-[10px] font-semibold text-gray-700 leading-none">
+            <span className="w-4 h-4 shrink-0 rounded bg-gray-200 flex items-center justify-center text-[9px] font-semibold text-gray-700 leading-none">
               {workspaceName.charAt(0).toUpperCase() || 'W'}
             </span>
           </button>
@@ -97,48 +97,26 @@ function LeftSidebar({
         <button
           type="button"
           onClick={onToggleCollapse}
-          className="p-0.5 rounded text-gray-500 hover:bg-gray-200 shrink-0"
+          className={`rounded text-gray-500 hover:bg-gray-200 shrink-0 ${collapsed ? 'p-0.5' : 'p-0.5'}`}
           aria-label={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
         >
-          <PanelLeftIcon className={`w-3.5 h-3.5 transition-transform ${collapsed ? 'rotate-180' : ''}`} />
+          <PanelLeftIcon className={`transition-transform ${collapsed ? 'w-3 h-3 rotate-180' : 'w-3.5 h-3.5'}`} />
         </button>
       </div>
       <nav className={`flex-1 py-1 space-y-0.5 ${collapsed ? 'px-0 flex flex-col items-center' : 'px-1.5'}`}>
         <NavLink to="/c" end className={navLinkClass} title="Home">
-          <HomeIcon className="w-4 h-4 shrink-0" />
+          <HomeIcon className={collapsed ? 'w-3.5 h-3.5 shrink-0' : 'w-4 h-4 shrink-0'} />
           {!collapsed && <span>Home</span>}
         </NavLink>
         <NavLink to="/c/library" className={navLinkClass} title="Library">
-          <LibraryIcon className="w-4 h-4 shrink-0" />
+          <LibraryIcon className={collapsed ? 'w-3.5 h-3.5 shrink-0' : 'w-4 h-4 shrink-0'} />
           {!collapsed && <span>Library</span>}
         </NavLink>
         <NavLink to="/c/integrations" className={navLinkClass} title="Integrations">
-          <IntegrationsIcon className="w-4 h-4 shrink-0" />
+          <IntegrationsIcon className={collapsed ? 'w-3.5 h-3.5 shrink-0' : 'w-4 h-4 shrink-0'} />
           {!collapsed && <span>Integrations</span>}
         </NavLink>
       </nav>
-      <div className={`py-1.5 ${collapsed ? 'px-0 flex justify-center' : 'px-1.5'}`}>
-        <div className={`flex items-center rounded-lg bg-gray-200/80 ${collapsed ? 'justify-center p-1.5' : 'gap-1.5 px-2 py-1.5'}`}>
-          <div className="w-7 h-7 rounded-full bg-gray-300 flex items-center justify-center shrink-0">
-            <User className="w-4 h-4 text-gray-500" />
-          </div>
-          {!collapsed && (
-            <>
-              <div className="min-w-0 flex-1">
-                <p className="text-sm font-medium text-gray-900 truncate">Alex Yang</p>
-                <p className="text-xs text-gray-500">Free</p>
-              </div>
-              <button
-                type="button"
-                className="p-0.5 rounded text-gray-500 hover:bg-gray-300"
-                aria-label="Profile menu"
-              >
-                <ChevronRight className="w-4 h-4 rotate-[-90deg]" />
-              </button>
-            </>
-          )}
-        </div>
-      </div>
     </aside>
   )
 }
