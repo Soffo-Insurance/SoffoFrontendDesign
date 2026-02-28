@@ -56,16 +56,19 @@ function LeftSidebar({ workspaceName }: { workspaceName: string }) {
 
   return (
     <aside
-      className="shrink-0 flex flex-col bg-gray-100"
+      className="shrink-0 flex flex-col bg-[#FAFAF9]"
       style={{ width: SIDEBAR_WIDTH }}
     >
       <div className="p-3 flex items-center gap-2">
         <button
           type="button"
-          className="flex items-center gap-1.5 min-w-0 flex-1 text-left rounded-lg py-1.5 px-2 hover:bg-gray-200/70 transition-colors"
+          className="flex items-center gap-2 min-w-0 flex-1 text-left rounded-lg py-1.5 px-2 hover:bg-gray-200/70 transition-colors"
           aria-label="Switch workspace"
         >
-          <span className="text-sm font-medium text-gray-900 truncate">{workspaceName}</span>
+          <span className="w-8 h-8 shrink-0 rounded-lg bg-gray-200 flex items-center justify-center text-sm font-semibold text-gray-700">
+            {workspaceName.charAt(0).toUpperCase() || 'W'}
+          </span>
+          <span className="text-sm font-medium text-gray-900 truncate min-w-0 flex-1">{workspaceName}</span>
           <ChevronDown className="w-4 h-4 shrink-0 text-gray-500" />
         </button>
         <button
@@ -122,13 +125,13 @@ function MainContent() {
   if (showSplitView) {
     return (
       <>
-        <div className="flex-1 flex flex-col min-w-0 min-h-0 p-2">
+        <div className="flex-1 flex flex-col min-w-0 min-h-0 px-2 pb-2 pt-0">
           <div className="flex-1 flex flex-col min-h-0 bg-white rounded-xl border border-gray-200 overflow-hidden">
             <TabContentPanel />
           </div>
         </div>
         <aside
-          className="shrink-0 flex flex-col bg-gray-100 p-2"
+          className="shrink-0 flex flex-col bg-[#FAFAF9] px-2 pb-2 pt-0"
           style={{ width: RIGHT_CHAT_WIDTH }}
         >
           <div className="flex-1 flex flex-col min-h-0 bg-white rounded-xl border border-gray-200 overflow-hidden">
@@ -140,7 +143,7 @@ function MainContent() {
   }
 
   return (
-    <div className="flex-1 flex flex-col min-w-0 min-h-0 p-2">
+    <div className="flex-1 flex flex-col min-w-0 min-h-0 px-2 pb-2 pt-0">
       <main className="flex-1 flex flex-col min-w-0 min-h-0 bg-white rounded-xl border border-gray-200 overflow-auto">
         <Outlet />
       </main>
@@ -194,7 +197,7 @@ export function AppShell() {
 
   return (
     <TabsProvider>
-      <div className="flex h-screen bg-gray-100 text-gray-900">
+      <div className="flex h-screen bg-[#FAFAF9] text-gray-900">
         <LeftSidebar workspaceName={workspaceName} />
         <div className="flex-1 flex flex-col min-w-0 min-h-0 bg-white">
           <ContentWithClaimChat />
