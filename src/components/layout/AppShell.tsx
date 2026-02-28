@@ -50,8 +50,8 @@ function PanelLeftIcon({ className }: { className?: string }) {
 
 function LeftSidebar({ workspaceName }: { workspaceName: string }) {
   const navLinkClass = ({ isActive }: { isActive: boolean }) =>
-    `flex items-center gap-2 px-2 py-2 rounded-lg text-sm font-medium transition-colors ${
-      isActive ? 'bg-gray-200 text-gray-900' : 'text-gray-700 hover:bg-gray-200/70'
+    `flex items-center gap-1.5 px-1.5 py-1 rounded-md text-sm font-medium text-gray-900 transition-colors ${
+      isActive ? 'bg-gray-200' : 'hover:bg-gray-200/70'
     }`
 
   return (
