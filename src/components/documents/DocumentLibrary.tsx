@@ -18,6 +18,7 @@ interface DocumentLibraryProps {
   folders: DocFolder[]
   onUpload: (file: File, docType: DocType) => void
   onCreateFolder: () => void
+  onMoveToFolder: (docId: string, folderId: string | null) => void
   isOpen: boolean
   onToggle: () => void
 }
@@ -28,6 +29,7 @@ export function DocumentLibrary({
   folders,
   onUpload,
   onCreateFolder,
+  onMoveToFolder,
   isOpen,
   onToggle,
 }: DocumentLibraryProps) {
@@ -54,8 +56,41 @@ export function DocumentLibrary({
 
   const handleDocDragStart = (e: React.DragEvent, doc: StoredDocument) => {
     e.dataTransfer.setData(DOC_DRAG_TYPE, JSON.stringify(doc))
-    e.dataTransfer.effectAllowed = 'copy'
-    e.dataTransfer.setData('text/plain', doc.filename)
+    e.dataTransfer.effectAllowed = 'move'
+  }
+
+  const handleFolderDrop = (e: React.DragEvent, folderId: string) => {
+    e.preventDefault()
+    e.currentTarget.classList.remove('bg-gray-100', 'border-gray-300')
+    const raw = e.dataTransfer.getData(DOC_DRAG_TYPE)
+    if (!raw) return
+    try {
+      const doc = JSON.parse(raw) as StoredDocument
+      if (doc.folder_id !== folderId) onMoveToFolder(doc.doc_id, folderId)
+    } catch {}
+  }
+
+  const handleFolderDragOver = (e: React.DragEvent, folderId: string) => {
+    e.preventDefault()
+    if (e.dataTransfer.types.includes(DOC_DRAG_TYPE)) {
+      e.dataTransfer.dropEffect = 'move'
+      e.currentTarget.classList.add('bg-gray-100', 'border-gray-300')
+    }
+  }
+
+  const handleFolderDragLeave = (e: React.DragEvent) => {
+    e.currentTarget.classList.remove('bg-gray-100', 'border-gray-300')
+  }
+
+  const handleUnfiledDrop = (e: React.DragEvent) => {
+    e.preventDefault()
+    e.currentTarget.classList.remove('bg-gray-100')
+    const raw = e.dataTransfer.getData(DOC_DRAG_TYPE)
+    if (!raw) return
+    try {
+      const doc = JSON.parse(raw) as StoredDocument
+      if (doc.folder_id) onMoveToFolder(doc.doc_id, null)
+    } catch {}
   }
 
   const docsByFolder = documents.reduce<Record<string, StoredDocument[]>>((acc, doc) => {
@@ -106,7 +141,13 @@ export function DocumentLibrary({
             const docs = docsByFolder[folder.folder_id] ?? []
             const isExpanded = expandedFolders.has(folder.folder_id)
             return (
-              <div key={folder.folder_id} className="mb-1">
+              <div
+                key={folder.folder_id}
+                className="mb-1 rounded-lg border border-transparent transition-colors"
+                onDrop={(e) => handleFolderDrop(e, folder.folder_id)}
+                onDragOver={(e) => handleFolderDragOver(e, folder.folder_id)}
+                onDragLeave={handleFolderDragLeave}
+              >
                 <button
                   onClick={() => toggleFolder(folder.folder_id)}
                   className="w-full flex items-center gap-1.5 py-2 px-3 hover:bg-gray-50 rounded-lg text-left transition-colors"
@@ -142,10 +183,22 @@ export function DocumentLibrary({
               </div>
             )
           })}
-          {rootDocs.length > 0 && (
+          {(folders.length > 0 || rootDocs.length > 0) && (
             <div className="mt-2">
-              <div className="text-[10px] text-gray-400 px-2 py-1 uppercase">Unfiled</div>
-              {rootDocs.map((doc) => (
+              <div
+                className="rounded-lg border border-dashed border-gray-200 p-2 transition-colors min-h-[40px]"
+                onDrop={handleUnfiledDrop}
+                onDragOver={(e) => {
+                  e.preventDefault()
+                  if (e.dataTransfer.types.includes(DOC_DRAG_TYPE)) {
+                    e.dataTransfer.dropEffect = 'move'
+                    e.currentTarget.classList.add('bg-gray-100')
+                  }
+                }}
+                onDragLeave={(e) => e.currentTarget.classList.remove('bg-gray-100')}
+              >
+                <div className="text-[10px] text-gray-400 px-2 py-1 uppercase">Unfiled</div>
+                {rootDocs.map((doc) => (
                 <div
                   key={doc.doc_id}
                   draggable
@@ -163,6 +216,7 @@ export function DocumentLibrary({
                   </div>
                 </div>
               ))}
+              </div>
             </div>
           )}
           {documents.length === 0 && folders.length === 0 && (

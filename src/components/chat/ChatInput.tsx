@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react'
-import { Send, X, Globe } from 'lucide-react'
+import { ArrowUp, X, Globe } from 'lucide-react'
 import { SUGGESTED_PROMPTS } from '../../mockData'
 import { DOC_DRAG_TYPE } from '../../utils/drag'
 import type { StoredDocument } from '../../types'
@@ -139,9 +139,10 @@ export function ChatInput({ onSend, showSuggestions = true }: ChatInputProps) {
           <button
             onClick={handleSubmit}
             disabled={!input.trim()}
-            className="p-2 rounded-lg bg-black text-white shadow-soft-button hover:bg-gray-800 hover:shadow-soft-button-hover disabled:opacity-40 disabled:cursor-not-allowed disabled:shadow-none disabled:hover:shadow-none transition-all duration-150"
+            className="p-1.5 rounded-lg bg-gray-200 text-gray-700 hover:bg-gray-300 shadow-soft-button disabled:opacity-40 disabled:cursor-not-allowed transition-all duration-150"
+            title="Send"
           >
-            <Send className="w-4 h-4" />
+            <ArrowUp className="w-4 h-4" />
           </button>
         </div>
       </div>

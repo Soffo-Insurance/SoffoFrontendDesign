@@ -1,5 +1,5 @@
-import { useState, useCallback } from 'react'
-import { useParams } from 'react-router-dom'
+import { useState, useCallback, useEffect, useRef } from 'react'
+import { useParams, useLocation } from 'react-router-dom'
 import { ClaimHeader } from '../components/shared/ClaimHeader'
 import { MessageList } from '../components/chat/MessageList'
 import { ChatInput } from '../components/chat/ChatInput'
@@ -10,6 +10,7 @@ import type { ChatMessage, QueryResponseMessage, ReportMessage, StoredDocument, 
 
 export function ChatPage() {
   const { claimId } = useParams<{ claimId: string }>()
+  const location = useLocation()
   const claim = MOCK_CLAIMS.find((c) => c.claim_id === claimId)
   const [messages, setMessages] = useState<ChatMessage[]>([])
   const [documents, setDocuments] = useState(
@@ -88,6 +89,22 @@ export function ChatPage() {
     ])
   }, [claimId, folders.length])
 
+  const handleMoveToFolder = useCallback((docId: string, folderId: string | null) => {
+    setDocuments((prev) =>
+      prev.map((d) => (d.doc_id === docId ? { ...d, folder_id: folderId ?? undefined } : d))
+    )
+  }, [])
+
+  const initialProcessed = useRef(false)
+  useEffect(() => {
+    const initial = (location.state as { initialQuery?: string })?.initialQuery
+    if (initial?.trim() && claimId && !initialProcessed.current) {
+      initialProcessed.current = true
+      handleSend(initial)
+      window.history.replaceState({}, '', location.pathname)
+    }
+  }, [claimId, handleSend, location.state, location.pathname])
+
   if (!claim) {
     return (
       <div className="flex-1 flex justify-center items-center text-gray-500 text-sm">
@@ -109,6 +126,7 @@ export function ChatPage() {
         folders={folders}
         onUpload={handleUpload}
         onCreateFolder={handleCreateFolder}
+        onMoveToFolder={handleMoveToFolder}
         isOpen={docLibraryOpen}
         onToggle={() => setDocLibraryOpen((o) => !o)}
       />
