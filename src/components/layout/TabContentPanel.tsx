@@ -14,10 +14,10 @@ export function TabContentPanel() {
     )
   }
 
-  if (activeTab.type === 'editor' && activeTab.payload?.content) {
+  if (activeTab.type === 'editor') {
     return (
       <EditorView
-        content={activeTab.payload.content}
+        content={activeTab.payload?.content ?? ''}
       />
     )
   }

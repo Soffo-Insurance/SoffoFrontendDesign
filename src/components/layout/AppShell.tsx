@@ -130,16 +130,16 @@ function MainContent() {
 }
 
 function TopBar() {
+  const claimId = useParams<{ claimId?: string }>().claimId
   const tabs = useTabsOptional()
   const hasTabs = tabs && tabs.tabs.length > 0
+  const showTabStrip = Boolean(claimId && hasTabs)
+
+  if (!showTabStrip) return null
 
   return (
     <header className="shrink-0 h-10 flex items-end min-h-0 bg-[#E5E7EB]">
-      {hasTabs ? (
-        <TabStrip />
-      ) : (
-        <div className="flex-1 min-w-0 h-full bg-[#E5E7EB]" />
-      )}
+      <TabStrip />
     </header>
   )
 }
@@ -150,6 +150,15 @@ function ContentLayout() {
   const hasClaimChat = useClaimChatOptional()
   const hasTabs = tabs && tabs.tabs.length > 0
   const showSplitView = Boolean(claimId && hasTabs && hasClaimChat)
+
+  // Landing, Library, Integrations: no tab bar, just main content
+  if (!claimId) {
+    return (
+      <div className="flex-1 flex flex-col min-h-0 min-w-0 overflow-hidden">
+        <MainContent />
+      </div>
+    )
+  }
 
   if (showSplitView) {
     return (
@@ -170,20 +179,22 @@ function ContentLayout() {
     )
   }
 
-  const shell = (
-    <div className="flex-1 flex flex-col min-h-0 min-w-0 p-3">
-      <div className="flex-1 flex flex-col min-h-0 min-w-0 bg-white rounded-lg border border-gray-200 overflow-hidden">
-        <TopBar />
-        <div className="flex-1 flex min-h-0 min-w-0 overflow-hidden">
-          <MainContent />
-        </div>
-      </div>
-    </div>
-  )
-
+  // Claim page, no tabs yet: shell without tab bar, with chat panel
   return (
-    <div className="flex-1 flex flex-col min-h-0 min-w-0">
-      {shell}
+    <div className="flex-1 flex flex-col min-h-0 min-w-0 p-3">
+      <div className="flex-1 flex min-h-0 gap-0 overflow-hidden">
+        <div className="flex-1 flex flex-col min-h-0 min-w-0 bg-white rounded-lg border border-gray-200 overflow-hidden">
+          <div className="flex-1 flex min-h-0 min-w-0 overflow-hidden">
+            <MainContent />
+          </div>
+        </div>
+        <aside
+          className="shrink-0 flex flex-col min-h-0 bg-[#FAFAF9]"
+          style={{ width: RIGHT_CHAT_WIDTH }}
+        >
+          <ChatPanel />
+        </aside>
+      </div>
     </div>
   )
 }
