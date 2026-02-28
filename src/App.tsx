@@ -2,7 +2,6 @@ import { Routes, Route, Navigate } from 'react-router-dom'
 import { AppShell } from './components/layout/AppShell'
 import { ChatPage } from './pages/ChatPage'
 import { EmptyStatePage } from './pages/EmptyStatePage'
-import { LibraryPage } from './pages/LibraryPage'
 import { LibraryProvider } from './contexts/LibraryContext'
 
 function PlaceholderPage({ title }: { title: string }) {
@@ -20,7 +19,7 @@ function App() {
         <Route path="/" element={<AppShell />}>
           <Route index element={<Navigate to="/c" replace />} />
           <Route path="c" element={<EmptyStatePage />} />
-          <Route path="c/library" element={<LibraryPage />} />
+          <Route path="c/library" element={<PlaceholderPage title="Library" />} />
           <Route path="c/integrations" element={<PlaceholderPage title="Integrations" />} />
           <Route path="c/:claimId" element={<ChatPage />} />
         </Route>
