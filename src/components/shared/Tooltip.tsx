@@ -1,4 +1,6 @@
-import { useState, useRef } from 'react'
+import { useState, useRef, useCallback } from 'react'
+
+const TOOLTIP_DELAY_MS = 150
 
 interface TooltipProps {
   label: string
@@ -9,14 +11,25 @@ interface TooltipProps {
 
 export function Tooltip({ label, children, position = 'below' }: TooltipProps) {
   const [visible, setVisible] = useState(false)
-  const triggerRef = useRef<HTMLDivElement>(null)
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+
+  const handleEnter = useCallback(() => {
+    timeoutRef.current = setTimeout(() => setVisible(true), TOOLTIP_DELAY_MS)
+  }, [])
+
+  const handleLeave = useCallback(() => {
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current)
+      timeoutRef.current = null
+    }
+    setVisible(false)
+  }, [])
 
   return (
     <div
-      ref={triggerRef}
       className="relative inline-flex"
-      onMouseEnter={() => setVisible(true)}
-      onMouseLeave={() => setVisible(false)}
+      onMouseEnter={handleEnter}
+      onMouseLeave={handleLeave}
     >
       {children}
       {visible && label && (

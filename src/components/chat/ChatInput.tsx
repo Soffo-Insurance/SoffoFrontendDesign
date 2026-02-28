@@ -162,18 +162,19 @@ export function ChatInput({ onSend, claimId, prefill, onPrefillConsumed }: ChatI
               e.target.value = ''
             }}
           />
-          <Tooltip label={includeWebSearch ? 'Web search on' : 'Web search off'} position="above">
-            <button
-              type="button"
-              onClick={() => setIncludeWebSearch((v) => !v)}
-              className={`chat-input-icon flex items-center justify-center h-7 w-7 shrink-0 rounded-full transition-colors ${
-                includeWebSearch ? 'bg-gray-100 text-gray-600' : 'text-gray-500 hover:bg-gray-100'
-              }`}
-              aria-label={includeWebSearch ? 'Web search on' : 'Web search off'}
-            >
-              <Globe className="w-3.5 h-3.5" />
-            </button>
-          </Tooltip>
+          <button
+            type="button"
+            onClick={() => setIncludeWebSearch((v) => !v)}
+            className={`chat-input-icon flex items-center justify-center gap-1.5 h-7 shrink-0 overflow-hidden transition-[width,background-color,color] duration-200 ${
+              includeWebSearch
+                ? 'w-[72px] px-2.5 rounded-md bg-gray-100 text-gray-600'
+                : 'w-7 rounded-full text-gray-500 hover:bg-gray-100'
+            }`}
+            aria-label={includeWebSearch ? 'Web search on' : 'Web search off'}
+          >
+            <Globe className="w-3.5 h-3.5 shrink-0" />
+            {includeWebSearch && <span className="text-[11px] font-semibold whitespace-nowrap">Search</span>}
+          </button>
           <div className="relative shrink-0">
             <Tooltip label="Add tabs or files" position="above">
               <button
@@ -195,16 +196,14 @@ export function ChatInput({ onSend, claimId, prefill, onPrefillConsumed }: ChatI
               libraryFiles={attachments.map((d) => ({ id: d.doc_id, name: d.filename }))}
             />
           </div>
-          <Tooltip label="Send" position="above">
-            <button
-              onClick={handleSubmit}
-              disabled={!input.trim()}
-              className="chat-input-icon w-7 h-7 flex items-center justify-center rounded-full bg-gray-200 text-gray-700 hover:bg-gray-300 shadow-soft-button disabled:opacity-40 disabled:cursor-not-allowed transition-all duration-150 shrink-0"
-              aria-label="Send"
-            >
-              <ArrowUp className="w-3.5 h-3.5" />
-            </button>
-          </Tooltip>
+          <button
+            onClick={handleSubmit}
+            disabled={!input.trim()}
+            className="chat-input-icon w-7 h-7 flex items-center justify-center rounded-full bg-gray-200 text-gray-700 hover:bg-gray-300 shadow-soft-button disabled:opacity-40 disabled:cursor-not-allowed transition-all duration-150 shrink-0"
+            aria-label="Send"
+          >
+            <ArrowUp className="w-3.5 h-3.5" />
+          </button>
         </div>
       </div>
     </div>
