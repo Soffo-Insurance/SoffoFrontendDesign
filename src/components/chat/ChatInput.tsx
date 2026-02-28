@@ -164,14 +164,14 @@ export function ChatInput({ onSend, showSuggestions = true, claimId }: ChatInput
             type="button"
             onClick={() => setIncludeWebSearch((v) => !v)}
             title={includeWebSearch ? 'Web search on' : 'Web search off'}
-            className={`flex items-center gap-1.5 shrink-0 transition-all duration-200 ${
+            className={`flex items-center gap-1.5 h-7 shrink-0 rounded-full overflow-hidden transition-[width] duration-200 ${
               includeWebSearch
-                ? 'px-3 py-1.5 rounded-full bg-[#373F4A] text-[#64B5F6]'
-                : 'w-7 h-7 justify-center rounded-full text-gray-500 hover:bg-gray-100 border border-gray-200'
+                ? 'w-[88px] pl-2 pr-3 bg-[#2563eb] text-[#64B5F6]'
+                : 'w-7 justify-center text-gray-500 hover:bg-gray-100 border border-gray-200'
             }`}
           >
             <Globe className="w-3.5 h-3.5 shrink-0" />
-            {includeWebSearch && <span className="text-xs font-semibold">Search</span>}
+            {includeWebSearch && <span className="text-xs font-semibold whitespace-nowrap">Search</span>}
           </button>
           <button
             type="button"

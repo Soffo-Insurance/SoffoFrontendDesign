@@ -115,14 +115,14 @@ export function EmptyStatePage() {
                 type="button"
                 onClick={() => setWebSearchOn((v) => !v)}
                 title={webSearchOn ? 'Web search on' : 'Web search off'}
-                className={`flex items-center gap-1.5 shrink-0 transition-all duration-200 ${
+                className={`flex items-center gap-1.5 h-7 shrink-0 rounded-full overflow-hidden transition-[width] duration-200 ${
                   webSearchOn
-                    ? 'px-3 py-1.5 rounded-full bg-[#373F4A] text-[#64B5F6]'
-                    : 'w-7 h-7 justify-center rounded-full text-gray-500 hover:bg-gray-100'
+                    ? 'w-[88px] pl-2 pr-3 bg-[#2563eb] text-[#64B5F6]'
+                    : 'w-7 justify-center text-gray-500 hover:bg-gray-100'
                 }`}
               >
                 <Globe className="w-3.5 h-3.5 shrink-0" />
-                {webSearchOn && <span className="text-xs font-semibold">Search</span>}
+                {webSearchOn && <span className="text-xs font-semibold whitespace-nowrap">Search</span>}
               </button>
               <button
                 type="button"
