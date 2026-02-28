@@ -12,6 +12,13 @@ body {
 /* Chat page: hover = light grey pill (like expanded web search), not applied to input box icons */
 .chat-page button:not(.chat-input-icon) {
   border-radius: 0.375rem;
+  font-size: 0.75rem;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+}
+.chat-page button:not(.chat-input-icon) svg {
+  width: 0.75rem;
+  height: 0.75rem;
 }
 .chat-page button:not(.chat-input-icon):hover {
   background-color: #f3f4f6;
