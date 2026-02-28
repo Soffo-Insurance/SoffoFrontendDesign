@@ -1,6 +1,6 @@
 import { useState, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Search, Plus, Mic, ArrowUp, Globe, X, FileText, PanelLeftClose, PanelLeftOpen } from 'lucide-react'
+import { Search, Plus, Mic, ArrowUp, Globe, X, FileText } from 'lucide-react'
 import { MOCK_CLAIMS } from '../mockData'
 import { AddTabsOrFilesPopover } from '../components/AddTabsOrFilesPopover'
 
@@ -10,8 +10,6 @@ export function EmptyStatePage() {
   const [isDropTarget, setIsDropTarget] = useState(false)
   const [webSearchOn, setWebSearchOn] = useState(false)
   const [addPopoverOpen, setAddPopoverOpen] = useState(false)
-  const [sidebarOpen, setSidebarOpen] = useState(true)
-  const [mainOpen, setMainOpen] = useState(true)
   const fileInputRef = useRef<HTMLInputElement>(null)
   const addButtonRef = useRef<HTMLButtonElement>(null)
   const navigate = useNavigate()
@@ -65,79 +63,16 @@ export function EmptyStatePage() {
   const handleDragLeave = () => setIsDropTarget(false)
 
   return (
-    <div className="min-h-screen bg-[#e8e8ea] flex">
-      {/* Grey sidebar — no divider, closable */}
-      <aside
-        className={`flex shrink-0 flex-col bg-[#e0e0e4] transition-[width] duration-200 ${
-          sidebarOpen ? 'w-56 lg:w-64' : 'w-0 overflow-hidden'
-        }`}
-      >
-        <div className="flex h-12 shrink-0 items-center justify-between gap-2 px-3">
-          {sidebarOpen && (
-            <>
-              <span className="text-sm font-medium text-gray-700">Nav</span>
-              <button
-                type="button"
-                onClick={() => setSidebarOpen(false)}
-                className="rounded p-1.5 text-gray-500 hover:bg-black/5 hover:text-gray-700"
-                title="Close sidebar"
-                aria-label="Close sidebar"
-              >
-                <PanelLeftClose className="h-4 w-4" />
-              </button>
-            </>
-          )}
-        </div>
-        {sidebarOpen && (
-          <nav className="flex-1 px-2 space-y-1 pb-4 text-sm">
-            <button className="flex w-full items-center rounded-lg px-3 py-2 bg-white/60 text-gray-900">
-              <span>Home</span>
-            </button>
-            <button className="flex w-full items-center rounded-lg px-3 py-2 text-gray-700 hover:bg-white/40">
-              <span>Library</span>
-            </button>
-            <button className="flex w-full items-center rounded-lg px-3 py-2 text-gray-700 hover:bg-white/40">
-              <span>Integration</span>
-            </button>
-            <button className="flex w-full items-center rounded-lg px-3 py-2 text-gray-700 hover:bg-white/40">
-              <span>Search</span>
-            </button>
-          </nav>
-        )}
-      </aside>
-      {!sidebarOpen && (
-        <button
-          type="button"
-          onClick={() => setSidebarOpen(true)}
-          className="fixed left-2 top-4 z-10 rounded-lg border border-gray-200 bg-white p-2 text-gray-600 shadow-sm hover:bg-gray-50"
-          title="Open sidebar"
-          aria-label="Open sidebar"
+    <div className="flex-1 flex flex-col items-center justify-center bg-white px-4">
+      <div className="w-full max-w-2xl flex flex-col items-center">
+        <div
+          onDrop={handleDrop}
+          onDragOver={handleDragOver}
+          onDragLeave={handleDragLeave}
+          className={`w-full bg-white rounded-2xl shadow-input transition-all overflow-hidden ${
+            isDropTarget ? 'shadow-soft-md' : ''
+          }`}
         >
-          <PanelLeftOpen className="h-4 w-4" />
-        </button>
-      )}
-
-      {/* Main: white rounded shell with gap, no divider; closable */}
-      <main className="flex-1 flex items-center justify-center p-6 min-w-0">
-        {mainOpen ? (
-          <div className="relative w-full max-w-2xl">
-            <button
-              type="button"
-              onClick={() => setMainOpen(false)}
-              className="absolute -right-2 -top-2 z-10 rounded-full border border-gray-200 bg-white p-1.5 text-gray-500 shadow-sm hover:bg-gray-50 hover:text-gray-700"
-              title="Close"
-              aria-label="Close"
-            >
-              <X className="h-4 w-4" />
-            </button>
-            <div
-              onDrop={handleDrop}
-              onDragOver={handleDragOver}
-              onDragLeave={handleDragLeave}
-              className={`rounded-2xl bg-white shadow-input transition-all overflow-hidden ${
-                isDropTarget ? 'shadow-soft-md' : ''
-              }`}
-            >
           {attachments.length > 0 && (
             <div className="flex flex-wrap gap-2 px-4 pt-3">
               {attachments.map(({ id, file }) => (
@@ -227,18 +162,8 @@ export function EmptyStatePage() {
               </button>
             </div>
           </div>
-            </div>
-          </div>
-        ) : (
-          <button
-            type="button"
-            onClick={() => setMainOpen(true)}
-            className="rounded-xl border border-gray-200 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50"
-          >
-            Open chat
-          </button>
-        )}
-      </main>
+        </div>
+      </div>
     </div>
   )
 }
