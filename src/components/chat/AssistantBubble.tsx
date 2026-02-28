@@ -1,5 +1,7 @@
+import { useState, useRef } from 'react'
 import ReactMarkdown from 'react-markdown'
 import { Copy, Download, RefreshCw, FileEdit, Globe, ThumbsUp, ThumbsDown } from 'lucide-react'
+import { SourcePopover, type SourceEntry } from '../SourcePopover'
 import type { QueryResponseMessage } from '../../types'
 
 interface AssistantBubbleProps {
@@ -7,14 +9,34 @@ interface AssistantBubbleProps {
   followUps?: string[]
 }
 
-function renderInlineWithCitations(text: string) {
+function sourceEntriesFromCitations(citations: string[]): SourceEntry[] {
+  return citations.map((name) => ({
+    name,
+    title: name,
+    description: 'Source content and context for this citation.',
+  }))
+}
+
+function renderInlineWithCitations(
+  text: string,
+  citations: string[],
+  onCitationClick: (index: number, el: HTMLElement) => void
+) {
   const parts = text.split(/(\[[^\]]+\])/g)
   return parts.map((part, i) => {
     if (part.startsWith('[') && part.endsWith(']')) {
       const cite = part.slice(1, -1)
+      const index = citations.indexOf(cite)
+      const idx = index >= 0 ? index : 0
       return (
-        <sup key={i} className="text-gray-400 text-xs font-normal align-super ml-0.5">
-          {cite}
+        <sup key={i} className="align-super ml-0.5">
+          <button
+            type="button"
+            onClick={(e) => onCitationClick(idx, e.currentTarget)}
+            className="text-gray-400 text-xs font-normal hover:text-gray-600 cursor-pointer underline decoration-dotted"
+          >
+            {cite}
+          </button>
         </sup>
       )
     }
@@ -36,9 +58,37 @@ const DEFAULT_FOLLOW_UPS = [
   'How does the notice period affect this case?',
 ]
 
+function extractCitationLabels(content: string): string[] {
+  const matches = content.matchAll(/\[([^\]]+)\]/g)
+  const seen = new Set<string>()
+  const list: string[] = []
+  for (const m of matches) {
+    const label = m[1]
+    if (!seen.has(label)) {
+      seen.add(label)
+      list.push(label)
+    }
+  }
+  return list
+}
+
 export function AssistantBubble({ message, followUps = DEFAULT_FOLLOW_UPS }: AssistantBubbleProps) {
   const hasCitations = message.content.includes('[')
   const citedCount = message.citations?.length ?? message.chunksUsed ?? 16
+  const citations =
+    message.citations && message.citations.length > 0
+      ? message.citations
+      : extractCitationLabels(message.content)
+  const sources = sourceEntriesFromCitations(citations)
+  const [sourcePopoverOpen, setSourcePopoverOpen] = useState(false)
+  const [sourcePopoverIndex, setSourcePopoverIndex] = useState(0)
+  const sourceAnchorRef = useRef<HTMLElement | null>(null)
+
+  const handleCitationClick = (index: number, el: HTMLElement) => {
+    sourceAnchorRef.current = el
+    setSourcePopoverIndex(index)
+    setSourcePopoverOpen(true)
+  }
 
   const handleCopy = () => {
     void navigator.clipboard.writeText(message.content)
@@ -55,7 +105,7 @@ export function AssistantBubble({ message, followUps = DEFAULT_FOLLOW_UPS }: Ass
             <div className="space-y-3">
               {message.content.split(/\n\n+/).map((para, i) => (
                 <p key={i} className="leading-relaxed">
-                  {renderInlineWithCitations(para)}
+                  {renderInlineWithCitations(para, citations, handleCitationClick)}
                 </p>
               ))}
             </div>
@@ -137,9 +187,18 @@ export function AssistantBubble({ message, followUps = DEFAULT_FOLLOW_UPS }: Ass
           </div>
         </div>
 
+        {sources.length > 0 && (
+          <SourcePopover
+            open={sourcePopoverOpen}
+            onClose={() => setSourcePopoverOpen(false)}
+            anchorRef={sourceAnchorRef}
+            sources={sources}
+            initialIndex={sourcePopoverIndex}
+          />
+        )}
         {followUps.length > 0 && (
           <div className="mt-8">
-            <h3 className="text-[15px] font-semibold text-gray-900 mb-3">Follow-ups,</h3>
+            <h3 className="text-[15px] font-semibold text-gray-900 mb-3">Follow-ups</h3>
             <ul className="border-t border-gray-200">
               {followUps.map((prompt, i) => (
                 <li
