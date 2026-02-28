@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import {
   Bold,
   Italic,
@@ -12,7 +12,6 @@ import {
   AlignJustify,
   Plus,
 } from 'lucide-react'
-import { BlockSuiteEditor } from './BlockSuiteEditor'
 
 interface EditorViewProps {
   title?: string
@@ -21,14 +20,17 @@ interface EditorViewProps {
 
 export function EditorView({ title, content }: EditorViewProps) {
   const [style, setStyle] = useState('Body')
-
   const bodyText = title ? content : (content.split('\n').slice(1).join('\n').trim() || content)
   const displayTitle = title ?? (content.split('\n')[0]?.trim() || 'Untitled')
   const initialContent = title ? `${displayTitle}\n\n${bodyText}` : content
+  const [value, setValue] = useState(initialContent)
+  useEffect(() => {
+    setValue(initialContent)
+  }, [initialContent])
 
   return (
     <div className="flex-1 flex flex-col min-h-0 bg-white">
-      {/* Toolbar - minimal, connects to tab above; design identical to app */}
+      {/* Toolbar - minimal, connects to tab above */}
       <div className="shrink-0 flex items-center gap-1.5 px-4 py-2.5 bg-white border-b border-gray-100">
         <select
           value={style}
@@ -83,10 +85,16 @@ export function EditorView({ title, content }: EditorViewProps) {
         </button>
       </div>
 
-      {/* Document area - BlockSuite (AFFiNE) editor, same white minimal look */}
-      <div className="flex-1 overflow-hidden min-h-0 bg-white flex flex-col">
-        <div className="flex-1 min-h-0 max-w-[680px] w-full mx-auto flex flex-col">
-          <BlockSuiteEditor content={initialContent} />
+      {/* Document area - simple editor that always works */}
+      <div className="flex-1 overflow-auto min-h-0 bg-white">
+        <div className="max-w-[680px] mx-auto px-12 py-12">
+          <textarea
+            value={value}
+            onChange={(e) => setValue(e.target.value)}
+            placeholder="Start writing..."
+            className="w-full min-h-[60vh] resize-none border-0 p-0 text-[15px] leading-[1.7] text-gray-800 placeholder:text-gray-400 focus:ring-0 focus:outline-none font-[inherit]"
+            spellCheck
+          />
         </div>
       </div>
     </div>

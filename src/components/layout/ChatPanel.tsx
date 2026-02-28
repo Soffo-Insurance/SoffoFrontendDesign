@@ -16,7 +16,7 @@ export function ChatPanel() {
   )
 
   return (
-    <div className="chat-page flex flex-1 flex-col min-h-0 relative h-full">
+    <div className="chat-page flex flex-1 flex-col min-h-0 relative h-full bg-[#FAFAF9]">
       <MessageList
         messages={messages}
         isLoading={isLoading}
