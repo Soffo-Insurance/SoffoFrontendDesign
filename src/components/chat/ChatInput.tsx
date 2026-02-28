@@ -184,10 +184,10 @@ export function ChatInput({ onSend, showSuggestions = true, claimId }: ChatInput
             type="button"
             onClick={() => setIncludeWebSearch((v) => !v)}
             title={includeWebSearch ? 'Web search on' : 'Web search off'}
-            className={`flex items-center justify-center gap-1.5 h-7 shrink-0 overflow-hidden transition-[width] duration-200 ${
+            className={`flex items-center justify-center gap-1.5 h-7 shrink-0 px-2.5 rounded-md text-xs transition-colors border ${
               includeWebSearch
-                ? 'w-[72px] px-2.5 rounded-md bg-gray-100 text-gray-600'
-                : 'w-7 rounded-full text-gray-500 hover:bg-gray-100 border border-gray-200'
+                ? 'bg-gray-100 border-gray-200 text-gray-700'
+                : 'bg-transparent border-gray-200 text-gray-500 hover:bg-gray-50'
             }`}
           >
             <Globe className="w-3.5 h-3.5 shrink-0" />
@@ -198,10 +198,10 @@ export function ChatInput({ onSend, showSuggestions = true, claimId }: ChatInput
               ref={addButtonRef}
               type="button"
               onClick={() => setAddPopoverOpen((v) => !v)}
-              className="w-7 h-7 flex items-center justify-center rounded-full border border-gray-200 hover:bg-gray-50 shrink-0"
+              className="flex items-center justify-center h-7 px-2.5 rounded-md border border-gray-200 text-gray-600 hover:bg-gray-50 shrink-0"
               title="Add tabs or files"
             >
-              <Plus className="w-3.5 h-3.5 text-gray-600" />
+              <Plus className="w-3.5 h-3.5" />
             </button>
             <AddTabsOrFilesPopover
               open={addPopoverOpen}
