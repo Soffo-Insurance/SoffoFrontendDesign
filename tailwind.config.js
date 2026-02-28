@@ -8,6 +8,7 @@ export default {
     extend: {
       fontFamily: {
         sans: ['Inter', 'system-ui', 'sans-serif'],
+        'inria-serif': ['"Inria Serif"', 'serif'],
       },
       boxShadow: {
         'input': '0 2px 4px rgba(0,0,0,0.06), 0 6px 16px rgba(0,0,0,0.05)',

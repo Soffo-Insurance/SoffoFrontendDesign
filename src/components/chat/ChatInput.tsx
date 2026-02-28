@@ -90,7 +90,7 @@ export function ChatInput({ onSend, showSuggestions = true, claimId }: ChatInput
   const handleDragLeave = () => setIsDropTarget(false)
 
   return (
-    <div className="shrink-0 border-t border-gray-100 px-4 py-3 bg-white flex justify-center">
+    <div className="shrink-0 px-4 pt-1 pb-3 bg-white flex justify-center">
       <div className="w-full max-w-xl flex flex-col items-center">
         {showSuggestions && (
           <div className="flex flex-wrap gap-2 mb-2 justify-center">
