@@ -29,6 +29,8 @@ export function ChatPanel() {
           claimId={claimId}
           prefill={prefillInput}
           onPrefillConsumed={() => setPrefillInput(null)}
+          placeholder="Ask anything"
+          sidePanel
         />
       </div>
     </div>

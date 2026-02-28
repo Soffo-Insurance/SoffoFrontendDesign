@@ -33,15 +33,22 @@ function WandIcon({ className }: { className?: string }) {
   )
 }
 
+const DEFAULT_PLACEHOLDER = 'Ask about causation, coverage... or drag a doc here'
+
 interface ChatInputProps {
   onSend: (text: string, attachments?: StoredDocument[], includeWebSearch?: boolean, improvePrompt?: boolean) => void
   claimId?: string
   /** When set, pastes into the input and focuses; cleared after consumed */
   prefill?: string | null
   onPrefillConsumed?: () => void
+  /** Placeholder text; default varies by context */
+  placeholder?: string
+  /** When true, input is in the side panel (more bottom spacing, simpler placeholder if not set) */
+  sidePanel?: boolean
 }
 
-export function ChatInput({ onSend, claimId, prefill, onPrefillConsumed }: ChatInputProps) {
+export function ChatInput({ onSend, claimId, prefill, onPrefillConsumed, placeholder: placeholderProp, sidePanel }: ChatInputProps) {
+  const placeholder = placeholderProp ?? (sidePanel ? 'Ask anything' : DEFAULT_PLACEHOLDER)
   const [input, setInput] = useState('')
   const [attachments, setAttachments] = useState<StoredDocument[]>([])
   const [includeWebSearch, setIncludeWebSearch] = useState(false)
@@ -133,7 +140,7 @@ export function ChatInput({ onSend, claimId, prefill, onPrefillConsumed }: ChatI
   const handleDragLeave = () => setIsDropTarget(false)
 
   return (
-    <div className="shrink-0 px-4 pt-4 pb-10 bg-transparent flex justify-center">
+    <div className={`shrink-0 px-4 pt-4 bg-transparent flex justify-center ${sidePanel ? 'pb-16' : 'pb-10'}`}>
       <div className="w-full max-w-xl flex flex-col items-center">
         {attachments.length > 0 && (
           <div className="flex flex-wrap gap-2 mb-2 justify-start w-full">
@@ -170,7 +177,7 @@ export function ChatInput({ onSend, claimId, prefill, onPrefillConsumed }: ChatI
           value={input}
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={handleKeyDown}
-          placeholder={isDropTarget ? 'Drop document here' : 'Ask about causation, coverage... or drag a doc here'}
+          placeholder={isDropTarget ? 'Drop document here' : placeholder}
           rows={1}
           className="flex-1 resize-none bg-transparent px-2 py-1.5 text-sm outline-none placeholder:text-gray-400 min-h-[36px] max-h-[200px] rounded-lg"
         />
