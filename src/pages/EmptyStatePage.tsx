@@ -63,13 +63,35 @@ export function EmptyStatePage() {
   const handleDragLeave = () => setIsDropTarget(false)
 
   return (
-    <div className="flex-1 flex flex-col items-center justify-center bg-white px-4">
-      <div className="w-full max-w-2xl flex flex-col items-center">
+    <div className="min-h-screen bg-[#f5f5f7] flex">
+      {/* Sidebar */}
+      <aside className="w-56 lg:w-64 bg-white border-r border-gray-200 flex flex-col">
+        <div className="px-4 pt-4 pb-3 text-xs font-semibold uppercase tracking-[0.16em] text-gray-500">
+          Navigation
+        </div>
+        <nav className="flex-1 px-2 space-y-1 text-sm">
+          <button className="flex w-full items-center justify-between rounded-md px-3 py-2 bg-gray-50 text-gray-900">
+            <span>Home</span>
+          </button>
+          <button className="flex w-full items-center justify-between rounded-md px-3 py-2 text-gray-700 hover:bg-gray-50">
+            <span>Library</span>
+          </button>
+          <button className="flex w-full items-center justify-between rounded-md px-3 py-2 text-gray-700 hover:bg-gray-50">
+            <span>Integration</span>
+          </button>
+          <button className="flex w-full items-center justify-between rounded-md px-3 py-2 text-gray-700 hover:bg-gray-50">
+            <span>Search</span>
+          </button>
+        </nav>
+      </aside>
+
+      {/* Main content */}
+      <main className="flex-1 flex items-center justify-center px-6 py-8">
         <div
           onDrop={handleDrop}
           onDragOver={handleDragOver}
           onDragLeave={handleDragLeave}
-          className={`w-full bg-white rounded-2xl shadow-input transition-all overflow-hidden ${
+          className={`w-full max-w-2xl bg-white rounded-2xl shadow-input transition-all overflow-hidden ${
             isDropTarget ? 'shadow-soft-md' : ''
           }`}
         >
@@ -163,7 +185,7 @@ export function EmptyStatePage() {
             </div>
           </div>
         </div>
-      </div>
+      </main>
     </div>
   )
 }
