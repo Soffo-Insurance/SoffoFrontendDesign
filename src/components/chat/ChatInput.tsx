@@ -101,7 +101,7 @@ export function ChatInput({ onSend, claimId }: ChatInputProps) {
   }, [isThinking])
 
   return (
-    <div className="shrink-0 px-4 pt-4 pb-10 bg-white flex justify-center">
+    <div className="shrink-0 px-4 pt-4 pb-10 bg-transparent flex justify-center">
       <div className="w-full max-w-xl flex flex-col items-center">
         {isThinking && (
           <div className="mb-3 flex w-full max-w-xl items-center gap-2 text-xs text-gray-500">
@@ -112,7 +112,7 @@ export function ChatInput({ onSend, claimId }: ChatInputProps) {
           </div>
         )}
         {attachments.length > 0 && (
-          <div className="flex flex-wrap gap-2 mb-2 justify-center w-full">
+          <div className="flex flex-wrap gap-2 mb-2 justify-start w-full">
             {attachments.map((doc) => (
               <span
                 key={doc.doc_id}
@@ -135,7 +135,7 @@ export function ChatInput({ onSend, claimId }: ChatInputProps) {
           onDrop={handleDrop}
           onDragOver={handleDragOver}
           onDragLeave={handleDragLeave}
-          className={`w-full flex items-center gap-2 p-2.5 rounded-2xl bg-white shadow-input transition-all duration-200 ${
+          className={`w-full flex items-center gap-2 p-2.5 rounded-2xl bg-transparent shadow-input transition-all duration-200 ${
             isDropTarget ? 'shadow-soft-md' : ''
           }`}
         >
@@ -172,7 +172,7 @@ export function ChatInput({ onSend, claimId }: ChatInputProps) {
             className={`flex items-center justify-center gap-1.5 h-7 shrink-0 overflow-hidden transition-[width,background-color,color] duration-200 ${
               includeWebSearch
                 ? 'w-[80px] px-2.5 rounded-full bg-gray-100 text-gray-700'
-                : 'w-7 rounded-full text-gray-500 hover:bg-gray-50'
+                : 'w-7 rounded-full text-gray-500 hover:bg-gray-100'
             }`}
           >
             <Globe className="w-3.5 h-3.5 shrink-0" />
