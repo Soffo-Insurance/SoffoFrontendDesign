@@ -10,6 +10,7 @@ export default {
         sans: ['Inter', 'system-ui', 'sans-serif'],
       },
       boxShadow: {
+        'input': '0 1px 2px rgba(0,0,0,0.04)',
         soft: '0 1px 2px rgba(0,0,0,0.04), 0 4px 12px rgba(0,0,0,0.03)',
         'soft-md': '0 2px 4px rgba(0,0,0,0.04), 0 6px 16px rgba(0,0,0,0.04)',
         'soft-lg': '0 4px 6px rgba(0,0,0,0.04), 0 10px 24px rgba(0,0,0,0.05)',

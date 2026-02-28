@@ -128,10 +128,8 @@ export function ChatInput({ onSend, showSuggestions = true, claimId }: ChatInput
         onDrop={handleDrop}
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
-        className={`flex items-end gap-2 p-2.5 rounded-xl transition-all duration-200 ${
-          isDropTarget
-            ? 'border-2 border-black bg-gray-50 shadow-soft-md'
-            : 'border border-gray-200 bg-white shadow-soft'
+        className={`flex items-end gap-2 p-2.5 rounded-xl bg-white shadow-input transition-all duration-200 ${
+          isDropTarget ? 'shadow-soft-md' : ''
         }`}
       >
         <textarea

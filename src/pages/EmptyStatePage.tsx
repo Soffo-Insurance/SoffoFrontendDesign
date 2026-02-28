@@ -65,8 +65,8 @@ export function EmptyStatePage() {
           onDrop={handleDrop}
           onDragOver={handleDragOver}
           onDragLeave={handleDragLeave}
-          className={`w-full bg-white rounded-2xl shadow-soft transition-all overflow-hidden ${
-            isDropTarget ? 'border-2 border-black bg-gray-50' : 'border border-gray-200 focus-within:border-gray-300'
+          className={`w-full bg-white rounded-2xl shadow-input transition-all overflow-hidden ${
+            isDropTarget ? 'shadow-soft-md' : ''
           }`}
         >
           {attachments.length > 0 && (
