@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom'
 import { Search, Plus, Mic, ArrowUp, Globe, X, FileText } from 'lucide-react'
 import { MOCK_CLAIMS } from '../mockData'
 import { AddTabsOrFilesPopover } from '../components/AddTabsOrFilesPopover'
-import { Tooltip } from '../components/shared/Tooltip'
 
 export function EmptyStatePage() {
   const [input, setInput] = useState('')
@@ -84,16 +83,14 @@ export function EmptyStatePage() {
                 >
                   <FileText className="w-3 h-3 shrink-0" />
                   {file.name}
-                  <Tooltip label="Remove">
-                    <button
-                      type="button"
-                      onClick={() => removeAttachment(id)}
-                      className="p-0.5 hover:bg-gray-200 rounded-md"
-                      aria-label="Remove"
-                    >
-                      <X className="w-3 h-3" />
-                    </button>
-                  </Tooltip>
+                  <button
+                    type="button"
+                    onClick={() => removeAttachment(id)}
+                    className="p-0.5 hover:bg-gray-200 rounded-md"
+                    aria-label="Remove"
+                  >
+                    <X className="w-3 h-3" />
+                  </button>
                 </span>
               ))}
             </div>
@@ -119,32 +116,29 @@ export function EmptyStatePage() {
               onChange={handleFileChange}
             />
             <div className="flex items-center gap-2 flex-1 min-w-0">
-              <Tooltip label={webSearchOn ? 'Web search on' : 'Web search off'} position="above">
-                <button
-                  type="button"
-                  onClick={() => setWebSearchOn((v) => !v)}
-                  className={`flex items-center justify-center gap-1.5 h-7 shrink-0 overflow-hidden transition-[width] duration-200 ${
-                    webSearchOn
-                      ? 'w-[72px] px-2.5 rounded-md bg-gray-100 text-gray-600'
-                      : 'w-7 rounded-full text-gray-500 hover:bg-gray-100'
-                  }`}
-                >
-                  <Globe className="w-3.5 h-3.5 shrink-0" />
-                  {webSearchOn && <span className="text-xs font-semibold whitespace-nowrap">Search</span>}
-                </button>
-              </Tooltip>
+              <button
+                type="button"
+                onClick={() => setWebSearchOn((v) => !v)}
+                title={webSearchOn ? 'Web search on' : 'Web search off'}
+                className={`flex items-center justify-center gap-1.5 h-7 shrink-0 overflow-hidden transition-[width] duration-200 ${
+                  webSearchOn
+                    ? 'w-[72px] px-2.5 rounded-md bg-gray-100 text-gray-600'
+                    : 'w-7 rounded-full text-gray-500 hover:bg-gray-100'
+                }`}
+              >
+                <Globe className="w-3.5 h-3.5 shrink-0" />
+                {webSearchOn && <span className="text-xs font-semibold whitespace-nowrap">Search</span>}
+              </button>
               <div className="relative">
-                <Tooltip label="Add tabs or files" position="above">
-                  <button
-                    ref={addButtonRef}
-                    type="button"
-                    onClick={() => setAddPopoverOpen((v) => !v)}
-                    className="flex items-center justify-center gap-1.5 rounded-lg bg-gray-100 px-2.5 py-1.5 text-gray-600 hover:bg-gray-200 text-xs shrink-0 transition-colors"
-                  >
-                    <Plus className="w-3.5 h-3.5 shrink-0" />
-                    <span>Add tabs or files</span>
-                  </button>
-                </Tooltip>
+                <button
+                  ref={addButtonRef}
+                  type="button"
+                  onClick={() => setAddPopoverOpen((v) => !v)}
+                  className="flex items-center justify-center gap-1.5 rounded-lg bg-gray-100 px-2.5 py-1.5 text-gray-600 hover:bg-gray-200 text-xs shrink-0 transition-colors"
+                >
+                  <Plus className="w-3.5 h-3.5 shrink-0" />
+                  <span>Add tabs or files</span>
+                </button>
                 <AddTabsOrFilesPopover
                   open={addPopoverOpen}
                   onClose={() => setAddPopoverOpen(false)}
@@ -155,17 +149,15 @@ export function EmptyStatePage() {
               </div>
             </div>
             <div className="flex items-center gap-1 shrink-0">
-              <Tooltip label="Voice input" position="above">
-                <button type="button" className="w-7 h-7 flex items-center justify-center rounded-full text-gray-400 hover:text-gray-600">
-                  <Mic className="w-3.5 h-3.5" />
-                </button>
-              </Tooltip>
+              <button type="button" className="w-7 h-7 flex items-center justify-center rounded-full text-gray-400 hover:text-gray-600" title="Voice input">
+                <Mic className="w-3.5 h-3.5" />
+              </button>
               <button
                 type="button"
                 onClick={handleSubmit}
                 disabled={!input.trim()}
                 className="w-7 h-7 flex items-center justify-center rounded-full bg-gray-200 text-gray-700 hover:bg-gray-300 disabled:opacity-40 disabled:cursor-not-allowed shrink-0"
-                aria-label="Send"
+                title="Send"
               >
                 <ArrowUp className="w-3.5 h-3.5" />
               </button>
