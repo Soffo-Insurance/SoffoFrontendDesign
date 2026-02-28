@@ -50,7 +50,7 @@ function PanelLeftIcon({ className }: { className?: string }) {
 
 function LeftSidebar({ workspaceName }: { workspaceName: string }) {
   const navLinkClass = ({ isActive }: { isActive: boolean }) =>
-    `flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
+    `flex items-center gap-2 px-2 py-2 rounded-lg text-sm font-medium transition-colors ${
       isActive ? 'bg-gray-200 text-gray-900' : 'text-gray-700 hover:bg-gray-200/70'
     }`
 
@@ -59,27 +59,27 @@ function LeftSidebar({ workspaceName }: { workspaceName: string }) {
       className="shrink-0 flex flex-col bg-[#FAFAF9]"
       style={{ width: SIDEBAR_WIDTH }}
     >
-      <div className="p-3 flex items-center gap-2">
+      <div className="px-2 pt-2 pb-1.5 flex items-center gap-1.5">
         <button
           type="button"
-          className="flex items-center gap-2 min-w-0 flex-1 text-left rounded-lg py-1.5 px-2 hover:bg-gray-200/70 transition-colors"
+          className="flex items-center gap-1.5 min-w-0 flex-1 text-left rounded-md py-1 px-1.5 hover:bg-gray-200/70 transition-colors"
           aria-label="Switch workspace"
         >
-          <span className="w-8 h-8 shrink-0 rounded-lg bg-gray-200 flex items-center justify-center text-sm font-semibold text-gray-700">
+          <span className="w-5 h-5 shrink-0 rounded bg-gray-200 flex items-center justify-center text-[10px] font-semibold text-gray-700 leading-none">
             {workspaceName.charAt(0).toUpperCase() || 'W'}
           </span>
           <span className="text-sm font-medium text-gray-900 truncate min-w-0 flex-1">{workspaceName}</span>
-          <ChevronDown className="w-4 h-4 shrink-0 text-gray-500" />
+          <ChevronDown className="w-3.5 h-3.5 shrink-0 text-gray-500" />
         </button>
         <button
           type="button"
-          className="p-1 rounded text-gray-500 hover:bg-gray-200 shrink-0"
+          className="p-0.5 rounded text-gray-500 hover:bg-gray-200 shrink-0"
           aria-label="Collapse sidebar"
         >
-          <PanelLeftIcon className="w-4 h-4" />
+          <PanelLeftIcon className="w-3.5 h-3.5" />
         </button>
       </div>
-      <nav className="flex-1 p-2 space-y-0.5">
+      <nav className="flex-1 px-1.5 py-1 space-y-0.5">
         <NavLink to="/c" end className={navLinkClass}>
           <HomeIcon className="w-4 h-4 shrink-0" />
           Home
@@ -93,9 +93,9 @@ function LeftSidebar({ workspaceName }: { workspaceName: string }) {
           Integrations
         </NavLink>
       </nav>
-      <div className="p-2">
-        <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-gray-200/80">
-          <div className="w-8 h-8 rounded-full bg-gray-300 flex items-center justify-center shrink-0">
+      <div className="px-1.5 py-1.5">
+        <div className="flex items-center gap-1.5 px-2 py-1.5 rounded-lg bg-gray-200/80">
+          <div className="w-7 h-7 rounded-full bg-gray-300 flex items-center justify-center shrink-0">
             <User className="w-4 h-4 text-gray-500" />
           </div>
           <div className="min-w-0 flex-1">
@@ -125,29 +125,23 @@ function MainContent() {
   if (showSplitView) {
     return (
       <>
-        <div className="flex-1 flex flex-col min-w-0 min-h-0 px-2 pb-2 pt-0">
-          <div className="flex-1 flex flex-col min-h-0 bg-white rounded-xl border border-gray-200 overflow-hidden">
-            <TabContentPanel />
-          </div>
+        <div className="flex-1 flex flex-col min-w-0 min-h-0 overflow-hidden">
+          <TabContentPanel />
         </div>
         <aside
-          className="shrink-0 flex flex-col bg-[#FAFAF9] px-2 pb-2 pt-0"
+          className="shrink-0 flex flex-col bg-white"
           style={{ width: RIGHT_CHAT_WIDTH }}
         >
-          <div className="flex-1 flex flex-col min-h-0 bg-white rounded-xl border border-gray-200 overflow-hidden">
-            <ChatPanel />
-          </div>
+          <ChatPanel />
         </aside>
       </>
     )
   }
 
   return (
-    <div className="flex-1 flex flex-col min-w-0 min-h-0 px-2 pb-2 pt-0">
-      <main className="flex-1 flex flex-col min-w-0 min-h-0 bg-white rounded-xl border border-gray-200 overflow-auto">
-        <Outlet />
-      </main>
-    </div>
+    <main className="flex-1 flex flex-col min-w-0 min-h-0 overflow-auto">
+      <Outlet />
+    </main>
   )
 }
 
@@ -156,7 +150,7 @@ function TopBar() {
   const hasTabs = tabs && tabs.tabs.length > 0
 
   return (
-    <header className="shrink-0 h-12 flex items-center bg-white px-3 gap-2">
+    <header className="shrink-0 h-10 flex items-center px-3 gap-2 border-b border-gray-100">
       {hasTabs ? (
         <TabStrip />
       ) : (
@@ -169,14 +163,20 @@ function TopBar() {
 function ContentWithClaimChat() {
   const claimId = useParams<{ claimId?: string }>().claimId
 
+  const shell = (
+    <div className="flex-1 flex flex-col min-h-0 min-w-0 bg-white rounded-lg border border-gray-200 overflow-hidden">
+      <TopBar />
+      <div className="flex-1 flex min-h-0 min-w-0 overflow-hidden">
+        <MainContent />
+      </div>
+    </div>
+  )
+
   if (claimId) {
     return (
       <ClaimChatProvider claimId={claimId}>
         <div className="flex-1 flex flex-col min-h-0 min-w-0">
-          <TopBar />
-          <div className="flex-1 flex min-h-0">
-            <MainContent />
-          </div>
+          {shell}
         </div>
       </ClaimChatProvider>
     )
@@ -184,10 +184,7 @@ function ContentWithClaimChat() {
 
   return (
     <div className="flex-1 flex flex-col min-h-0 min-w-0">
-      <TopBar />
-      <div className="flex-1 flex min-h-0">
-        <MainContent />
-      </div>
+      {shell}
     </div>
   )
 }
@@ -199,7 +196,7 @@ export function AppShell() {
     <TabsProvider>
       <div className="flex h-screen bg-[#FAFAF9] text-gray-900">
         <LeftSidebar workspaceName={workspaceName} />
-        <div className="flex-1 flex flex-col min-w-0 min-h-0 bg-white">
+        <div className="flex-1 flex flex-col min-w-0 min-h-0 bg-[#FAFAF9]">
           <ContentWithClaimChat />
         </div>
       </div>
