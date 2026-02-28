@@ -190,7 +190,7 @@ export function ChatInput({ onSend, showSuggestions = true, claimId }: ChatInput
               onClose={() => setAddPopoverOpen(false)}
               onUploadClick={() => fileInputRef.current?.click()}
               anchorRef={addButtonRef}
-              showTabs={true}
+              libraryFiles={attachments.map((d) => ({ id: d.doc_id, name: d.filename }))}
             />
           </div>
           <button

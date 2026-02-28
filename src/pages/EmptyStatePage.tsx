@@ -143,7 +143,7 @@ export function EmptyStatePage() {
                   onClose={() => setAddPopoverOpen(false)}
                   onUploadClick={openUpload}
                   anchorRef={addButtonRef}
-                  showTabs={true}
+                  libraryFiles={attachments.map((a) => ({ id: a.id, name: a.file.name }))}
                 />
               </div>
             </div>
