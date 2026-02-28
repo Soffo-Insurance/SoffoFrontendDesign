@@ -160,8 +160,8 @@ export function AssistantBubble({ message, followUps = DEFAULT_FOLLOW_UPS, onFol
           </button>
         </div>
 
-        <div className="flex items-center justify-between gap-4 mt-3 flex-wrap">
-          <div className="flex items-center gap-4">
+        <div className="flex items-center justify-between gap-2 mt-3 flex-wrap">
+          <div className="flex items-center gap-2">
             <button
               type="button"
               onClick={handleCopy}
@@ -192,7 +192,7 @@ export function AssistantBubble({ message, followUps = DEFAULT_FOLLOW_UPS, onFol
               Open in editor
             </button>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1">
             <button
               type="button"
               className="p-1 text-gray-500 hover:text-gray-700 transition-colors"

@@ -70,7 +70,7 @@ export function UserBubble({
         <p className="text-[15px] leading-relaxed text-gray-900 whitespace-pre-wrap">
           {content}
         </p>
-        <div className="flex items-center gap-4 mt-2">
+        <div className="flex items-center gap-2 mt-2">
           <button
             type="button"
             onClick={handleCopy}
