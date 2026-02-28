@@ -129,9 +129,10 @@ export function ChatInput({ onSend, claimId, prefill, onPrefillConsumed }: ChatI
           onDrop={handleDrop}
           onDragOver={handleDragOver}
           onDragLeave={handleDragLeave}
-          className={`w-full flex items-center gap-2 p-2.5 rounded-2xl bg-transparent shadow-input transition-all duration-200 ${
+          className={`w-full flex items-center gap-2 p-2.5 rounded-2xl !bg-transparent shadow-input transition-all duration-200 ${
             isDropTarget ? 'shadow-soft-md' : ''
           }`}
+          style={{ backgroundColor: 'transparent' }}
         >
         <textarea
           ref={textareaRef}
@@ -163,7 +164,7 @@ export function ChatInput({ onSend, claimId, prefill, onPrefillConsumed }: ChatI
             type="button"
             onClick={() => setIncludeWebSearch((v) => !v)}
             title={includeWebSearch ? 'Web search on' : 'Web search off'}
-            className={`flex items-center justify-center gap-1.5 h-7 shrink-0 overflow-hidden transition-[width,background-color,color] duration-200 ${
+            className={`chat-input-icon flex items-center justify-center gap-1.5 h-7 shrink-0 overflow-hidden transition-[width,background-color,color] duration-200 ${
               includeWebSearch
                 ? 'w-[72px] px-2.5 rounded-md bg-gray-100 text-gray-600'
                 : 'w-7 rounded-full text-gray-500 hover:bg-gray-100'
@@ -177,7 +178,7 @@ export function ChatInput({ onSend, claimId, prefill, onPrefillConsumed }: ChatI
               ref={addButtonRef}
               type="button"
               onClick={() => setAddPopoverOpen((v) => !v)}
-              className="flex items-center justify-center h-7 w-7 text-gray-600 hover:text-gray-800 shrink-0"
+              className="chat-input-icon flex items-center justify-center h-7 w-7 text-gray-600 hover:text-gray-800 shrink-0"
               title="Add tabs or files"
             >
               <Plus className="w-3.5 h-3.5" />
@@ -194,7 +195,7 @@ export function ChatInput({ onSend, claimId, prefill, onPrefillConsumed }: ChatI
           <button
             onClick={handleSubmit}
             disabled={!input.trim()}
-            className="w-7 h-7 flex items-center justify-center rounded-full bg-gray-200 text-gray-700 hover:bg-gray-300 shadow-soft-button disabled:opacity-40 disabled:cursor-not-allowed transition-all duration-150 shrink-0"
+            className="chat-input-icon w-7 h-7 flex items-center justify-center rounded-full bg-gray-200 text-gray-700 hover:bg-gray-300 shadow-soft-button disabled:opacity-40 disabled:cursor-not-allowed transition-all duration-150 shrink-0"
             title="Send"
           >
             <ArrowUp className="w-3.5 h-3.5" />

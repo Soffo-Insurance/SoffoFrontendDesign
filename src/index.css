@@ -9,15 +9,19 @@ body {
   font-family: 'Inter', system-ui, sans-serif;
 }
 
-/* Chat page: light grey box (like web search pill) when buttons are clicked/focused */
-.chat-page button {
+/* Chat page: hover = light grey pill (like expanded web search), not applied to input box icons */
+.chat-page button:not(.chat-input-icon) {
   border-radius: 0.375rem;
 }
-.chat-page button:focus-visible,
-.chat-page button:active {
-  outline: none;
+.chat-page button:not(.chat-input-icon):hover {
   background-color: #f3f4f6;
-  box-shadow: 0 0 0 2px #d1d5db;
+}
+/* Keep send and other round input icons circular (same as landing page) */
+.chat-page button.chat-input-icon.rounded-full {
+  border-radius: 9999px;
+}
+.chat-page button:focus-visible {
+  outline: none;
 }
 .chat-page button::-moz-focus-inner {
   border: 0;
