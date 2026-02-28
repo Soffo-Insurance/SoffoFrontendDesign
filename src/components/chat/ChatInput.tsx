@@ -5,8 +5,36 @@ import type { StoredDocument } from '../../types'
 import { AddTabsOrFilesPopover } from '../AddTabsOrFilesPopover'
 import { Tooltip } from '../shared/Tooltip'
 
+function WandIcon({ className }: { className?: string }) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={className}
+      aria-hidden
+    >
+      <path d="M15 4V2" />
+      <path d="M15 16v-2" />
+      <path d="M8 9h2" />
+      <path d="M20 9h2" />
+      <path d="M17.8 11.8 19 13" />
+      <path d="M15 9h.01" />
+      <path d="M17.8 6.2 19 5" />
+      <path d="m3 21 9-9" />
+      <path d="M12.2 6.2 11 5" />
+    </svg>
+  )
+}
+
 interface ChatInputProps {
-  onSend: (text: string, attachments?: StoredDocument[], includeWebSearch?: boolean) => void
+  onSend: (text: string, attachments?: StoredDocument[], includeWebSearch?: boolean, improvePrompt?: boolean) => void
   claimId?: string
   /** When set, pastes into the input and focuses; cleared after consumed */
   prefill?: string | null
@@ -17,6 +45,7 @@ export function ChatInput({ onSend, claimId, prefill, onPrefillConsumed }: ChatI
   const [input, setInput] = useState('')
   const [attachments, setAttachments] = useState<StoredDocument[]>([])
   const [includeWebSearch, setIncludeWebSearch] = useState(false)
+  const [improvePrompt, setImprovePrompt] = useState(false)
   const [isDropTarget, setIsDropTarget] = useState(false)
   const [addPopoverOpen, setAddPopoverOpen] = useState(false)
   const textareaRef = useRef<HTMLTextAreaElement>(null)
@@ -43,7 +72,7 @@ export function ChatInput({ onSend, claimId, prefill, onPrefillConsumed }: ChatI
   const handleSubmit = () => {
     const trimmed = input.trim()
     if (!trimmed) return
-    onSend(trimmed, attachments.length > 0 ? attachments : undefined, includeWebSearch)
+    onSend(trimmed, attachments.length > 0 ? attachments : undefined, includeWebSearch, improvePrompt)
     setInput('')
     setAttachments([])
   }
@@ -162,6 +191,21 @@ export function ChatInput({ onSend, claimId, prefill, onPrefillConsumed }: ChatI
               e.target.value = ''
             }}
           />
+          <Tooltip label={improvePrompt ? 'Improve prompt on' : 'Improve prompt'} position="above">
+            <button
+              type="button"
+              onClick={() => setImprovePrompt((v) => !v)}
+              className={`chat-input-icon flex items-center justify-center gap-1.5 h-7 shrink-0 overflow-hidden transition-[width,background-color,color] duration-200 ${
+                improvePrompt
+                  ? 'w-[72px] px-2.5 rounded-md bg-gray-100 text-gray-600'
+                  : 'w-7 rounded-full text-gray-500 hover:bg-gray-100'
+              }`}
+              aria-label={improvePrompt ? 'Improve prompt on' : 'Improve prompt off'}
+            >
+              <WandIcon className="w-3.5 h-3.5 shrink-0" />
+              {improvePrompt && <span className="text-[11px] font-semibold whitespace-nowrap">Improve</span>}
+            </button>
+          </Tooltip>
           <button
             type="button"
             onClick={() => setIncludeWebSearch((v) => !v)}

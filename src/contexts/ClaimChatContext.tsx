@@ -17,7 +17,7 @@ interface ClaimChatContextValue {
   isLoading: boolean
   prefillInput: string | null
   setPrefillInput: (v: string | null) => void
-  send: (text: string, attachments?: StoredDocument[], includeWebSearch?: boolean) => void
+  send: (text: string, attachments?: StoredDocument[], includeWebSearch?: boolean, improvePrompt?: boolean) => void
 }
 
 const ClaimChatContext = createContext<ClaimChatContextValue | null>(null)
@@ -36,20 +36,25 @@ export function ClaimChatProvider({
   const initialProcessed = useRef(false)
 
   const send = useCallback(
-    (text: string, attachments?: StoredDocument[], includeWebSearch?: boolean) => {
+    (text: string, attachments?: StoredDocument[], includeWebSearch?: boolean, improvePrompt?: boolean) => {
       if (!text.trim()) return
+
+      const trimmed = text.trim()
+      const displayContent = improvePrompt
+        ? `Please provide a clear, detailed answer to: ${trimmed}`
+        : trimmed
 
       const userMsg: ChatMessage = {
         id: `user-${Date.now()}`,
         role: 'user',
-        content: text.trim(),
+        content: displayContent,
         timestamp: new Date().toISOString(),
         attachments,
       }
       setMessages((prev) => [...prev, userMsg])
       setIsLoading(true)
 
-      const queryText = includeWebSearch ? `${text} [web search enabled]` : text
+      const queryText = includeWebSearch ? `${displayContent} [web search enabled]` : displayContent
       const lower = queryText.toLowerCase()
       const isReportRequest =
         lower.includes('generate') ||
@@ -62,7 +67,7 @@ export function ClaimChatProvider({
           const reportMsg = mockReportResponse(claimId, msgId)
           setMessages((prev) => [...prev, reportMsg])
         } else {
-          const queryMsg = mockQueryResponse(text, claimId, msgId)
+          const queryMsg = mockQueryResponse(displayContent, claimId, msgId)
           setMessages((prev) => [...prev, queryMsg])
         }
         setIsLoading(false)
