@@ -135,7 +135,7 @@ function TopBar() {
 
   return (
     <header
-      className={`shrink-0 h-10 flex items-center px-3 gap-2 ${hasTabs ? 'bg-[#374151]' : 'bg-white'}`}
+      className="shrink-0 h-10 flex items-center px-3 gap-2 bg-white"
     >
       {hasTabs ? (
         <TabStrip />

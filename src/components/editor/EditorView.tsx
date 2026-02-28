@@ -11,7 +11,6 @@ import {
   AlignRight,
   AlignJustify,
   Plus,
-  ChevronDown,
 } from 'lucide-react'
 
 interface EditorViewProps {
@@ -20,7 +19,6 @@ interface EditorViewProps {
 }
 
 export function EditorView({ title, content }: EditorViewProps) {
-  const [editingMode, setEditingMode] = useState<'editing' | 'suggesting' | 'viewing'>('editing')
   const [style, setStyle] = useState('Body')
 
   const displayTitle = title ?? (content.split('\n')[0]?.trim() || 'Untitled')
@@ -28,85 +26,71 @@ export function EditorView({ title, content }: EditorViewProps) {
 
   return (
     <div className="flex-1 flex flex-col min-h-0 bg-white">
-      {/* Toolbar */}
-      <div className="shrink-0 flex items-center gap-2 px-3 py-2 bg-gray-100 border-b border-gray-200">
+      {/* Toolbar - minimal, connects to tab above */}
+      <div className="shrink-0 flex items-center gap-1.5 px-4 py-2.5 bg-white border-b border-gray-100">
         <select
           value={style}
           onChange={(e) => setStyle(e.target.value)}
-          className="text-sm font-medium text-gray-700 bg-transparent border-0 rounded px-2 py-1 cursor-pointer focus:ring-1 focus:ring-gray-300"
+          className="text-[13px] font-medium text-gray-600 bg-transparent border-0 rounded px-1.5 py-0.5 cursor-pointer focus:ring-0 focus:outline-none hover:text-gray-900"
         >
-          <option value="Body">Body</option>
+          <option value="Body">Paragraph</option>
           <option value="Heading 1">Heading 1</option>
           <option value="Heading 2">Heading 2</option>
           <option value="Heading 3">Heading 3</option>
         </select>
-        <div className="w-px h-5 bg-gray-300" />
-        <div className="flex items-center gap-0.5">
-          <ToolbarButton aria-label="Bold">
-            <Bold className="w-4 h-4" />
-          </ToolbarButton>
-          <ToolbarButton aria-label="Italic">
-            <Italic className="w-4 h-4" />
-          </ToolbarButton>
-          <ToolbarButton aria-label="Underline">
-            <Underline className="w-4 h-4" />
-          </ToolbarButton>
-          <ToolbarButton aria-label="Strikethrough">
-            <Strikethrough className="w-4 h-4" />
-          </ToolbarButton>
-        </div>
-        <div className="w-px h-5 bg-gray-300" />
+        <div className="w-px h-4 bg-gray-200" />
+        <ToolbarButton aria-label="Bold">
+          <Bold className="w-4 h-4" />
+        </ToolbarButton>
+        <ToolbarButton aria-label="Italic">
+          <Italic className="w-4 h-4" />
+        </ToolbarButton>
+        <ToolbarButton aria-label="Underline">
+          <Underline className="w-4 h-4" />
+        </ToolbarButton>
+        <ToolbarButton aria-label="Strikethrough">
+          <Strikethrough className="w-4 h-4" />
+        </ToolbarButton>
+        <div className="w-px h-4 bg-gray-200" />
         <ToolbarButton aria-label="Bullet list">
           <List className="w-4 h-4" />
         </ToolbarButton>
         <ToolbarButton aria-label="Numbered list">
           <ListOrdered className="w-4 h-4" />
         </ToolbarButton>
-        <div className="w-px h-5 bg-gray-300" />
-        <div className="flex items-center gap-0.5">
-          <ToolbarButton aria-label="Align left">
-            <AlignLeft className="w-4 h-4" />
-          </ToolbarButton>
-          <ToolbarButton aria-label="Align center">
-            <AlignCenter className="w-4 h-4" />
-          </ToolbarButton>
-          <ToolbarButton aria-label="Align right">
-            <AlignRight className="w-4 h-4" />
-          </ToolbarButton>
-          <ToolbarButton aria-label="Justify">
-            <AlignJustify className="w-4 h-4" />
-          </ToolbarButton>
-        </div>
+        <div className="w-px h-4 bg-gray-200" />
+        <ToolbarButton aria-label="Align left">
+          <AlignLeft className="w-4 h-4" />
+        </ToolbarButton>
+        <ToolbarButton aria-label="Align center">
+          <AlignCenter className="w-4 h-4" />
+        </ToolbarButton>
+        <ToolbarButton aria-label="Align right">
+          <AlignRight className="w-4 h-4" />
+        </ToolbarButton>
+        <ToolbarButton aria-label="Justify">
+          <AlignJustify className="w-4 h-4" />
+        </ToolbarButton>
         <div className="flex-1 min-w-0" />
         <button
           type="button"
-          className="flex items-center gap-1.5 px-2.5 py-1.5 rounded text-sm font-medium text-gray-700 hover:bg-gray-200 transition-colors"
+          className="flex items-center gap-1.5 px-2 py-1 rounded text-[13px] font-medium text-gray-500 hover:text-gray-800 hover:bg-gray-50 transition-colors"
         >
           <Plus className="w-4 h-4" />
           Insert
         </button>
-        <div className="relative">
-          <button
-            type="button"
-            onClick={() => setEditingMode((m) => (m === 'editing' ? 'suggesting' : m === 'suggesting' ? 'viewing' : 'editing'))}
-            className="flex items-center gap-1.5 px-2.5 py-1.5 rounded text-sm font-medium text-gray-700 hover:bg-gray-200 transition-colors capitalize"
-          >
-            {editingMode} mode
-            <ChevronDown className="w-4 h-4" />
-          </button>
-        </div>
       </div>
 
-      {/* Document area */}
-      <div className="flex-1 overflow-auto min-h-0">
-        <div className="max-w-[720px] mx-auto px-8 py-8">
-          <h1 className="text-2xl font-bold text-gray-900 mb-6 tracking-tight">
+      {/* Document area - all white, well formatted */}
+      <div className="flex-1 overflow-auto min-h-0 bg-white">
+        <article className="max-w-[680px] mx-auto px-12 py-12">
+          <h1 className="text-[22px] font-semibold text-gray-900 tracking-tight leading-tight mb-8">
             {displayTitle}
           </h1>
-          <div className="text-[15px] leading-relaxed text-gray-800 whitespace-pre-wrap">
+          <div className="text-[15px] leading-[1.7] text-gray-800 whitespace-pre-wrap font-[inherit]">
             {bodyText}
           </div>
-        </div>
+        </article>
       </div>
     </div>
   )
@@ -123,7 +107,7 @@ function ToolbarButton({
     <button
       type="button"
       aria-label={ariaLabel}
-      className="p-1.5 rounded text-gray-600 hover:bg-gray-200 hover:text-gray-900 transition-colors"
+      className="p-1.5 rounded text-gray-500 hover:text-gray-900 hover:bg-gray-100 transition-colors"
     >
       {children}
     </button>
