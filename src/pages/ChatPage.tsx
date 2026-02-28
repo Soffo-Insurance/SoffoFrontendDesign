@@ -4,9 +4,9 @@ import { ClaimHeader } from '../components/shared/ClaimHeader'
 import { MessageList } from '../components/chat/MessageList'
 import { ChatInput } from '../components/chat/ChatInput'
 import { DocumentLibrary } from '../components/documents/DocumentLibrary'
-import { MOCK_CLAIMS, MOCK_DOCUMENTS } from '../mockData'
+import { MOCK_CLAIMS, MOCK_DOCUMENTS, MOCK_FOLDERS } from '../mockData'
 import { mockQueryResponse, mockReportResponse } from '../mockGenerator'
-import type { ChatMessage, QueryResponseMessage, ReportMessage } from '../types'
+import type { ChatMessage, QueryResponseMessage, ReportMessage, StoredDocument, DocFolder } from '../types'
 
 export function ChatPage() {
   const { claimId } = useParams<{ claimId: string }>()
@@ -15,11 +15,14 @@ export function ChatPage() {
   const [documents, setDocuments] = useState(
     () => MOCK_DOCUMENTS[claimId ?? ''] ?? []
   )
+  const [folders, setFolders] = useState<DocFolder[]>(
+    () => MOCK_FOLDERS[claimId ?? ''] ?? []
+  )
   const [isLoading, setIsLoading] = useState(false)
   const [docLibraryOpen, setDocLibraryOpen] = useState(true)
 
   const handleSend = useCallback(
-    (text: string) => {
+    (text: string, attachments?: StoredDocument[], includeWebSearch?: boolean) => {
       if (!text.trim() || !claimId) return
 
       const userMsg: ChatMessage = {
@@ -27,11 +30,13 @@ export function ChatPage() {
         role: 'user',
         content: text.trim(),
         timestamp: new Date().toISOString(),
+        attachments,
       }
       setMessages((prev) => [...prev, userMsg])
       setIsLoading(true)
 
-      const lower = text.toLowerCase()
+      const queryText = includeWebSearch ? `${text} [web search enabled]` : text
+      const lower = queryText.toLowerCase()
       const isReportRequest =
         lower.includes('generate') ||
         lower.includes('report') ||
@@ -74,9 +79,18 @@ export function ChatPage() {
     [claimId]
   )
 
+  const handleCreateFolder = useCallback(() => {
+    if (!claimId) return
+    const name = `Folder ${folders.length + 1}`
+    setFolders((prev) => [
+      ...prev,
+      { folder_id: `f_${Date.now()}`, name, claim_id: claimId },
+    ])
+  }, [claimId, folders.length])
+
   if (!claim) {
     return (
-      <div className="flex-1 flex items-center justify-center text-gray-500 text-sm">
+      <div className="flex-1 flex justify-center items-center text-gray-500 text-sm">
         Claim not found
       </div>
     )
@@ -92,7 +106,9 @@ export function ChatPage() {
       <DocumentLibrary
         claimId={claimId}
         documents={documents}
+        folders={folders}
         onUpload={handleUpload}
+        onCreateFolder={handleCreateFolder}
         isOpen={docLibraryOpen}
         onToggle={() => setDocLibraryOpen((o) => !o)}
       />

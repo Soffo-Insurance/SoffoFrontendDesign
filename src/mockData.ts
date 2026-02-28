@@ -1,4 +1,4 @@
-import type { Claim, StoredDocument } from './types'
+import type { Claim, StoredDocument, DocFolder } from './types'
 
 export const MOCK_CLAIMS: Claim[] = [
   {
@@ -21,6 +21,14 @@ export const MOCK_CLAIMS: Claim[] = [
   },
 ]
 
+export const MOCK_FOLDERS: Record<string, DocFolder[]> = {
+  'CLM-2024-TX-00847': [
+    { folder_id: 'f1', name: 'Policy & Coverage', claim_id: 'CLM-2024-TX-00847' },
+    { folder_id: 'f2', name: 'Inspection Reports', claim_id: 'CLM-2024-TX-00847' },
+  ],
+  'CLM-2024-FL-00122': [],
+}
+
 export const MOCK_DOCUMENTS: Record<string, StoredDocument[]> = {
   'CLM-2024-TX-00847': [
     {
@@ -30,6 +38,7 @@ export const MOCK_DOCUMENTS: Record<string, StoredDocument[]> = {
       status: 'Ready',
       created_at: '2024-05-20T10:00:00Z',
       claim_id: 'CLM-2024-TX-00847',
+      folder_id: 'f1',
     },
     {
       doc_id: 'doc_002',
@@ -38,6 +47,7 @@ export const MOCK_DOCUMENTS: Record<string, StoredDocument[]> = {
       status: 'Ready',
       created_at: '2024-05-22T14:30:00Z',
       claim_id: 'CLM-2024-TX-00847',
+      folder_id: 'f2',
     },
   ],
   'CLM-2024-FL-00122': [],

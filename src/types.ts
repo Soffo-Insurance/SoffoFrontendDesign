@@ -15,6 +15,7 @@ export interface ChatMessage {
   role: MessageRole
   content: string
   timestamp: string
+  attachments?: StoredDocument[]
 }
 
 export interface QueryResponseMessage extends ChatMessage {
@@ -44,6 +45,12 @@ export interface ReportData {
 
 export type DocType = 'policy' | 'inspection_report' | 'estimate' | 'adjuster_notes' | 'legal' | 'permit'
 
+export interface DocFolder {
+  folder_id: string
+  name: string
+  claim_id: string
+}
+
 export interface StoredDocument {
   doc_id: string
   filename: string
@@ -51,4 +58,5 @@ export interface StoredDocument {
   status: 'Processing' | 'Ready' | 'Failed'
   created_at: string
   claim_id: string
+  folder_id?: string
 }

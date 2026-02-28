@@ -27,7 +27,13 @@ export function MessageList({ messages, isLoading }: MessageListProps) {
         )}
         {messages.map((msg) => {
           if (msg.role === 'user') {
-            return <UserBubble key={msg.id} content={msg.content} />
+            return (
+              <UserBubble
+                key={msg.id}
+                content={msg.content}
+                attachments={msg.attachments}
+              />
+            )
           }
           if ((msg as ReportMessage).report) {
             return (
