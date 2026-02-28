@@ -129,10 +129,9 @@ export function ChatInput({ onSend, claimId, prefill, onPrefillConsumed }: ChatI
           onDrop={handleDrop}
           onDragOver={handleDragOver}
           onDragLeave={handleDragLeave}
-          className={`w-full flex items-center gap-2 p-2.5 rounded-2xl !bg-transparent shadow-input transition-all duration-200 ${
+          className={`w-full flex items-center gap-2 p-2.5 rounded-2xl bg-white shadow-input transition-all duration-200 ${
             isDropTarget ? 'shadow-soft-md' : ''
           }`}
-          style={{ backgroundColor: 'transparent' }}
         >
         <textarea
           ref={textareaRef}

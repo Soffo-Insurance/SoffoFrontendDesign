@@ -44,9 +44,9 @@ export function UserBubble({
 
   return (
     <div className="flex-1 min-w-0 max-w-[720px]">
-      <div className="rounded-xl bg-gray-100 px-4 py-3 w-fit max-w-full">
+      <div className="rounded-xl bg-gray-100 px-3 py-2 w-fit max-w-full">
         {attachments && attachments.length > 0 && (
-          <div className="flex flex-wrap gap-1.5 mb-2">
+          <div className="flex flex-wrap gap-1.5 mb-1.5">
             {attachments.map((doc) => (
               <span
                 key={doc.doc_id}
@@ -57,7 +57,7 @@ export function UserBubble({
             ))}
           </div>
         )}
-        <p className="text-[15px] leading-relaxed text-gray-900 whitespace-pre-wrap">
+        <p className="text-[15px] leading-snug text-gray-900 whitespace-pre-wrap">
           {content}
         </p>
       </div>
