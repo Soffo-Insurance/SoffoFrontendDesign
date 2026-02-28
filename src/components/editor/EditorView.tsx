@@ -23,8 +23,8 @@ export function EditorView({ title, content }: EditorViewProps) {
   const [editingMode, setEditingMode] = useState<'editing' | 'suggesting' | 'viewing'>('editing')
   const [style, setStyle] = useState('Body')
 
-  const displayTitle = title ?? content.split('\n')[0]?.trim() || 'Untitled'
-  const bodyText = title ? content : content.split('\n').slice(1).join('\n').trim() || content
+  const displayTitle = title ?? (content.split('\n')[0]?.trim() || 'Untitled')
+  const bodyText = title ? content : (content.split('\n').slice(1).join('\n').trim() || content)
 
   return (
     <div className="flex-1 flex flex-col min-h-0 bg-white">
