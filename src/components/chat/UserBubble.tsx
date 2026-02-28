@@ -1,4 +1,5 @@
 import { Copy } from 'lucide-react'
+import { Tooltip } from '../shared/Tooltip'
 import type { StoredDocument } from '../../types'
 
 function SavePromptIcon({ className }: { className?: string }) {
@@ -61,23 +62,27 @@ export function UserBubble({
           {content}
         </p>
       </div>
-      <div className="flex items-center gap-2 mt-2">
-        <button
-          type="button"
-          onClick={handleCopy}
-          className="inline-flex items-center gap-1.5 text-sm text-gray-500 hover:text-gray-700 transition-colors"
-        >
-          <Copy className="w-3.5 h-3.5" />
-          Copy
-        </button>
-        <button
-          type="button"
-          onClick={onSavePrompt}
-          className="inline-flex items-center gap-1.5 text-sm text-gray-500 hover:text-gray-700 transition-colors"
-        >
-          <SavePromptIcon className="w-3.5 h-3.5" />
-          Save prompt
-        </button>
+      <div className="flex items-center gap-1 mt-2">
+        <Tooltip label="Copy">
+          <button
+            type="button"
+            onClick={handleCopy}
+            className="p-1.5 text-gray-500 hover:text-gray-700 rounded-md hover:bg-gray-100 transition-colors"
+            aria-label="Copy"
+          >
+            <Copy className="w-4 h-4" />
+          </button>
+        </Tooltip>
+        <Tooltip label="Save prompt">
+          <button
+            type="button"
+            onClick={onSavePrompt}
+            className="p-1.5 text-gray-500 hover:text-gray-700 rounded-md hover:bg-gray-100 transition-colors"
+            aria-label="Save prompt"
+          >
+            <SavePromptIcon className="w-4 h-4" />
+          </button>
+        </Tooltip>
       </div>
     </div>
   )

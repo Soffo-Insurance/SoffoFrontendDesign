@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import { ChevronDown, Download, Printer } from 'lucide-react'
+import { Tooltip } from '../shared/Tooltip'
 import type { ReportData } from '../../types'
 
 interface ReportCardProps {
@@ -81,21 +82,25 @@ export function ReportCard({ report }: ReportCardProps) {
     <div className="rounded-2xl border border-gray-200 overflow-hidden shadow-soft-lg bg-white">
       <div className="px-4 py-3 border-b border-gray-100 flex items-center justify-between bg-gray-50/80">
         <h3 className="text-sm font-medium text-black">Report</h3>
-        <div className="flex gap-2">
-          <button
-            onClick={handleExport}
-            className="flex items-center gap-1.5 px-3 py-2 text-xs text-gray-600 hover:bg-white hover:text-black rounded-lg border border-gray-200 shadow-soft-button transition-all"
-          >
-            <Download className="w-3.5 h-3.5" />
-            Export
-          </button>
-          <button
-            onClick={handlePrint}
-            className="flex items-center gap-1.5 px-3 py-2 text-xs text-gray-600 hover:bg-white hover:text-black rounded-lg border border-gray-200 shadow-soft-button transition-all"
-          >
-            <Printer className="w-3.5 h-3.5" />
-            Print
-          </button>
+        <div className="flex gap-1">
+          <Tooltip label="Export" position="below">
+            <button
+              onClick={handleExport}
+              className="p-2 text-gray-600 hover:bg-white hover:text-black rounded-lg border border-gray-200 shadow-soft-button transition-all"
+              aria-label="Export"
+            >
+              <Download className="w-4 h-4" />
+            </button>
+          </Tooltip>
+          <Tooltip label="Print" position="below">
+            <button
+              onClick={handlePrint}
+              className="p-2 text-gray-600 hover:bg-white hover:text-black rounded-lg border border-gray-200 shadow-soft-button transition-all"
+              aria-label="Print"
+            >
+              <Printer className="w-4 h-4" />
+            </button>
+          </Tooltip>
         </div>
       </div>
       <div className="divide-y divide-gray-100">

@@ -24,6 +24,7 @@ function RewriteIcon({ className }: { className?: string }) {
 }
 
 import { SourcePopover, type SourceEntry } from '../SourcePopover'
+import { Tooltip } from '../shared/Tooltip'
 import type { QueryResponseMessage } from '../../types'
 
 interface AssistantBubbleProps {
@@ -157,52 +158,64 @@ export function AssistantBubble({ message, followUps = DEFAULT_FOLLOW_UPS, onFol
         </div>
 
         <div className="flex items-center justify-between gap-2 mt-3 flex-wrap">
-          <div className="flex items-center gap-2">
-            <button
-              type="button"
-              onClick={handleCopy}
-              className="inline-flex items-center gap-1.5 text-sm text-gray-600 hover:text-gray-900 transition-colors"
-            >
-              <Copy className="w-3.5 h-3.5" />
-              Copy
-            </button>
-            <button
-              type="button"
-              className="inline-flex items-center gap-1.5 text-sm text-gray-600 hover:text-gray-900 transition-colors"
-            >
-              <Download className="w-3.5 h-3.5" />
-              Export
-            </button>
-            <button
-              type="button"
-              className="inline-flex items-center gap-1.5 text-sm text-gray-600 hover:text-gray-900 transition-colors"
-            >
-              <RewriteIcon className="w-3.5 h-3.5" />
-              Rewrite
-            </button>
-            <button
-              type="button"
-              className="inline-flex items-center gap-1.5 text-sm text-gray-600 hover:text-gray-900 transition-colors"
-            >
-              <FileEdit className="w-3.5 h-3.5" />
-              Open in editor
-            </button>
+          <div className="flex items-center gap-1">
+            <Tooltip label="Copy">
+              <button
+                type="button"
+                onClick={handleCopy}
+                className="p-1.5 text-gray-500 hover:text-gray-700 rounded-md hover:bg-gray-100 transition-colors"
+                aria-label="Copy"
+              >
+                <Copy className="w-4 h-4" />
+              </button>
+            </Tooltip>
+            <Tooltip label="Export">
+              <button
+                type="button"
+                className="p-1.5 text-gray-500 hover:text-gray-700 rounded-md hover:bg-gray-100 transition-colors"
+                aria-label="Export"
+              >
+                <Download className="w-4 h-4" />
+              </button>
+            </Tooltip>
+            <Tooltip label="Rewrite">
+              <button
+                type="button"
+                className="p-1.5 text-gray-500 hover:text-gray-700 rounded-md hover:bg-gray-100 transition-colors"
+                aria-label="Rewrite"
+              >
+                <RewriteIcon className="w-4 h-4" />
+              </button>
+            </Tooltip>
+            <Tooltip label="Open in editor">
+              <button
+                type="button"
+                className="p-1.5 text-gray-500 hover:text-gray-700 rounded-md hover:bg-gray-100 transition-colors"
+                aria-label="Open in editor"
+              >
+                <FileEdit className="w-4 h-4" />
+              </button>
+            </Tooltip>
           </div>
           <div className="flex items-center gap-1">
-            <button
-              type="button"
-              className="p-1 text-gray-500 hover:text-gray-700 transition-colors"
-              aria-label="Good response"
-            >
-              <ThumbsUp className="w-4 h-4" />
-            </button>
-            <button
-              type="button"
-              className="p-1 text-gray-500 hover:text-gray-700 transition-colors"
-              aria-label="Bad response"
-            >
-              <ThumbsDown className="w-4 h-4" />
-            </button>
+            <Tooltip label="Good response">
+              <button
+                type="button"
+                className="p-1 text-gray-500 hover:text-gray-700 transition-colors rounded-md hover:bg-gray-100"
+                aria-label="Good response"
+              >
+                <ThumbsUp className="w-4 h-4" />
+              </button>
+            </Tooltip>
+            <Tooltip label="Bad response">
+              <button
+                type="button"
+                className="p-1 text-gray-500 hover:text-gray-700 transition-colors rounded-md hover:bg-gray-100"
+                aria-label="Bad response"
+              >
+                <ThumbsDown className="w-4 h-4" />
+              </button>
+            </Tooltip>
           </div>
         </div>
 

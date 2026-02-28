@@ -3,6 +3,7 @@ import { ArrowUp, X, Globe, Plus } from 'lucide-react'
 import { DOC_DRAG_TYPE } from '../../utils/drag'
 import type { StoredDocument } from '../../types'
 import { AddTabsOrFilesPopover } from '../AddTabsOrFilesPopover'
+import { Tooltip } from '../shared/Tooltip'
 
 interface ChatInputProps {
   onSend: (text: string, attachments?: StoredDocument[], includeWebSearch?: boolean) => void
@@ -113,14 +114,16 @@ export function ChatInput({ onSend, claimId, prefill, onPrefillConsumed }: ChatI
                 className="inline-flex items-center gap-1.5 px-2.5 py-1.5 text-xs bg-gray-50 border border-gray-200 text-gray-800 rounded-lg shadow-soft"
               >
                 {doc.filename}
-                <button
-                  type="button"
-                  onClick={() => removeAttachment(doc.doc_id)}
-                  className="p-0.5 hover:bg-gray-200 rounded-md transition-colors"
-                  aria-label="Remove"
-                >
-                  <X className="w-3 h-3" />
-                </button>
+                <Tooltip label="Remove">
+                  <button
+                    type="button"
+                    onClick={() => removeAttachment(doc.doc_id)}
+                    className="p-0.5 hover:bg-gray-200 rounded-md transition-colors"
+                    aria-label="Remove"
+                  >
+                    <X className="w-3 h-3" />
+                  </button>
+                </Tooltip>
               </span>
             ))}
           </div>
@@ -159,29 +162,30 @@ export function ChatInput({ onSend, claimId, prefill, onPrefillConsumed }: ChatI
               e.target.value = ''
             }}
           />
-          <button
-            type="button"
-            onClick={() => setIncludeWebSearch((v) => !v)}
-            title={includeWebSearch ? 'Web search on' : 'Web search off'}
-            className={`chat-input-icon flex items-center justify-center gap-1.5 h-7 shrink-0 overflow-hidden transition-[width,background-color,color] duration-200 ${
-              includeWebSearch
-                ? 'w-[72px] px-2.5 rounded-md bg-gray-100 text-gray-600'
-                : 'w-7 rounded-full text-gray-500 hover:bg-gray-100'
-            }`}
-          >
-            <Globe className="w-3.5 h-3.5 shrink-0" />
-            {includeWebSearch && <span className="text-[11px] font-semibold whitespace-nowrap">Search</span>}
-          </button>
-          <div className="relative shrink-0">
+          <Tooltip label={includeWebSearch ? 'Web search on' : 'Web search off'} position="above">
             <button
-              ref={addButtonRef}
               type="button"
-              onClick={() => setAddPopoverOpen((v) => !v)}
-              className="chat-input-icon flex items-center justify-center h-7 w-7 text-gray-600 hover:text-gray-800 shrink-0"
-              title="Add tabs or files"
+              onClick={() => setIncludeWebSearch((v) => !v)}
+              className={`chat-input-icon flex items-center justify-center h-7 w-7 shrink-0 rounded-full transition-colors ${
+                includeWebSearch ? 'bg-gray-100 text-gray-600' : 'text-gray-500 hover:bg-gray-100'
+              }`}
+              aria-label={includeWebSearch ? 'Web search on' : 'Web search off'}
             >
-              <Plus className="w-3.5 h-3.5" />
+              <Globe className="w-3.5 h-3.5" />
             </button>
+          </Tooltip>
+          <div className="relative shrink-0">
+            <Tooltip label="Add tabs or files" position="above">
+              <button
+                ref={addButtonRef}
+                type="button"
+                onClick={() => setAddPopoverOpen((v) => !v)}
+                className="chat-input-icon flex items-center justify-center h-7 w-7 text-gray-600 hover:text-gray-800 shrink-0 rounded-full hover:bg-gray-100"
+                aria-label="Add tabs or files"
+              >
+                <Plus className="w-3.5 h-3.5" />
+              </button>
+            </Tooltip>
             <AddTabsOrFilesPopover
               open={addPopoverOpen}
               onClose={() => setAddPopoverOpen(false)}
@@ -191,14 +195,16 @@ export function ChatInput({ onSend, claimId, prefill, onPrefillConsumed }: ChatI
               libraryFiles={attachments.map((d) => ({ id: d.doc_id, name: d.filename }))}
             />
           </div>
-          <button
-            onClick={handleSubmit}
-            disabled={!input.trim()}
-            className="chat-input-icon w-7 h-7 flex items-center justify-center rounded-full bg-gray-200 text-gray-700 hover:bg-gray-300 shadow-soft-button disabled:opacity-40 disabled:cursor-not-allowed transition-all duration-150 shrink-0"
-            title="Send"
-          >
-            <ArrowUp className="w-3.5 h-3.5" />
-          </button>
+          <Tooltip label="Send" position="above">
+            <button
+              onClick={handleSubmit}
+              disabled={!input.trim()}
+              className="chat-input-icon w-7 h-7 flex items-center justify-center rounded-full bg-gray-200 text-gray-700 hover:bg-gray-300 shadow-soft-button disabled:opacity-40 disabled:cursor-not-allowed transition-all duration-150 shrink-0"
+              aria-label="Send"
+            >
+              <ArrowUp className="w-3.5 h-3.5" />
+            </button>
+          </Tooltip>
         </div>
       </div>
     </div>
