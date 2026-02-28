@@ -12,6 +12,8 @@ interface AddTabsOrFilesPopoverProps {
   onClose: () => void
   onUploadClick: () => void
   anchorRef: React.RefObject<HTMLElement | null>
+  /** Where to position popover relative to the trigger */
+  placement?: 'above' | 'below'
   /** Library files (saved/added documents) to browse and search */
   libraryFiles?: LibraryFile[]
   /** When user selects a file from the library (e.g. to attach or open) */
@@ -23,6 +25,7 @@ export function AddTabsOrFilesPopover({
   onClose,
   onUploadClick,
   anchorRef,
+  placement = 'below',
   libraryFiles = [],
   onSelectFile,
 }: AddTabsOrFilesPopoverProps) {
@@ -30,7 +33,7 @@ export function AddTabsOrFilesPopover({
   const [position, setPosition] = useState<{ top: number; left: number } | null>(null)
   const popoverRef = useRef<HTMLDivElement>(null)
 
-  // Position popover directly below the trigger button (no Popover API so we control placement)
+  // Position popover relative to the trigger button (no Popover API so we control placement)
   const updatePosition = () => {
     const anchor = anchorRef.current
     if (!anchor) return
@@ -40,8 +43,15 @@ export function AddTabsOrFilesPopover({
     let left = r.left
     if (left + width > window.innerWidth - padding) left = window.innerWidth - width - padding
     if (left < padding) left = padding
+    // For chat input near the bottom of the viewport we want the popover ABOVE the button.
+    // We don't know the exact height before render, so we use an estimated max height and clamp.
+    const estimatedHeight = 260
+    const top =
+      placement === 'above'
+        ? Math.max(padding, r.top - 4 - estimatedHeight)
+        : Math.min(window.innerHeight - padding, r.bottom + 4)
     setPosition({
-      top: r.bottom + 4,
+      top,
       left,
     })
   }

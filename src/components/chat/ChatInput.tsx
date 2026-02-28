@@ -17,6 +17,7 @@ export function ChatInput({ onSend, showSuggestions = true, claimId }: ChatInput
   const [includeWebSearch, setIncludeWebSearch] = useState(false)
   const [isDropTarget, setIsDropTarget] = useState(false)
   const [addPopoverOpen, setAddPopoverOpen] = useState(false)
+  const [isThinking, setIsThinking] = useState(false)
   const textareaRef = useRef<HTMLTextAreaElement>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
   const addButtonRef = useRef<HTMLButtonElement>(null)
@@ -35,6 +36,8 @@ export function ChatInput({ onSend, showSuggestions = true, claimId }: ChatInput
     onSend(trimmed, attachments.length > 0 ? attachments : undefined, includeWebSearch)
     setInput('')
     setAttachments([])
+    // Show a short \"thinking\" shimmer after sending to mimic Claude/ChatGPT
+    setIsThinking(true)
   }
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -92,9 +95,24 @@ export function ChatInput({ onSend, showSuggestions = true, claimId }: ChatInput
 
   const handleDragLeave = () => setIsDropTarget(false)
 
+  // Auto-clear the thinking state after a short delay so it doesn't persist forever
+  useEffect(() => {
+    if (!isThinking) return
+    const id = setTimeout(() => setIsThinking(false), 3500)
+    return () => clearTimeout(id)
+  }, [isThinking])
+
   return (
-    <div className="shrink-0 px-4 pt-1 pb-3 bg-white flex justify-center">
+    <div className="shrink-0 px-4 pt-4 pb-10 bg-white flex justify-center">
       <div className="w-full max-w-xl flex flex-col items-center">
+        {isThinking && (
+          <div className="mb-3 flex w-full max-w-xl items-center gap-2 text-xs text-gray-500">
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-gray-100/80 px-3 py-1.5 animate-pulse">
+              <Globe className="w-3.5 h-3.5 text-gray-400" />
+              <span>Thinking… searching the web and case law</span>
+            </span>
+          </div>
+        )}
         {showSuggestions && (
           <div className="flex flex-wrap gap-2 mb-2 justify-center">
             {SUGGESTED_PROMPTS.map((prompt) => (
@@ -190,6 +208,7 @@ export function ChatInput({ onSend, showSuggestions = true, claimId }: ChatInput
               onClose={() => setAddPopoverOpen(false)}
               onUploadClick={() => fileInputRef.current?.click()}
               anchorRef={addButtonRef}
+              placement="above"
               libraryFiles={attachments.map((d) => ({ id: d.doc_id, name: d.filename }))}
             />
           </div>
