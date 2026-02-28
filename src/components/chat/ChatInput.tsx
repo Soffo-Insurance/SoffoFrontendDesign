@@ -3,6 +3,7 @@ import { ArrowUp, X, Globe, Plus } from 'lucide-react'
 import { SUGGESTED_PROMPTS } from '../../mockData'
 import { DOC_DRAG_TYPE } from '../../utils/drag'
 import type { StoredDocument } from '../../types'
+import { AddTabsOrFilesPopover } from '../AddTabsOrFilesPopover'
 
 interface ChatInputProps {
   onSend: (text: string, attachments?: StoredDocument[], includeWebSearch?: boolean) => void
@@ -15,8 +16,10 @@ export function ChatInput({ onSend, showSuggestions = true, claimId }: ChatInput
   const [attachments, setAttachments] = useState<StoredDocument[]>([])
   const [includeWebSearch, setIncludeWebSearch] = useState(false)
   const [isDropTarget, setIsDropTarget] = useState(false)
+  const [addPopoverOpen, setAddPopoverOpen] = useState(false)
   const textareaRef = useRef<HTMLTextAreaElement>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
+  const addButtonRef = useRef<HTMLButtonElement>(null)
 
   useEffect(() => {
     const ta = textareaRef.current
@@ -172,14 +175,24 @@ export function ChatInput({ onSend, showSuggestions = true, claimId }: ChatInput
             <Globe className="w-3.5 h-3.5 shrink-0" />
             {includeWebSearch && <span className="text-xs font-semibold whitespace-nowrap">Search</span>}
           </button>
-          <button
-            type="button"
-            onClick={() => fileInputRef.current?.click()}
-            className="w-7 h-7 flex items-center justify-center rounded-full border border-gray-200 hover:bg-gray-50 shrink-0"
-            title="Add files"
-          >
-            <Plus className="w-3.5 h-3.5 text-gray-600" />
-          </button>
+          <div className="relative shrink-0">
+            <button
+              ref={addButtonRef}
+              type="button"
+              onClick={() => setAddPopoverOpen((v) => !v)}
+              className="w-7 h-7 flex items-center justify-center rounded-full border border-gray-200 hover:bg-gray-50 shrink-0"
+              title="Add tabs or files"
+            >
+              <Plus className="w-3.5 h-3.5 text-gray-600" />
+            </button>
+            <AddTabsOrFilesPopover
+              open={addPopoverOpen}
+              onClose={() => setAddPopoverOpen(false)}
+              onUploadClick={() => fileInputRef.current?.click()}
+              anchorRef={addButtonRef}
+              showTabs={true}
+            />
+          </div>
           <button
             onClick={handleSubmit}
             disabled={!input.trim()}

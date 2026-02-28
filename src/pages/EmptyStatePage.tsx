@@ -2,13 +2,16 @@ import { useState, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Search, Plus, Mic, ArrowUp, Globe, X, FileText } from 'lucide-react'
 import { MOCK_CLAIMS } from '../mockData'
+import { AddTabsOrFilesPopover } from '../components/AddTabsOrFilesPopover'
 
 export function EmptyStatePage() {
   const [input, setInput] = useState('')
   const [attachments, setAttachments] = useState<{ id: string; file: File }[]>([])
   const [isDropTarget, setIsDropTarget] = useState(false)
   const [webSearchOn, setWebSearchOn] = useState(false)
+  const [addPopoverOpen, setAddPopoverOpen] = useState(false)
   const fileInputRef = useRef<HTMLInputElement>(null)
+  const addButtonRef = useRef<HTMLButtonElement>(null)
   const navigate = useNavigate()
   const firstClaimId = MOCK_CLAIMS[0]?.claim_id
 
@@ -34,6 +37,7 @@ export function EmptyStatePage() {
   }
 
   const handleAddFiles = () => fileInputRef.current?.click()
+  const openUpload = () => fileInputRef.current?.click()
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { files } = e.target
@@ -124,14 +128,24 @@ export function EmptyStatePage() {
                 <Globe className="w-3.5 h-3.5 shrink-0" />
                 {webSearchOn && <span className="text-xs font-semibold whitespace-nowrap">Search</span>}
               </button>
-              <button
-                type="button"
-                onClick={handleAddFiles}
-                className="flex items-center justify-center gap-1.5 text-gray-500 hover:text-gray-700 text-xs shrink-0"
-              >
-                <Plus className="w-3.5 h-3.5 shrink-0" />
-                <span>Add tabs or files</span>
-              </button>
+              <div className="relative">
+                <button
+                  ref={addButtonRef}
+                  type="button"
+                  onClick={() => setAddPopoverOpen((v) => !v)}
+                  className="flex items-center justify-center gap-1.5 rounded-lg bg-gray-100 px-2.5 py-1.5 text-gray-600 hover:bg-gray-200 text-xs shrink-0 transition-colors"
+                >
+                  <Plus className="w-3.5 h-3.5 shrink-0" />
+                  <span>Add tabs or files</span>
+                </button>
+                <AddTabsOrFilesPopover
+                  open={addPopoverOpen}
+                  onClose={() => setAddPopoverOpen(false)}
+                  onUploadClick={openUpload}
+                  anchorRef={addButtonRef}
+                  showTabs={true}
+                />
+              </div>
             </div>
             <div className="flex items-center gap-1 shrink-0">
               <button type="button" className="w-7 h-7 flex items-center justify-center rounded-full text-gray-400 hover:text-gray-600" title="Voice input">
