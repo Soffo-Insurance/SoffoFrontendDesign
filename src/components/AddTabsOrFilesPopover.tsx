@@ -91,6 +91,9 @@ export function AddTabsOrFilesPopover({
       )
     : libraryFiles
 
+  // Don't render until we know exactly where to place it
+  if (!open || position === null) return null
+
   const popoverContent = (
     <div
       ref={popoverRef}
@@ -166,8 +169,6 @@ export function AddTabsOrFilesPopover({
       </div>
     </div>
   )
-
-  if (!open || position === null) return null
 
   return createPortal(popoverContent, document.body)
 }
