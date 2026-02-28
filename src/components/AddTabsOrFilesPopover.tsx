@@ -138,9 +138,18 @@ export function AddTabsOrFilesPopover({
 
       {/* LIBRARY: saved/added files to browse */}
       <div className="px-2">
-        <p className="mb-1 px-2 text-[11px] font-semibold uppercase tracking-wide text-gray-500">
-          Library
-        </p>
+        <div className="mb-1 flex items-center justify-between gap-2 px-2">
+          <p className="text-[11px] font-semibold uppercase tracking-wide text-gray-500">
+            Library
+          </p>
+          <button
+            type="button"
+            className="shrink-0 rounded-md px-2 py-1 text-[11px] font-medium text-gray-600 hover:bg-black/5"
+            title="Filter by most recent"
+          >
+            Most recent
+          </button>
+        </div>
         <ul className="max-h-[220px] overflow-y-auto overflow-x-hidden">
           {filteredFiles.length === 0 ? (
             <li className="px-2 py-4 text-center text-[13px] text-gray-500">
