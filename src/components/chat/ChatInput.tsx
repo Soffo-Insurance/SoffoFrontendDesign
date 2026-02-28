@@ -90,48 +90,49 @@ export function ChatInput({ onSend, showSuggestions = true, claimId }: ChatInput
   const handleDragLeave = () => setIsDropTarget(false)
 
   return (
-    <div className="shrink-0 border-t border-gray-100 px-4 py-3 bg-white">
-      {showSuggestions && (
-        <div className="flex flex-wrap gap-2 mb-2">
-          {SUGGESTED_PROMPTS.map((prompt) => (
-            <button
-              key={prompt}
-              onClick={() => onSend(prompt)}
-              className="px-3 py-1.5 text-xs rounded-lg border border-gray-200 text-gray-600 bg-white hover:bg-gray-50 hover:border-gray-300 shadow-soft transition-all duration-150"
-            >
-              {prompt}
-            </button>
-          ))}
-        </div>
-      )}
-      {attachments.length > 0 && (
-        <div className="flex flex-wrap gap-2 mb-2">
-          {attachments.map((doc) => (
-            <span
-              key={doc.doc_id}
-              className="inline-flex items-center gap-1.5 px-2.5 py-1.5 text-xs bg-gray-50 border border-gray-200 text-gray-800 rounded-lg shadow-soft"
-            >
-              {doc.filename}
+    <div className="shrink-0 border-t border-gray-100 px-4 py-3 bg-white flex justify-center">
+      <div className="w-full max-w-xl flex flex-col items-center">
+        {showSuggestions && (
+          <div className="flex flex-wrap gap-2 mb-2 justify-center">
+            {SUGGESTED_PROMPTS.map((prompt) => (
               <button
-                type="button"
-                onClick={() => removeAttachment(doc.doc_id)}
-                className="p-0.5 hover:bg-gray-200 rounded-md transition-colors"
-                aria-label="Remove"
+                key={prompt}
+                onClick={() => onSend(prompt)}
+                className="px-3 py-1.5 text-xs rounded-lg border border-gray-200 text-gray-600 bg-white hover:bg-gray-50 hover:border-gray-300 shadow-soft transition-all duration-150"
               >
-                <X className="w-3 h-3" />
+                {prompt}
               </button>
-            </span>
-          ))}
-        </div>
-      )}
-      <div
-        onDrop={handleDrop}
-        onDragOver={handleDragOver}
-        onDragLeave={handleDragLeave}
-        className={`flex items-end gap-2 p-2.5 rounded-xl bg-white shadow-input transition-all duration-200 ${
-          isDropTarget ? 'shadow-soft-md' : ''
-        }`}
-      >
+            ))}
+          </div>
+        )}
+        {attachments.length > 0 && (
+          <div className="flex flex-wrap gap-2 mb-2 justify-center w-full">
+            {attachments.map((doc) => (
+              <span
+                key={doc.doc_id}
+                className="inline-flex items-center gap-1.5 px-2.5 py-1.5 text-xs bg-gray-50 border border-gray-200 text-gray-800 rounded-lg shadow-soft"
+              >
+                {doc.filename}
+                <button
+                  type="button"
+                  onClick={() => removeAttachment(doc.doc_id)}
+                  className="p-0.5 hover:bg-gray-200 rounded-md transition-colors"
+                  aria-label="Remove"
+                >
+                  <X className="w-3 h-3" />
+                </button>
+              </span>
+            ))}
+          </div>
+        )}
+        <div
+          onDrop={handleDrop}
+          onDragOver={handleDragOver}
+          onDragLeave={handleDragLeave}
+          className={`w-full flex items-end gap-2 p-2.5 rounded-2xl bg-gray-50 shadow-input transition-all duration-200 ${
+            isDropTarget ? 'shadow-soft-md' : ''
+          }`}
+        >
         <textarea
           ref={textareaRef}
           value={input}
@@ -189,6 +190,7 @@ export function ChatInput({ onSend, showSuggestions = true, claimId }: ChatInput
           </button>
         </div>
       </div>
+    </div>
     </div>
   )
 }

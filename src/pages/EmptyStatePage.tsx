@@ -61,7 +61,7 @@ export function EmptyStatePage() {
   return (
     <div className="flex-1 flex flex-col items-center justify-center bg-white px-4">
       <div className="w-full max-w-2xl flex flex-col items-center">
-        <div className="mb-4 text-sm font-semibold tracking-wide text-gray-500">Soffo</div>
+        <div className="-mt-2 mb-5 text-7xl font-semibold tracking-wide text-gray-500">Soffo</div>
         <div
           onDrop={handleDrop}
           onDragOver={handleDragOver}
