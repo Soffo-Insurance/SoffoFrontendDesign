@@ -59,7 +59,9 @@ function LeftSidebar({
   onToggleCollapse: () => void
 }) {
   const navLinkClass = ({ isActive }: { isActive: boolean }) =>
-    `flex items-center gap-1.5 px-1.5 py-1 rounded-md text-sm font-medium text-gray-900 transition-colors ${
+    `flex items-center gap-1.5 rounded-md text-sm font-medium text-gray-900 transition-colors ${
+      collapsed ? 'justify-center p-1.5' : 'px-1.5 py-1'
+    } ${
       isActive ? 'bg-gray-200/70' : 'hover:bg-gray-200/70'
     }`
 
@@ -101,7 +103,7 @@ function LeftSidebar({
           <PanelLeftIcon className={`w-3.5 h-3.5 transition-transform ${collapsed ? 'rotate-180' : ''}`} />
         </button>
       </div>
-      <nav className="flex-1 px-1.5 py-1 space-y-0.5">
+      <nav className={`flex-1 py-1 space-y-0.5 ${collapsed ? 'px-0 flex flex-col items-center' : 'px-1.5'}`}>
         <NavLink to="/c" end className={navLinkClass} title="Home">
           <HomeIcon className="w-4 h-4 shrink-0" />
           {!collapsed && <span>Home</span>}
@@ -115,7 +117,7 @@ function LeftSidebar({
           {!collapsed && <span>Integrations</span>}
         </NavLink>
       </nav>
-      <div className="px-1.5 py-1.5">
+      <div className={`py-1.5 ${collapsed ? 'px-0 flex justify-center' : 'px-1.5'}`}>
         <div className={`flex items-center rounded-lg bg-gray-200/80 ${collapsed ? 'justify-center p-1.5' : 'gap-1.5 px-2 py-1.5'}`}>
           <div className="w-7 h-7 rounded-full bg-gray-300 flex items-center justify-center shrink-0">
             <User className="w-4 h-4 text-gray-500" />
