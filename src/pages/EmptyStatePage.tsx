@@ -103,7 +103,7 @@ export function EmptyStatePage() {
           onDrop={handleDrop}
           onDragOver={handleDragOver}
           onDragLeave={handleDragLeave}
-          className={`w-full bg-white rounded-2xl shadow-input transition-all overflow-hidden ${
+          className={`landing-input-box relative w-full bg-white rounded-2xl shadow-input transition-all overflow-hidden ${
             isDropTarget ? 'shadow-soft-md' : ''
           }`}
         >

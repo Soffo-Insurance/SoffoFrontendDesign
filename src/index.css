@@ -72,3 +72,42 @@ body {
   -webkit-text-fill-color: transparent;
   animation: shimmer 1.8s ease-in-out infinite;
 }
+
+/* Landing page input: one-time soft border shimmer (bottom → top, then fade out) */
+@keyframes landing-border-shimmer {
+  0% {
+    background-position: 0 100%;
+    opacity: 1;
+  }
+  72% {
+    background-position: 0 0%;
+    opacity: 1;
+  }
+  100% {
+    background-position: 0 0%;
+    opacity: 0;
+  }
+}
+
+.landing-input-box::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  /* Soft white band sweeping upward along the border — light reflection, not glow */
+  background: linear-gradient(
+    to top,
+    transparent 0%,
+    transparent 40%,
+    rgba(255, 255, 255, 0.14) 46%,
+    rgba(255, 255, 255, 0.32) 50%,
+    rgba(255, 255, 255, 0.14) 54%,
+    transparent 60%,
+    transparent 100%
+  );
+  background-size: 100% 280%;
+  background-repeat: no-repeat;
+  background-position: 0 100%;
+  animation: landing-border-shimmer 2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
