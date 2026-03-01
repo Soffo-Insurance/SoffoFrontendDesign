@@ -2,11 +2,9 @@ import { useState } from 'react'
 import { Outlet, useParams, NavLink } from 'react-router-dom'
 import { ChevronDown } from 'lucide-react'
 import { ClaimChatProvider } from '../../contexts/ClaimChatContext'
-import { ChatPanel } from './ChatPanel'
 
 const SIDEBAR_WIDTH = 220
 const SIDEBAR_COLLAPSED_WIDTH = 40
-const RIGHT_CHAT_WIDTH = 360
 
 function HomeIcon({ className }: { className?: string }) {
   return (
@@ -138,21 +136,13 @@ function ContentLayout() {
     )
   }
 
-  // Claim page: chat in white shell + right panel
+  // Claim page: chat in white shell only (no right sidebar)
   return (
     <div className="flex-1 flex flex-col min-h-0 min-w-0 p-3">
-      <div className="flex-1 flex min-h-0 gap-0 overflow-hidden">
-        <div className="flex-1 flex flex-col min-h-0 min-w-0 bg-white rounded-lg border border-gray-200 overflow-hidden">
-          <div className="flex-1 flex min-h-0 min-w-0 overflow-hidden">
-            <MainContent />
-          </div>
+      <div className="flex-1 flex flex-col min-h-0 min-w-0 bg-white rounded-lg border border-gray-200 overflow-hidden">
+        <div className="flex-1 flex min-h-0 min-w-0 overflow-hidden">
+          <MainContent />
         </div>
-        <aside
-          className="shrink-0 flex flex-col min-h-0 bg-[#FAFAF9]"
-          style={{ width: RIGHT_CHAT_WIDTH }}
-        >
-          <ChatPanel />
-        </aside>
       </div>
     </div>
   )
