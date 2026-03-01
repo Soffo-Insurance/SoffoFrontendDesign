@@ -9,9 +9,6 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@blocksuite/blocks": "^0.0.0-canary-20250316001624",
-    "@blocksuite/presets": "^0.0.0-canary-20250316001624",
-    "@blocksuite/store": "^0.0.0-canary-20250316001624",
     "lucide-react": "^0.460.0",
     "mermaid": "^11.4.0",
     "react": "^18.3.1",

@@ -1,10 +1,7 @@
 import { useState } from 'react'
 import { Outlet, useParams, NavLink } from 'react-router-dom'
 import { ChevronDown } from 'lucide-react'
-import { TabsProvider, useTabsOptional } from '../../contexts/TabsContext'
-import { ClaimChatProvider, useClaimChatOptional } from '../../contexts/ClaimChatContext'
-import { TabStrip } from './TabStrip'
-import { TabContentPanel } from './TabContentPanel'
+import { ClaimChatProvider } from '../../contexts/ClaimChatContext'
 import { ChatPanel } from './ChatPanel'
 
 const SIDEBAR_WIDTH = 220
@@ -129,29 +126,10 @@ function MainContent() {
   )
 }
 
-function TopBar() {
-  const claimId = useParams<{ claimId?: string }>().claimId
-  const tabs = useTabsOptional()
-  const hasTabs = tabs && tabs.tabs.length > 0
-  const showTabStrip = Boolean(claimId && hasTabs)
-
-  if (!showTabStrip) return null
-
-  return (
-    <header className="shrink-0 h-10 flex items-end min-h-0 bg-[#E5E7EB]">
-      <TabStrip />
-    </header>
-  )
-}
-
 function ContentLayout() {
   const claimId = useParams<{ claimId?: string }>().claimId
-  const tabs = useTabsOptional()
-  const hasClaimChat = useClaimChatOptional()
-  const hasTabs = tabs && tabs.tabs.length > 0
-  const showSplitView = Boolean(claimId && hasTabs && hasClaimChat)
 
-  // Landing, Library, Integrations: no tab bar, just main content
+  // Landing, Library, Integrations: just main content
   if (!claimId) {
     return (
       <div className="flex-1 flex flex-col min-h-0 min-w-0 overflow-hidden">
@@ -160,26 +138,7 @@ function ContentLayout() {
     )
   }
 
-  if (showSplitView) {
-    return (
-      <div className="flex-1 flex flex-col min-h-0 min-w-0 p-3">
-        <div className="flex-1 flex min-h-0 gap-0 overflow-hidden">
-          <div className="flex-1 flex flex-col min-h-0 min-w-0 bg-white rounded-lg border border-gray-200 overflow-hidden">
-            <TopBar />
-            <TabContentPanel />
-          </div>
-          <aside
-            className="shrink-0 flex flex-col min-h-0 bg-[#FAFAF9]"
-            style={{ width: RIGHT_CHAT_WIDTH }}
-          >
-            <ChatPanel />
-          </aside>
-        </div>
-      </div>
-    )
-  }
-
-  // Claim page, no tabs yet: shell without tab bar, with chat panel
+  // Claim page: chat in white shell + right panel
   return (
     <div className="flex-1 flex flex-col min-h-0 min-w-0 p-3">
       <div className="flex-1 flex min-h-0 gap-0 overflow-hidden">
@@ -222,17 +181,15 @@ export function AppShell() {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false)
 
   return (
-    <TabsProvider>
-      <div className="flex h-screen bg-[#FAFAF9] text-gray-900">
-        <LeftSidebar
-          workspaceName={workspaceName}
-          collapsed={sidebarCollapsed}
-          onToggleCollapse={() => setSidebarCollapsed((v) => !v)}
-        />
-        <div className="flex-1 flex flex-col min-w-0 min-h-0 bg-[#FAFAF9]">
-          <ContentWithClaimChatOrLayout />
-        </div>
+    <div className="flex h-screen bg-[#FAFAF9] text-gray-900">
+      <LeftSidebar
+        workspaceName={workspaceName}
+        collapsed={sidebarCollapsed}
+        onToggleCollapse={() => setSidebarCollapsed((v) => !v)}
+      />
+      <div className="flex-1 flex flex-col min-w-0 min-h-0 bg-[#FAFAF9]">
+        <ContentWithClaimChatOrLayout />
       </div>
-    </TabsProvider>
+    </div>
   )
 }
